@@ -859,20 +859,19 @@ h1.hero .hero-h1-accent-2 {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 40%;
+  height: 28%;
   pointer-events: none;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.78) 25%,
-    rgba(0, 0, 0, 0.5) 55%,
-    rgba(0, 0, 0, 0.15) 85%,
+    rgba(0, 0, 0, 0.75) 35%,
+    rgba(0, 0, 0, 0.35) 75%,
     transparent 100%
   );
-  mask-image: linear-gradient(to top, black 65%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to top, black 65%, transparent 100%);
+  mask-image: linear-gradient(to top, black 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 55%, transparent 100%);
 }
 
 .sector-card-label {
