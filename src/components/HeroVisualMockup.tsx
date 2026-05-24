@@ -49,11 +49,18 @@ function MockupHeader({ sector }: { sector: Sector }) {
 
 function MockupHero({ sector }: { sector: Sector }) {
   return (
-    <motion.div className="mockup-site-hero" variants={HERO_VARIANT}>
-      <h2 className="mockup-site-tagline">{sector.tagline}</h2>
-      <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
-        {sector.cta}
-      </button>
+    <motion.div
+      className="mockup-site-hero"
+      style={{ backgroundImage: `url(${sector.heroImage})` }}
+      variants={HERO_VARIANT}
+    >
+      <div className="mockup-site-hero-overlay" />
+      <div className="mockup-site-hero-inner">
+        <h2 className="mockup-site-tagline">{sector.tagline}</h2>
+        <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
+          {sector.cta}
+        </button>
+      </div>
     </motion.div>
   );
 }
@@ -160,11 +167,17 @@ export default function HeroVisualMockup() {
                 <span>Contact</span>
               </nav>
             </div>
-            <div className="mockup-site-hero">
-              <h2 className="mockup-site-tagline">{sector.tagline}</h2>
-              <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
-                {sector.cta}
-              </button>
+            <div
+              className="mockup-site-hero"
+              style={{ backgroundImage: `url(${sector.heroImage})` }}
+            >
+              <div className="mockup-site-hero-overlay" />
+              <div className="mockup-site-hero-inner">
+                <h2 className="mockup-site-tagline">{sector.tagline}</h2>
+                <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
+                  {sector.cta}
+                </button>
+              </div>
             </div>
             {sector.sections.map((section) => (
               <div key={section.type} className="mockup-site-section">

@@ -11,6 +11,7 @@ export interface Sector {
   accent: string;
   tagline: string;
   cta: string;
+  heroImage: string;
   sections: [MockupSection, MockupSection, MockupSection];
 }
 
@@ -22,6 +23,7 @@ export const sectors: Sector[] = [
     accent: '#dc2626',
     tagline: 'Cuisine de saison, à l\'ardoise',
     cta: 'Réserver une table',
+    heroImage: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=320&fit=crop&q=70',
     sections: [
       {
         type: 'menu',
@@ -47,6 +49,7 @@ export const sectors: Sector[] = [
     accent: '#10b981',
     tagline: 'Yoga, pilates, méditation',
     cta: 'Réserver un cours',
+    heroImage: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&h=320&fit=crop&q=70',
     sections: [
       {
         type: 'services',
@@ -72,6 +75,7 @@ export const sectors: Sector[] = [
     accent: '#ea580c',
     tagline: 'Menuiserie sur-mesure',
     cta: 'Demander un devis',
+    heroImage: 'https://images.unsplash.com/photo-1572297974806-94c2b3b9c6c4?w=800&h=320&fit=crop&q=70',
     sections: [
       {
         type: 'realisations',
@@ -97,6 +101,7 @@ export const sectors: Sector[] = [
     accent: '#1e3a8a',
     tagline: 'Kiné & ostéopathie',
     cta: 'Prendre rendez-vous',
+    heroImage: 'https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=800&h=320&fit=crop&q=70',
     sections: [
       {
         type: 'services',
