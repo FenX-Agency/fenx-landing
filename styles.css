@@ -435,3 +435,97 @@ h2.section {
   font-size: 15px;
   line-height: 1.6;
 }
+
+/* ============================================
+   Section Offre — Packs
+   ============================================ */
+.offre { background: var(--charcoal-bg); }
+.offre .label { margin-bottom: 16px; }
+.offre h2.section { margin-bottom: 48px; }
+
+.packs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1024px) {
+  .packs-grid { grid-template-columns: 1fr; }
+}
+
+.pack-card {
+  background: var(--charcoal-card);
+  border: 1px solid var(--border-subtle);
+  padding: 40px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+.pack-card:hover {
+  border-color: rgba(179, 227, 77, 0.3);
+}
+
+.pack-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background: rgba(179, 227, 77, 0.1);
+  color: var(--lime-soft);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 100px;
+  margin-bottom: 16px;
+  align-self: flex-start;
+}
+.pack-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.pack-price {
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--lime-primary);
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.pack-unit {
+  font-size: 18px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.pack-period {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+.pack-features {
+  list-style: none;
+  margin-bottom: 32px;
+  flex: 1;
+}
+.pack-features li {
+  padding: 8px 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pack-features li::before {
+  content: "✓";
+  color: var(--lime-primary);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* Variante bouton plus petit pour pack cards */
+.btn-pill.btn-pill-small {
+  padding: 16px 24px 16px 32px;
+  font-size: 14px;
+  align-self: stretch;
+  justify-content: space-between;
+}
