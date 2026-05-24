@@ -319,11 +319,23 @@ h1.hero,
   opacity: 1;
 }
 
-.hero-content {
+/* Hero grid : 2 colonnes (contenu gauche + placeholder visuel droite) */
+.hero-grid {
   position: relative;
   z-index: 5;
-  max-width: 720px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.hero-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -344,27 +356,18 @@ h1.hero,
   margin-top: 8px;
 }
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 5;
+/* Placeholder visuel pour ajout futur (mockup, image, animation) */
+.hero-visual {
+  min-height: 360px;
+  border-radius: 16px;
+  /* Visible discret pendant le développement, à remplacer par contenu réel */
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.06), rgba(139, 92, 246, 0.03));
+  border: 1px dashed rgba(167, 139, 250, 0.15);
 }
-.scroll-indicator span {
-  font-size: 10px;
-  color: var(--text-dim);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-.scroll-line {
-  width: 1px;
-  height: 24px;
-  background: linear-gradient(to bottom, var(--lime-primary), transparent);
+@media (max-width: 1024px) {
+  .hero-visual {
+    display: none; /* Cache placeholder sur mobile/tablet */
+  }
 }
 
 /* ============================================
