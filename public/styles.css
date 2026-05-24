@@ -688,3 +688,194 @@ h1.hero,
     font-size: 15px;
   }
 }
+
+/* ============================================
+   Hero V3 — Browser Frame Mockup (Cosmic Violet)
+   ============================================ */
+
+.mockup-frame {
+  width: 100%;
+  max-width: 580px;
+  background: oklch(0.18 0.04 280);
+  border: 1px solid oklch(0.3 0.05 280 / 0.4);
+  border-radius: 14px;
+  box-shadow: 0 30px 60px -20px rgba(167, 139, 250, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', system-ui, sans-serif;
+  position: relative;
+}
+
+/* Browser chrome (haut) — dots macOS + URL bar */
+.mockup-chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: oklch(0.16 0.03 280);
+  border-bottom: 1px solid oklch(0.3 0.05 280 / 0.4);
+}
+.mockup-dots {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mockup-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: block;
+}
+.mockup-dot-red    { background: #ff5f57; }
+.mockup-dot-yellow { background: #febc2e; }
+.mockup-dot-green  { background: #28c840; }
+
+.mockup-url-bar {
+  flex: 1;
+  background: oklch(0.14 0.03 280);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--text-primary);
+  display: flex;
+  gap: 2px;
+  font-family: 'Inter', system-ui, monospace;
+  border: 1px solid oklch(0.25 0.04 280 / 0.6);
+}
+.mockup-url-protocol { color: var(--lavender-bright); }
+.mockup-url-host { color: #ffffff; font-weight: 500; }
+
+/* Content (interior du browser) */
+.mockup-content {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  padding: 16px 18px;
+  gap: 14px;
+  color: #1a1a1a;
+}
+
+/* Mockup site internals — styles génériques (le contenu varie par secteur) */
+.mockup-site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.mockup-site-logo {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.mockup-site-nav {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.mockup-site-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 0 6px 0;
+}
+.mockup-site-tagline {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.25;
+}
+.mockup-site-cta {
+  align-self: flex-start;
+  color: #ffffff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: default;
+}
+
+.mockup-site-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0 4px 0;
+  border-top: 1px solid #f3f4f6;
+}
+.mockup-site-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mockup-site-section-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mockup-site-section-items li {
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+.mockup-site-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+/* Sector tabs (bas du frame) */
+.mockup-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  background: oklch(0.16 0.03 280);
+  border-top: 1px solid oklch(0.3 0.05 280 / 0.4);
+  justify-content: center;
+}
+.mockup-tab {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: all 200ms ease;
+  font-family: inherit;
+}
+.mockup-tab:hover { color: var(--violet-soft); border-color: var(--violet-soft); }
+.mockup-tab.is-active {
+  background: var(--violet-primary);
+  color: #16161c;
+  border-color: var(--violet-primary);
+  font-weight: 600;
+}
+
+/* Responsive mobile/tablet */
+@media (max-width: 1024px) {
+  .mockup-frame { max-width: 480px; margin: 0 auto; }
+  .mockup-content { min-height: 320px; }
+}
+@media (max-width: 600px) {
+  .mockup-frame { max-width: 100%; }
+  .mockup-content { min-height: 280px; padding: 12px 14px; }
+  .mockup-site-tagline { font-size: 15px; }
+}
