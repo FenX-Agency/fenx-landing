@@ -68,8 +68,8 @@ section { padding: 120px 32px; }
 .label {
   display: inline-block;
   padding: 5px 12px;
-  background: rgba(179, 227, 77, 0.12);
-  border: 1px solid rgba(179, 227, 77, 0.4);
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.45);
   border-radius: 100px;
   font-size: 10px;
   color: var(--lime-soft);
@@ -308,8 +308,19 @@ h2.section {
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  background: radial-gradient(ellipse at bottom right, var(--charcoal-surface) 0%, var(--charcoal-bg) 70%);
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 30%, rgba(167, 139, 250, 0.08) 0%, transparent 60%),
+    var(--cosmic-bg);
   padding: 120px 32px;
+}
+
+/* Hero safety net : éléments toujours visibles par défaut (GSAP override possible) */
+h1.hero,
+.hero-content .label,
+.hero-sub,
+.hero-ctas {
+  opacity: 1;
 }
 
 .hero-halo {
@@ -499,7 +510,7 @@ h2.section {
 .pack-tag {
   display: inline-block;
   padding: 4px 10px;
-  background: rgba(179, 227, 77, 0.1);
+  background: rgba(167, 139, 250, 0.12);
   color: var(--lime-soft);
   font-size: 10px;
   font-weight: 700;
@@ -671,7 +682,7 @@ h2.section {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(179, 227, 77, 0.2);
+  background: rgba(167, 139, 250, 0.2);
   border: 1.5px solid var(--lime-primary);
   backdrop-filter: blur(2px);
   pointer-events: none;
@@ -690,7 +701,7 @@ h2.section {
 .cursor-blob.is-hover {
   width: 48px;
   height: 48px;
-  background: rgba(179, 227, 77, 0.35);
+  background: rgba(167, 139, 250, 0.35);
 }
 
 /* ============================================
@@ -739,9 +750,5 @@ h2.section {
   .hero-ctas .btn-pill {
     padding: 18px 28px 18px 36px;
     font-size: 15px;
-  }
-  .hero-ctas .btn-pill .arrow-circle {
-    width: 32px;
-    height: 32px;
   }
 }
