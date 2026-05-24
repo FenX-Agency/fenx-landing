@@ -32,11 +32,11 @@
   --pad-section-mobile: 64px 24px;
   --container-max: 1100px;
 
-  /* Typography sizing */
-  --h1-hero: clamp(4rem, 8vw, 6.5rem);
-  --h1-hero-mobile: clamp(2.5rem, 12vw, 3.5rem);
-  --h2-section: clamp(2.5rem, 5vw, 3.75rem);
-  --h2-section-mobile: clamp(1.75rem, 6vw, 2.5rem);
+  /* Typography sizing (réduits — hero compact, H2 sur 1 ligne) */
+  --h1-hero: clamp(2.75rem, 5.5vw, 4.5rem);
+  --h1-hero-mobile: clamp(2.25rem, 10vw, 3rem);
+  --h2-section: clamp(1.75rem, 3.5vw, 2.5rem);
+  --h2-section-mobile: clamp(1.5rem, 5vw, 2rem);
   --body-size: 1.0625rem;
   --body-size-mobile: 1rem;
 }
@@ -303,13 +303,13 @@ h2.section {
    ============================================ */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 85vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
   background: var(--cosmic-bg);
-  padding: 120px 32px;
+  padding: 100px 32px 80px;
 }
 
 /* Hero safety net : éléments toujours visibles par défaut (GSAP override possible) */
@@ -323,22 +323,25 @@ h1.hero,
 .hero-content {
   position: relative;
   z-index: 5;
-  max-width: 880px;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.hero-content .label { margin-bottom: 28px; }
-.hero-content h1.hero { margin-bottom: 24px; }
+.hero-content .label { align-self: flex-start; }
 .hero-sub {
   font-size: 17px;
   color: var(--text-muted);
-  max-width: 480px;
-  margin-bottom: 32px;
+  max-width: 540px;
   line-height: 1.5;
+  margin: 0;
 }
 .hero-ctas {
   display: flex;
-  gap: 24px;
+  gap: 20px;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 .scroll-indicator {
@@ -551,6 +554,9 @@ h1.hero,
   padding: 28px;
   border-radius: 12px;
   transition: border-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 240px;
 }
 .step-card:hover {
   border-color: rgba(167, 139, 250, 0.3);
@@ -563,17 +569,21 @@ h1.hero,
   letter-spacing: -0.04em;
   margin-bottom: 16px;
   font-family: 'Inter', sans-serif;
+  line-height: 1;
 }
 .step-card h3 {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   letter-spacing: -0.02em;
+  min-height: 48px;
+  line-height: 1.3;
 }
 .step-card p {
   font-size: 14px;
   color: var(--text-muted);
   line-height: 1.6;
+  margin: 0;
 }
 
 /* ============================================
