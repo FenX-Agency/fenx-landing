@@ -1,6 +1,6 @@
 // Scroll-Triggered Reveals — GSAP ScrollTrigger
 // Fades up sections + cascades sub-elements
-// IMPORTANT : hero EXCLU des reveals (visible immédiatement, sinon bug opacity)
+// Hero EXCLU des reveals (visible immédiatement, sinon bug opacity)
 
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -13,7 +13,8 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Section labels + h2 : fade up — EXCLURE le hero (sinon opacity 0 stuck)
+  // Section labels + h2 : fade up — EXCLURE le hero
+  // toggleActions: 'play none none none' = play once, pas de reverse au scroll up (évite oscillations)
   gsap.utils.toArray('section:not(#hero) .label, section:not(#hero) h2.section').forEach((el) => {
     gsap.from(el, {
       y: 30,
@@ -23,12 +24,12 @@
       scrollTrigger: {
         trigger: el,
         start: 'top 85%',
-        toggleActions: 'play none none reverse',
+        toggleActions: 'play none none none',
       },
     });
   });
 
-  // Pain cards : cascade
+  // Pain cards : cascade (play once)
   gsap.from('.pain-card', {
     y: 40,
     opacity: 0,
@@ -38,11 +39,11 @@
     scrollTrigger: {
       trigger: '.pain-grid',
       start: 'top 80%',
-      toggleActions: 'play none none reverse',
+      toggleActions: 'play none none none',
     },
   });
 
-  // Pack cards : cascade
+  // Pack cards : cascade (play once)
   gsap.from('.pack-card', {
     y: 60,
     opacity: 0,
@@ -52,11 +53,11 @@
     scrollTrigger: {
       trigger: '.packs-grid',
       start: 'top 80%',
-      toggleActions: 'play none none reverse',
+      toggleActions: 'play none none none',
     },
   });
 
-  // Step cards : cascade
+  // Step cards : cascade (play once)
   gsap.from('.step-card', {
     y: 40,
     opacity: 0,
@@ -66,12 +67,11 @@
     scrollTrigger: {
       trigger: '.steps-flow',
       start: 'top 80%',
-      toggleActions: 'play none none reverse',
+      toggleActions: 'play none none none',
     },
   });
 
-  // Hero : load animation simple (pas de scrollTrigger, pas de from opacity 0)
-  // Utilise fromTo avec immediateRender false pour éviter le flash
+  // Hero : animation simple au load (fromTo + clearProps pour garantir visibilité)
   gsap.fromTo('h1.hero',
     { y: 30, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.1, clearProps: 'all' }

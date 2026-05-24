@@ -413,7 +413,9 @@ h2.section {
    Section Problème
    ============================================ */
 .probleme {
-  background: var(--charcoal-surface);
+  background:
+    radial-gradient(ellipse at top left, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
+    var(--cosmic-bg);
 }
 .probleme .label { margin-bottom: 16px; }
 .probleme h2.section { margin-bottom: 12px; }
@@ -463,7 +465,11 @@ h2.section {
 /* ============================================
    Section Offre — Packs
    ============================================ */
-.offre { background: var(--charcoal-bg); }
+.offre {
+  background:
+    radial-gradient(ellipse at top right, rgba(167, 139, 250, 0.04) 0%, transparent 50%),
+    var(--cosmic-bg);
+}
 .offre .label { margin-bottom: 16px; }
 .offre h2.section { margin-bottom: 48px; }
 
@@ -549,7 +555,11 @@ h2.section {
 /* ============================================
    Section Processus
    ============================================ */
-.processus { background: var(--charcoal-surface); }
+.processus {
+  background:
+    radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+    var(--cosmic-bg);
+}
 .processus .label { margin-bottom: 16px; }
 .processus h2.section { margin-bottom: 48px; }
 
