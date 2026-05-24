@@ -4,18 +4,28 @@
    ============================================ */
 
 :root {
-  /* Palette Lime Edge Glow */
-  --charcoal-bg: #14161a;
-  --charcoal-surface: #1a201a;
-  --charcoal-card: #181c20;
-  --lime-primary: #b3e34d;
-  --lime-soft: #d9f99d;
-  --lime-dark: #84cc16;
-  --lime-gradient-top: #c8f06c;
-  --text-primary: #f5f5f3;
-  --text-muted: #a3a39d;
-  --text-dim: #6b6b66;
-  --border-subtle: rgba(179, 227, 77, 0.15);
+  /* Palette Cosmic Violet (NEW — replaces Lime Edge Glow) */
+  --cosmic-bg: #16161c;
+  --cosmic-surface: #1e1e3f;
+  --cosmic-card: #1c1c2e;
+  --violet-primary: #a78bfa;
+  --violet-soft: #c4b5fd;
+  --violet-dark: #7c3aed;
+  --lavender-bright: #e9d5ff;
+  --text-primary: #ede9fe;
+  --text-hover: #ffffff;
+  --text-muted: rgba(167, 139, 250, 0.6);
+  --text-dim: rgba(167, 139, 250, 0.4);
+  --border-subtle: rgba(167, 139, 250, 0.2);
+
+  /* Aliases for backwards compat (keep references working) */
+  --charcoal-bg: var(--cosmic-bg);
+  --charcoal-surface: var(--cosmic-surface);
+  --charcoal-card: var(--cosmic-card);
+  --lime-primary: var(--violet-primary);
+  --lime-soft: var(--violet-soft);
+  --lime-dark: var(--violet-dark);
+  --lime-gradient-top: var(--violet-soft);
 
   /* Spacing */
   --pad-section-desktop: 120px 32px;
@@ -102,109 +112,123 @@ h2.section {
 }
 
 /* ============================================
-   Composant Bouton Primary
-   Spec : §3.bis du design doc
+   Composant Bouton Primary V6 — pixel-canvas
+   Spec : §3.bis amendment 2026-05-24
    ============================================ */
 
 .btn-pill {
   position: relative;
-  background: linear-gradient(180deg, var(--lime-gradient-top) 0%, var(--lime-dark) 100%);
-  color: #0a0a0a;
   border: none;
-  padding: 22px 60px 22px 70px;
+  padding: 18px 28px 18px 36px;
   border-radius: 100px;
   font-family: 'Inter', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   cursor: pointer;
   letter-spacing: -0.01em;
   display: inline-flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
   text-decoration: none;
+  color: var(--text-primary);
+  background: transparent;
   box-shadow:
-    0 0 40px rgba(179, 227, 77, 0.4),
-    0 0 80px rgba(179, 227, 77, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  outline: 2px solid transparent;
-  outline-offset: 3px;
+    0 6px 28px rgba(139, 92, 246, 0.25),
+    inset 0 0 0 1.5px rgba(167, 139, 250, 0.55);
   transition:
-    outline-color 0.35s ease,
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.4s ease;
+    box-shadow 0.4s ease,
+    color 0.3s ease;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .btn-pill:hover,
 .btn-pill:focus-visible {
-  outline: 2px solid var(--lime-primary);
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-2px) scale(1.02);
+  color: var(--text-hover);
   box-shadow:
-    0 0 80px rgba(179, 227, 77, 0.6),
-    0 16px 160px rgba(179, 227, 77, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    0 12px 48px rgba(139, 92, 246, 0.5),
+    0 0 80px rgba(167, 139, 250, 0.25),
+    inset 0 0 0 2px rgba(167, 139, 250, 0.7);
 }
 
-.btn-pill .glass-top {
+.btn-pill .pixel-canvas-wrapper {
   position: absolute;
-  top: 2px;
-  left: 8px;
-  right: 8px;
-  height: 40%;
-  border-radius: 100px 100px 60% 60%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 100%);
+  inset: 0;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at center, #000 30%, transparent 90%);
+  mask-image: radial-gradient(ellipse 60% 70% at center, #000 30%, transparent 90%);
 }
 
-.btn-pill .highlight-bottom {
-  position: absolute;
-  bottom: 3px;
-  left: 28%;
-  right: 28%;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.85) 50%, transparent 100%);
-  border-radius: 100px;
-  pointer-events: none;
-  z-index: 1;
+.btn-pill .pixel-canvas-wrapper canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-.btn-pill .arrow-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: #0a0a0a;
-  color: var(--lime-primary);
-  border-radius: 50%;
+.btn-pill > .text,
+.btn-pill > .arrow {
   position: relative;
   z-index: 2;
-  overflow: hidden;
 }
 
-.btn-pill .arrow-circle .line {
-  transition: width 0.3s ease;
-  transform-origin: left;
+.btn-pill .arrow {
+  display: inline-flex;
+  align-items: center;
 }
 
-.btn-pill .arrow-circle .head {
-  transition: transform 0.3s ease;
+.btn-pill .arrow svg {
+  overflow: visible;
 }
 
-.btn-pill:hover .arrow-circle .line { width: 16px; }
-.btn-pill:hover .arrow-circle .head { transform: translateX(2px); }
+.btn-pill .arrow .arrow-base {
+  stroke: var(--violet-soft);
+  transition: stroke 0.3s ease;
+}
 
-.btn-pill .text { position: relative; z-index: 2; }
+.btn-pill:hover .arrow .arrow-base {
+  stroke: var(--text-hover);
+}
+
+.btn-pill .arrow .arrow-shimmer {
+  stroke: var(--text-hover);
+  opacity: 0;
+  stroke-dasharray: 6 35;
+  stroke-dashoffset: 40;
+}
+
+.btn-pill:hover .arrow .arrow-shimmer {
+  animation: shimmer-flow 0.8s ease-out;
+}
+
+@keyframes shimmer-flow {
+  0% { stroke-dashoffset: 40; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { stroke-dashoffset: -10; opacity: 0; }
+}
+
+/* Variante small (cards packs + footer) — moins de padding */
+.btn-pill.btn-pill-small {
+  padding: 16px 24px 16px 32px;
+  font-size: 14px;
+  align-self: stretch;
+  justify-content: space-between;
+}
 
 /* Variante text-link (secondary CTA) */
 .btn-text {
-  color: var(--lime-soft);
+  color: var(--violet-soft);
   font-family: 'Inter', sans-serif;
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
   padding-bottom: 4px;
-  border-bottom: 1.5px solid rgba(217, 249, 157, 0.4);
+  border-bottom: 1.5px solid rgba(196, 181, 253, 0.4);
   transition: color 0.2s ease, border-color 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -212,8 +236,8 @@ h2.section {
 }
 
 .btn-text:hover {
-  color: var(--lime-primary);
-  border-bottom-color: var(--lime-primary);
+  color: var(--text-hover);
+  border-bottom-color: var(--text-hover);
 }
 
 /* ============================================
@@ -298,7 +322,7 @@ h2.section {
   right: -120px;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(179, 227, 77, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
   filter: blur(80px);
 }
 .halo-top-left {
@@ -306,7 +330,7 @@ h2.section {
   left: -60px;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(132, 204, 22, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.18) 0%, transparent 70%);
   filter: blur(60px);
 }
 
@@ -417,8 +441,8 @@ h2.section {
 }
 .pain-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(179, 227, 77, 0.4);
-  box-shadow: 0 8px 32px rgba(179, 227, 77, 0.1);
+  border-color: rgba(167, 139, 250, 0.4);
+  box-shadow: 0 8px 32px rgba(167, 139, 250, 0.12);
 }
 .pain-icon {
   font-size: 32px;
@@ -463,7 +487,7 @@ h2.section {
   will-change: transform;
 }
 .pack-card:hover {
-  border-color: rgba(179, 227, 77, 0.3);
+  border-color: rgba(167, 139, 250, 0.3);
 }
 
 .pack-tag {
@@ -522,14 +546,6 @@ h2.section {
   font-size: 14px;
 }
 
-/* Variante bouton plus petit pour pack cards */
-.btn-pill.btn-pill-small {
-  padding: 16px 24px 16px 32px;
-  font-size: 14px;
-  align-self: stretch;
-  justify-content: space-between;
-}
-
 /* ============================================
    Section Processus
    ============================================ */
@@ -556,7 +572,7 @@ h2.section {
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 .step-card:hover {
-  border-color: rgba(179, 227, 77, 0.3);
+  border-color: rgba(167, 139, 250, 0.3);
   transform: translateY(-2px);
 }
 .step-number {
