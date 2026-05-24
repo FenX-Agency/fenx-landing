@@ -1,0 +1,28 @@
+---
+import Button from './Button.astro';
+---
+<section id="hero" class="hero" aria-label="Présentation FenX">
+  <div class="hero-stars" aria-hidden="true">
+    <span class="star" style="width: 2px; height: 2px; top: 25%; left: 15%; animation-delay: 0s;"></span>
+    <span class="star" style="width: 1.5px; height: 1.5px; top: 18%; left: 35%; animation-delay: 0.5s;"></span>
+    <span class="star" style="width: 1.5px; height: 1.5px; top: 32%; right: 28%; animation-delay: 1s;"></span>
+    <span class="star" style="width: 2px; height: 2px; top: 70%; left: 22%; animation-delay: 1.5s;"></span>
+    <span class="star" style="width: 1.5px; height: 1.5px; top: 78%; right: 18%; animation-delay: 2s;"></span>
+    <span class="star" style="width: 2px; height: 2px; top: 12%; right: 40%; animation-delay: 1.3s;"></span>
+  </div>
+
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <span class="label">Sites · Visibilité · Vidéos IA</span>
+      <h1 class="hero"><span>VOTRE COMMERCE</span><span>MÉRITE MIEUX.</span></h1>
+      <p class="hero-sub">Un site qui transforme vos visiteurs en clients. Livré en 7 jours, à partir de 990€.</p>
+      <div class="hero-ctas">
+        <Button href="mailto:anthony.grupposo@gmail.com?subject=Intéressé par FenX" text="Discuter projet" />
+        <a href="https://demo-wok.fenx-agency.com" target="_blank" rel="noopener" class="btn-text">Voir une démo →</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <!-- Placeholder pour ajout futur (mockup, image, animation, etc.) -->
+    </div>
+  </div>
+</section>

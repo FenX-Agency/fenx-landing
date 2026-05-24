@@ -1,0 +1,77 @@
+---
+import Button from './Button.astro';
+
+const packs = [
+  {
+    tag: 'One-shot',
+    name: 'Pack Démarrage',
+    price: '990€',
+    unit: null,
+    period: 'Paiement unique, livré 7-14 jours',
+    features: [
+      'Site web sur-mesure',
+      "Back-office d'autonomie",
+      'SEO local + Google Maps',
+      'Hébergement Cloudflare',
+      'Formation 30 min visio',
+    ],
+    cta: { href: 'mailto:anthony.grupposo@gmail.com?subject=Pack Démarrage FenX', text: 'Commencer' },
+  },
+  {
+    tag: 'Récurrent',
+    name: 'Pack Maintenance',
+    price: '79€',
+    unit: '/mois',
+    period: 'Sans engagement, résiliable préavis 1 mois',
+    features: [
+      'Hébergement maintenu',
+      '2 modifications/mois',
+      'Audit SEO trimestriel',
+      'Support email < 48h',
+      'Backups quotidiens',
+    ],
+    cta: { href: 'mailto:anthony.grupposo@gmail.com?subject=Pack Maintenance FenX', text: 'En savoir plus' },
+  },
+  {
+    tag: 'Upsell',
+    name: 'Vidéo Sociale IA',
+    price: '290€',
+    unit: '/pièce',
+    period: '9:16 Insta/TikTok, livraison 5 jours',
+    features: [
+      '30-60 secondes',
+      'Visuels IA + voix IA',
+      'Motion design dynamique',
+      'Pack 3 vidéos : 690€',
+      'Multilingue : +150€',
+    ],
+    cta: { href: 'https://demo-wok.fenx-agency.com', text: 'Voir un exemple', target: '_blank', rel: 'noopener' },
+  },
+];
+---
+<section id="offre" class="offre">
+  <div class="container">
+    <p class="label">L'offre</p>
+    <h2 class="section">3 PRODUITS. PRIX FIXES. ZÉRO SURPRISE.</h2>
+    <div class="packs-grid">
+      {packs.map((pack) => (
+        <article class="pack-card">
+          <span class="pack-tag">{pack.tag}</span>
+          <h3 class="pack-name">{pack.name}</h3>
+          <div class="pack-price">{pack.price}{pack.unit && <span class="pack-unit">{pack.unit}</span>}</div>
+          <p class="pack-period">{pack.period}</p>
+          <ul class="pack-features">
+            {pack.features.map((f) => <li>{f}</li>)}
+          </ul>
+          <Button
+            href={pack.cta.href}
+            text={pack.cta.text}
+            small={true}
+            target={pack.cta.target}
+            rel={pack.cta.rel}
+          />
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'FenX — Sites premium pour commerces de proximité',
+  description = "Site web sur-mesure + back-office d'autonomie + référencement local pour TPE. 990€ tout compris, livré en 7 jours. Sans dépendre d'une agence après.",
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+
+  <meta property="og:title" content="FenX Agency — Des sites propres pour commerces de proximité">
+  <meta property="og:description" content="Pack site clé en main 990€, livré en 7 jours, back-office d'autonomie inclus.">
+  <meta property="og:image" content="/assets/og-image.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://fenx-agency.com">
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="/styles.css" as="style">
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5n-wU.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Aller au contenu</a>
+
+  <slot />
+
+  <script src="https://cdn.skypack.dev/@studio-freight/lenis@1.0.42" is:inline></script>
+  <script src="/scripts/lenis.js" defer is:inline></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js" defer is:inline></script>
+  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js" defer is:inline></script>
+  <script src="/scripts/reveals.js" defer is:inline></script>
+  <script src="/scripts/pixel-canvas.js" defer is:inline></script>
+</body>
+</html>

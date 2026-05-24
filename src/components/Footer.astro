@@ -1,0 +1,30 @@
+---
+import Button from './Button.astro';
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <a href="#hero" class="logo">Fen<span>X</span></a>
+      <p class="footer-tagline">Sites premium pour commerces de proximité.</p>
+      <p class="footer-address">Sannois (95) · France</p>
+    </div>
+    <div class="footer-col">
+      <h4>Naviguer</h4>
+      <a href="#offre">Offre</a>
+      <a href="#processus">Processus</a>
+      <a href="https://demo-wok.fenx-agency.com" target="_blank" rel="noopener">Démo en ligne</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:anthony.grupposo@gmail.com">anthony.grupposo@gmail.com</a>
+      <Button
+        href="mailto:anthony.grupposo@gmail.com?subject=On en parle ?"
+        text="On en parle ?"
+        small={true}
+      />
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© 2026 FenX Agency · Mentions légales · Sannois (95)</p>
+  </div>
+</footer>
