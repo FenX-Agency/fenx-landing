@@ -1,9 +1,40 @@
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { sectors, type Sector } from './sectors';
+
+const SECTOR_DURATION_MS = 7500;
+
+const STAGGER = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: { staggerChildren: 0.35, delayChildren: 0.1 },
+  },
+};
+
+const HEADER_VARIANT = {
+  initial: { opacity: 0, y: -8 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.2 } },
+};
+
+const HERO_VARIANT = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
+
+const SECTION_VARIANT = {
+  initial: { opacity: 0, scale: 0.97 },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.25 } },
+};
+
+const FOOTER_VARIANT = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.2 } },
+};
 
 function MockupHeader({ sector }: { sector: Sector }) {
   return (
-    <div className="mockup-site-header">
+    <motion.div className="mockup-site-header" variants={HEADER_VARIANT}>
       <span className="mockup-site-logo" style={{ color: sector.accent }}>
         {sector.businessName}
       </span>
@@ -12,40 +43,40 @@ function MockupHeader({ sector }: { sector: Sector }) {
         <span>Services</span>
         <span>Contact</span>
       </nav>
-    </div>
+    </motion.div>
   );
 }
 
 function MockupHero({ sector }: { sector: Sector }) {
   return (
-    <div className="mockup-site-hero">
+    <motion.div className="mockup-site-hero" variants={HERO_VARIANT}>
       <h2 className="mockup-site-tagline">{sector.tagline}</h2>
       <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
         {sector.cta}
       </button>
-    </div>
+    </motion.div>
   );
 }
 
 function MockupSection({ section }: { section: Sector['sections'][number] }) {
   return (
-    <div className="mockup-site-section">
+    <motion.div className="mockup-site-section" variants={SECTION_VARIANT}>
       <h3 className="mockup-site-section-title">{section.title}</h3>
       <ul className="mockup-site-section-items">
         {section.items.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   );
 }
 
 function MockupFooter({ sector }: { sector: Sector }) {
   return (
-    <div className="mockup-site-footer">
+    <motion.div className="mockup-site-footer" variants={FOOTER_VARIANT}>
       <span>© 2026 {sector.businessName}</span>
       <span>Mentions légales</span>
-    </div>
+    </motion.div>
   );
 }
 
@@ -84,8 +115,6 @@ function SectorTabs({ active, onSelect }: { active: number; onSelect: (idx: numb
   );
 }
 
-const SECTOR_DURATION_MS = 7500;
-
 export default function HeroVisualMockup() {
   const [activeSector, setActiveSector] = useState(0);
 
@@ -102,12 +131,23 @@ export default function HeroVisualMockup() {
     <div className="mockup-frame">
       <BrowserChrome url={sector.url} />
       <div className="mockup-content">
-        <MockupHeader sector={sector} />
-        <MockupHero sector={sector} />
-        {sector.sections.map((section) => (
-          <MockupSection key={section.type} section={section} />
-        ))}
-        <MockupFooter sector={sector} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={sector.id}
+            variants={STAGGER}
+            initial="initial"
+            animate="animate"
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+          >
+            <MockupHeader sector={sector} />
+            <MockupHero sector={sector} />
+            {sector.sections.map((section) => (
+              <MockupSection key={section.type} section={section} />
+            ))}
+            <MockupFooter sector={sector} />
+          </motion.div>
+        </AnimatePresence>
       </div>
       <SectorTabs active={activeSector} onSelect={setActiveSector} />
     </div>
