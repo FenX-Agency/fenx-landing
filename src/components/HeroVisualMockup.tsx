@@ -98,12 +98,11 @@ function BrowserChrome({ url }: { url: string }) {
 
 function SectorTabs({ active, onSelect }: { active: number; onSelect: (idx: number) => void }) {
   return (
-    <div className="mockup-tabs" role="tablist">
+    <div className="mockup-tabs">
       {sectors.map((s, idx) => (
         <button
           key={s.id}
-          role="tab"
-          aria-selected={idx === active}
+          aria-pressed={idx === active}
           className={`mockup-tab ${idx === active ? 'is-active' : ''}`}
           onClick={() => onSelect(idx)}
           type="button"
@@ -141,6 +140,7 @@ export default function HeroVisualMockup() {
   return (
     <div
       className="mockup-frame"
+      aria-hidden="true"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
