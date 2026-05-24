@@ -2,11 +2,6 @@
 import { sectors } from './sectors';
 
 const sectorUrls = sectors.map((s) => s.url);
-const sectorMeta = sectors.map((s) => ({
-  id: s.id,
-  label: s.businessName,
-  sub: s.tagline,
-}));
 const sectorImages: Record<string, string> = {
   restauration: '/assets/mockup/restauration.webp',
   studio: '/assets/mockup/studio.webp',
@@ -27,7 +22,6 @@ const sectorTabLabels: Record<string, string> = {
     aria-hidden="true"
     data-mockup
     data-mockup-urls={JSON.stringify(sectorUrls)}
-    data-mockup-meta={JSON.stringify(sectorMeta)}
   >
     <div class="mockup-chrome">
       <div class="mockup-dots">
@@ -52,17 +46,6 @@ const sectorTabLabels: Record<string, string> = {
           data-mockup-sector={idx}
         />
       ))}
-
-      <div class="mockup-blur-veil"></div>
-
-      <div class="mockup-overlay">
-        <span class="mockup-overlay-eyebrow" data-mockup-eyebrow>
-          {sectorTabLabels[sectors[0].id]}
-        </span>
-        <h3 class="mockup-overlay-title" data-mockup-title>
-          {sectors[0].businessName} · {sectors[0].tagline}
-        </h3>
-      </div>
     </div>
   </div>
 
@@ -123,19 +106,6 @@ const sectorTabLabels: Record<string, string> = {
       }, SECTOR_DURATION_MS);
     }
 
-    const eyebrowEl = root.querySelector<HTMLElement>('[data-mockup-eyebrow]');
-    const titleEl = root.querySelector<HTMLElement>('[data-mockup-title]');
-    const metaAttr = root.getAttribute('data-mockup-meta');
-    const meta: Array<{ id: string; label: string; sub: string }> = metaAttr
-      ? JSON.parse(metaAttr)
-      : [];
-    const tabLabels: Record<string, string> = {
-      restauration: 'Restauration',
-      studio: 'Studio',
-      atelier: 'Atelier',
-      cabinet: 'Cabinet',
-    };
-
     const stage = root.closest<HTMLElement>('[data-mockup-stage]');
     const indicatorEl = stage?.querySelector<HTMLElement>('[data-mockup-indicator]');
 
@@ -167,11 +137,6 @@ const sectorTabLabels: Record<string, string> = {
       moveIndicator(idx);
       if (urlEl && urls[idx]) {
         urlEl.textContent = urls[idx];
-      }
-      const info = meta[idx];
-      if (info) {
-        if (eyebrowEl) eyebrowEl.textContent = tabLabels[info.id] ?? info.id;
-        if (titleEl) titleEl.textContent = `${info.label} · ${info.sub}`;
       }
       scheduleNext();
     }
