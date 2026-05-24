@@ -1,40 +1,11 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { sectors, type Sector } from './sectors';
 
 const SECTOR_DURATION_MS = 7500;
 
-const STAGGER = {
-  initial: { opacity: 0 },
-  animate: {
-    opacity: 1,
-    transition: { staggerChildren: 0.35, delayChildren: 0.1 },
-  },
-};
-
-const HEADER_VARIANT = {
-  initial: { opacity: 0, y: -8 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.2 } },
-};
-
-const HERO_VARIANT = {
-  initial: { opacity: 0, y: 10 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-};
-
-const SECTION_VARIANT = {
-  initial: { opacity: 0, scale: 0.97 },
-  animate: { opacity: 1, scale: 1, transition: { duration: 0.25 } },
-};
-
-const FOOTER_VARIANT = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.2 } },
-};
-
-function MockupHeader({ sector }: { sector: Sector }) {
+function MockupSiteHeader({ sector }: { sector: Sector }) {
   return (
-    <motion.div className="mockup-site-header" variants={HEADER_VARIANT}>
+    <div className="mockup-site-header">
       <span className="mockup-site-logo" style={{ color: sector.accent }}>
         {sector.businessName}
       </span>
@@ -43,16 +14,15 @@ function MockupHeader({ sector }: { sector: Sector }) {
         <span>Services</span>
         <span>Contact</span>
       </nav>
-    </motion.div>
+    </div>
   );
 }
 
-function MockupHero({ sector }: { sector: Sector }) {
+function MockupSiteHero({ sector }: { sector: Sector }) {
   return (
-    <motion.div
+    <div
       className="mockup-site-hero"
       style={{ backgroundImage: `url(${sector.heroImage})` }}
-      variants={HERO_VARIANT}
     >
       <div className="mockup-site-hero-overlay" />
       <div className="mockup-site-hero-inner">
@@ -61,29 +31,29 @@ function MockupHero({ sector }: { sector: Sector }) {
           {sector.cta}
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-function MockupSection({ section }: { section: Sector['sections'][number] }) {
+function MockupSiteSection({ section }: { section: Sector['sections'][number] }) {
   return (
-    <motion.div className="mockup-site-section" variants={SECTION_VARIANT}>
+    <div className="mockup-site-section">
       <h3 className="mockup-site-section-title">{section.title}</h3>
       <ul className="mockup-site-section-items">
         {section.items.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
-    </motion.div>
+    </div>
   );
 }
 
-function MockupFooter({ sector }: { sector: Sector }) {
+function MockupSiteFooter({ sector }: { sector: Sector }) {
   return (
-    <motion.div className="mockup-site-footer" variants={FOOTER_VARIANT}>
+    <div className="mockup-site-footer">
       <span>© 2026 {sector.businessName}</span>
       <span>Mentions légales</span>
-    </motion.div>
+    </div>
   );
 }
 
@@ -125,10 +95,8 @@ export default function HeroVisualMockup() {
   const [activeSector, setActiveSector] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true);
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReducedMotion(mq.matches);
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
@@ -137,12 +105,12 @@ export default function HeroVisualMockup() {
   }, []);
 
   useEffect(() => {
-    if (isPaused || reducedMotion || !hasMounted) return;
+    if (isPaused || reducedMotion) return;
     const timer = setTimeout(() => {
       setActiveSector((prev) => (prev + 1) % sectors.length);
     }, SECTOR_DURATION_MS);
     return () => clearTimeout(timer);
-  }, [activeSector, isPaused, reducedMotion, hasMounted]);
+  }, [activeSector, isPaused, reducedMotion]);
 
   const sector = sectors[activeSector];
 
@@ -155,64 +123,14 @@ export default function HeroVisualMockup() {
     >
       <BrowserChrome url={sector.url} />
       <div className="mockup-content">
-        {reducedMotion || !hasMounted ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div className="mockup-site-header">
-              <span className="mockup-site-logo" style={{ color: sector.accent }}>
-                {sector.businessName}
-              </span>
-              <nav className="mockup-site-nav">
-                <span>Accueil</span>
-                <span>Services</span>
-                <span>Contact</span>
-              </nav>
-            </div>
-            <div
-              className="mockup-site-hero"
-              style={{ backgroundImage: `url(${sector.heroImage})` }}
-            >
-              <div className="mockup-site-hero-overlay" />
-              <div className="mockup-site-hero-inner">
-                <h2 className="mockup-site-tagline">{sector.tagline}</h2>
-                <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
-                  {sector.cta}
-                </button>
-              </div>
-            </div>
-            {sector.sections.map((section) => (
-              <div key={section.type} className="mockup-site-section">
-                <h3 className="mockup-site-section-title">{section.title}</h3>
-                <ul className="mockup-site-section-items">
-                  {section.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            <div className="mockup-site-footer">
-              <span>© 2026 {sector.businessName}</span>
-              <span>Mentions légales</span>
-            </div>
-          </div>
-        ) : (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={sector.id}
-              variants={STAGGER}
-              initial="initial"
-              animate="animate"
-              exit={{ opacity: 0, transition: { duration: 0.3 } }}
-              style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
-            >
-              <MockupHeader sector={sector} />
-              <MockupHero sector={sector} />
-              {sector.sections.map((section) => (
-                <MockupSection key={section.type} section={section} />
-              ))}
-              <MockupFooter sector={sector} />
-            </motion.div>
-          </AnimatePresence>
-        )}
+        <div key={sector.id} className="mockup-site mockup-site-fade-in">
+          <MockupSiteHeader sector={sector} />
+          <MockupSiteHero sector={sector} />
+          {sector.sections.map((section) => (
+            <MockupSiteSection key={section.type} section={section} />
+          ))}
+          <MockupSiteFooter sector={sector} />
+        </div>
       </div>
       <SectorTabs active={activeSector} onSelect={setActiveSector} />
     </div>

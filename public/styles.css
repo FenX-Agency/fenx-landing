@@ -753,8 +753,27 @@ h1.hero,
   flex-direction: column;
   min-height: 360px;
   padding: 16px 18px;
-  gap: 14px;
   color: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+}
+
+.mockup-site {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+@keyframes mockup-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mockup-site-fade-in {
+  animation: mockup-fade-in 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mockup-site-fade-in { animation: none; }
 }
 
 /* Mockup site internals — styles génériques (le contenu varie par secteur) */
