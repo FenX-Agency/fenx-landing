@@ -666,3 +666,56 @@ h2.section {
   height: 48px;
   background: rgba(179, 227, 77, 0.35);
 }
+
+/* ============================================
+   Reduced motion overrides (cursor + animations)
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blob {
+    display: none !important;
+  }
+  body,
+  a,
+  button,
+  [role="button"] {
+    cursor: auto !important;
+  }
+  /* Désactiver halo float animations */
+  .star {
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   Mobile nav adjustments
+   ============================================ */
+@media (max-width: 640px) {
+  .site-header {
+    padding: 16px 20px;
+  }
+  .site-nav {
+    gap: 12px;
+  }
+  .site-nav a:not(.nav-cta):not([class~="logo"]) {
+    display: none;
+  }
+  .site-nav .nav-cta {
+    font-size: 13px;
+  }
+  .hero {
+    padding: 100px 24px 80px;
+  }
+  .hero-ctas {
+    gap: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-ctas .btn-pill {
+    padding: 18px 28px 18px 36px;
+    font-size: 15px;
+  }
+  .hero-ctas .btn-pill .arrow-circle {
+    width: 32px;
+    height: 32px;
+  }
+}
