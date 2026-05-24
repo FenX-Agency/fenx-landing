@@ -1,6 +1,6 @@
 ---
 import Button from './Button.astro';
-import HeroVisualMockup from './HeroVisualMockup.tsx';
+import HeroVisualMockup from './HeroVisualMockup.astro';
 ---
 <section id="hero" class="hero" aria-label="Présentation FenX">
   <div class="hero-stars" aria-hidden="true">
@@ -23,7 +23,7 @@ import HeroVisualMockup from './HeroVisualMockup.tsx';
       </div>
     </div>
     <div class="hero-visual">
-      <HeroVisualMockup client:visible />
+      <HeroVisualMockup />
     </div>
   </div>
 </section>

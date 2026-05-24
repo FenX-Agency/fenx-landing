@@ -1,0 +1,166 @@
+---
+import { sectors } from './sectors';
+
+const sectorUrls = sectors.map((s) => s.url);
+---
+
+<div
+  class="mockup-frame"
+  aria-hidden="true"
+  data-mockup
+  data-mockup-urls={JSON.stringify(sectorUrls)}
+>
+  <div class="mockup-chrome">
+    <div class="mockup-dots">
+      <span class="mockup-dot mockup-dot-red"></span>
+      <span class="mockup-dot mockup-dot-yellow"></span>
+      <span class="mockup-dot mockup-dot-green"></span>
+    </div>
+    <div class="mockup-url-bar">
+      <span class="mockup-url-protocol">https://</span>
+      <span class="mockup-url-host" data-mockup-url>{sectors[0].url}</span>
+    </div>
+  </div>
+
+  <div class="mockup-content">
+    {sectors.map((sector, idx) => (
+      <div
+        class={`mockup-site mockup-site-fade-in ${idx === 0 ? 'is-active' : ''}`}
+        data-mockup-sector={idx}
+      >
+        <div class="mockup-site-header">
+          <span class="mockup-site-logo" style={`color: ${sector.accent}`}>
+            {sector.businessName}
+          </span>
+          <nav class="mockup-site-nav">
+            <span>Accueil</span>
+            <span>Services</span>
+            <span>Contact</span>
+          </nav>
+        </div>
+
+        <div class="mockup-site-hero" style={`background-image: url(${sector.heroImage})`}>
+          <div class="mockup-site-hero-overlay"></div>
+          <div class="mockup-site-hero-inner">
+            <h2 class="mockup-site-tagline">{sector.tagline}</h2>
+            <button
+              class="mockup-site-cta"
+              style={`background: ${sector.accent}`}
+              type="button"
+              tabindex="-1"
+            >
+              {sector.cta}
+            </button>
+          </div>
+        </div>
+
+        {sector.sections.map((section) => (
+          <div class="mockup-site-section">
+            <h3 class="mockup-site-section-title">{section.title}</h3>
+            <ul class="mockup-site-section-items">
+              {section.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))}
+
+        <div class="mockup-site-footer">
+          <span>© 2026 {sector.businessName}</span>
+          <span>Mentions légales</span>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="mockup-tabs">
+    {sectors.map((s, idx) => (
+      <button
+        type="button"
+        class={`mockup-tab ${idx === 0 ? 'is-active' : ''}`}
+        data-mockup-tab={idx}
+        aria-pressed={idx === 0}
+      >
+        {s.id}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  const SECTOR_DURATION_MS = 7500;
+
+  function initMockup(root: HTMLElement) {
+    const sectors = Array.from(
+      root.querySelectorAll<HTMLElement>('[data-mockup-sector]')
+    );
+    const tabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>('[data-mockup-tab]')
+    );
+    const urlEl = root.querySelector<HTMLElement>('[data-mockup-url]');
+    const urlsAttr = root.getAttribute('data-mockup-urls');
+    const urls: string[] = urlsAttr ? JSON.parse(urlsAttr) : [];
+
+    const count = sectors.length;
+    if (count === 0) return;
+
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    let active = 0;
+    let paused = false;
+    let timer: number | null = null;
+
+    function clearTimer() {
+      if (timer !== null) {
+        window.clearTimeout(timer);
+        timer = null;
+      }
+    }
+
+    function scheduleNext() {
+      clearTimer();
+      if (paused || prefersReduced) return;
+      timer = window.setTimeout(() => {
+        setActive((active + 1) % count);
+      }, SECTOR_DURATION_MS);
+    }
+
+    function setActive(idx: number) {
+      if (idx === active) {
+        scheduleNext();
+        return;
+      }
+      active = idx;
+      sectors.forEach((el, i) => {
+        el.classList.toggle('is-active', i === idx);
+      });
+      tabs.forEach((el, i) => {
+        el.classList.toggle('is-active', i === idx);
+        el.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
+      });
+      if (urlEl && urls[idx]) {
+        urlEl.textContent = urls[idx];
+      }
+      scheduleNext();
+    }
+
+    tabs.forEach((tab, idx) => {
+      tab.addEventListener('click', () => setActive(idx));
+    });
+
+    root.addEventListener('mouseenter', () => {
+      paused = true;
+      clearTimer();
+    });
+    root.addEventListener('mouseleave', () => {
+      paused = false;
+      scheduleNext();
+    });
+
+    scheduleNext();
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('[data-mockup]')
+    .forEach(initMockup);
+</script>
