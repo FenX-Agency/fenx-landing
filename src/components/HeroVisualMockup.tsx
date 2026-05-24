@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { sectors, type Sector } from './sectors';
 
 function MockupHeader({ sector }: { sector: Sector }) {
@@ -20,7 +20,7 @@ function MockupHero({ sector }: { sector: Sector }) {
   return (
     <div className="mockup-site-hero">
       <h2 className="mockup-site-tagline">{sector.tagline}</h2>
-      <button className="mockup-site-cta" style={{ background: sector.accent }}>
+      <button className="mockup-site-cta" style={{ background: sector.accent }} type="button">
         {sector.cta}
       </button>
     </div>
@@ -84,8 +84,18 @@ function SectorTabs({ active, onSelect }: { active: number; onSelect: (idx: numb
   );
 }
 
+const SECTOR_DURATION_MS = 7500;
+
 export default function HeroVisualMockup() {
-  const [activeSector] = useState(0);
+  const [activeSector, setActiveSector] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setActiveSector((prev) => (prev + 1) % sectors.length);
+    }, SECTOR_DURATION_MS);
+    return () => clearTimeout(timer);
+  }, [activeSector]);
+
   const sector = sectors[activeSector];
 
   return (
@@ -99,7 +109,7 @@ export default function HeroVisualMockup() {
         ))}
         <MockupFooter sector={sector} />
       </div>
-      <SectorTabs active={activeSector} onSelect={() => {}} />
+      <SectorTabs active={activeSector} onSelect={setActiveSector} />
     </div>
   );
 }
