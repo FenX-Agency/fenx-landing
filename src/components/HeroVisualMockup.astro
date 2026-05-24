@@ -2,6 +2,12 @@
 import { sectors } from './sectors';
 
 const sectorUrls = sectors.map((s) => s.url);
+const sectorImages: Record<string, string> = {
+  restauration: '/assets/mockup/restauration.png',
+  studio: '/assets/mockup/studio.png',
+  atelier: '/assets/mockup/atelier.png',
+  cabinet: '/assets/mockup/cabinet.png',
+};
 ---
 
 <div
@@ -24,50 +30,14 @@ const sectorUrls = sectors.map((s) => s.url);
 
   <div class="mockup-content">
     {sectors.map((sector, idx) => (
-      <div
-        class={`mockup-site mockup-site-fade-in ${idx === 0 ? 'is-active' : ''}`}
+      <img
+        src={sectorImages[sector.id]}
+        alt=""
+        loading={idx === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+        class={`mockup-shot ${idx === 0 ? 'is-active' : ''}`}
         data-mockup-sector={idx}
-      >
-        <div class="mockup-site-header">
-          <span class="mockup-site-logo" style={`color: ${sector.accent}`}>
-            {sector.businessName}
-          </span>
-          <nav class="mockup-site-nav">
-            <span>Accueil</span>
-            <span>Services</span>
-            <span>Contact</span>
-          </nav>
-        </div>
-
-        <div class="mockup-site-hero" style={`background-image: url(${sector.heroImage})`}>
-          <div class="mockup-site-hero-overlay"></div>
-          <div class="mockup-site-hero-inner">
-            <h2 class="mockup-site-tagline">{sector.tagline}</h2>
-            <button
-              class="mockup-site-cta"
-              style={`background: ${sector.accent}`}
-              type="button"
-              tabindex="-1"
-            >
-              {sector.cta}
-            </button>
-          </div>
-        </div>
-
-        {sector.sections.map((section) => (
-          <div class="mockup-site-section">
-            <h3 class="mockup-site-section-title">{section.title}</h3>
-            <ul class="mockup-site-section-items">
-              {section.items.map((item) => <li>{item}</li>)}
-            </ul>
-          </div>
-        ))}
-
-        <div class="mockup-site-footer">
-          <span>© 2026 {sector.businessName}</span>
-          <span>Mentions légales</span>
-        </div>
-      </div>
+      />
     ))}
   </div>
 
@@ -89,7 +59,7 @@ const sectorUrls = sectors.map((s) => s.url);
   const SECTOR_DURATION_MS = 7500;
 
   function initMockup(root: HTMLElement) {
-    const sectors = Array.from(
+    const shots = Array.from(
       root.querySelectorAll<HTMLElement>('[data-mockup-sector]')
     );
     const tabs = Array.from(
@@ -99,7 +69,7 @@ const sectorUrls = sectors.map((s) => s.url);
     const urlsAttr = root.getAttribute('data-mockup-urls');
     const urls: string[] = urlsAttr ? JSON.parse(urlsAttr) : [];
 
-    const count = sectors.length;
+    const count = shots.length;
     if (count === 0) return;
 
     const prefersReduced = window.matchMedia(
@@ -131,7 +101,7 @@ const sectorUrls = sectors.map((s) => s.url);
         return;
       }
       active = idx;
-      sectors.forEach((el, i) => {
+      shots.forEach((el, i) => {
         el.classList.toggle('is-active', i === idx);
       });
       tabs.forEach((el, i) => {
