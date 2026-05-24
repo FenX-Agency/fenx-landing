@@ -1,0 +1,102 @@
+/* ============================================
+   FenX Landing V2 — Design System
+   Spec : 2026-05-24-landing-fenx-v2-design.md
+   ============================================ */
+
+:root {
+  /* Palette Lime Edge Glow */
+  --charcoal-bg: #14161a;
+  --charcoal-surface: #1a201a;
+  --charcoal-card: #181c20;
+  --lime-primary: #b3e34d;
+  --lime-soft: #d9f99d;
+  --lime-dark: #84cc16;
+  --lime-gradient-top: #c8f06c;
+  --text-primary: #f5f5f3;
+  --text-muted: #a3a39d;
+  --text-dim: #6b6b66;
+  --border-subtle: rgba(179, 227, 77, 0.15);
+
+  /* Spacing */
+  --pad-section-desktop: 120px 32px;
+  --pad-section-mobile: 64px 24px;
+  --container-max: 1100px;
+
+  /* Typography sizing */
+  --h1-hero: clamp(4rem, 8vw, 6.5rem);
+  --h1-hero-mobile: clamp(2.5rem, 12vw, 3.5rem);
+  --h2-section: clamp(2.5rem, 5vw, 3.75rem);
+  --h2-section-mobile: clamp(1.75rem, 6vw, 2.5rem);
+  --body-size: 1.0625rem;
+  --body-size-mobile: 1rem;
+}
+
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--charcoal-bg);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Container */
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 32px; }
+@media (max-width: 768px) {
+  .container { padding: 0 24px; }
+}
+
+/* Sections base */
+section { padding: 120px 32px; }
+@media (max-width: 768px) {
+  section { padding: 64px 24px; }
+}
+
+/* Typography helpers */
+.label {
+  display: inline-block;
+  padding: 5px 12px;
+  background: rgba(179, 227, 77, 0.12);
+  border: 1px solid rgba(179, 227, 77, 0.4);
+  border-radius: 100px;
+  font-size: 10px;
+  color: var(--lime-soft);
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+h1.hero {
+  font-size: var(--h1-hero);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+@media (max-width: 768px) {
+  h1.hero { font-size: var(--h1-hero-mobile); }
+}
+
+h2.section {
+  font-size: var(--h2-section);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+@media (max-width: 768px) {
+  h2.section { font-size: var(--h2-section-mobile); }
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
