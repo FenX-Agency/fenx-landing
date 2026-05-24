@@ -18,7 +18,10 @@ const sectorTabLabels: Record<string, string> = {
 
 <div class="sector-grid">
   {sectors.map((sector, idx) => (
-    <article class="sector-card">
+    <article
+      class="sector-card hero-reveal"
+      style={`--reveal-delay: ${560 + idx * 160}ms`}
+    >
       <div class="sector-card-image-wrap">
         <img
           src={sectorImages[sector.id]}
