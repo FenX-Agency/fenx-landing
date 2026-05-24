@@ -1,5 +1,6 @@
 ---
 import Button from './Button.astro';
+import HeroVisualMockup from './HeroVisualMockup.tsx';
 ---
 <section id="hero" class="hero" aria-label="Présentation FenX">
   <div class="hero-stars" aria-hidden="true">
@@ -13,16 +14,16 @@ import Button from './Button.astro';
 
   <div class="container hero-grid">
     <div class="hero-content">
-      <span class="label">Sites · Visibilité · Vidéos IA</span>
-      <h1 class="hero"><span>VOTRE COMMERCE</span><span>MÉRITE MIEUX.</span></h1>
-      <p class="hero-sub">Un site qui transforme vos visiteurs en clients. Livré en 7 jours, à partir de 990€.</p>
+      <span class="label">Sites · SEO local · Vidéos IA</span>
+      <h1 class="hero"><span>PLUS DE CLIENTS.</span><span>EN 7 JOURS.</span></h1>
+      <p class="hero-sub">Un site qui fait le boulot — design, SEO local, autonomie. À partir de 990€, livré clé en main.</p>
       <div class="hero-ctas">
         <Button href="mailto:anthony.grupposo@gmail.com?subject=Intéressé par FenX" text="Discuter projet" />
         <a href="https://demo-wok.fenx-agency.com" target="_blank" rel="noopener" class="btn-text">Voir une démo →</a>
       </div>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <!-- Placeholder pour ajout futur (mockup, image, animation, etc.) -->
+    <div class="hero-visual">
+      <HeroVisualMockup client:visible />
     </div>
   </div>
 </section>
