@@ -348,15 +348,63 @@ h1.hero,
   }
 }
 
-/* Gradient highlight on the accent word in H1 */
-.hero-h1-accent {
+/* Gradient highlights on accent words in H1 (2 colors for visual contrast) */
+.hero-h1-accent,
+.hero-h1-accent-2 {
   display: inline;
-  background: linear-gradient(135deg, var(--violet-soft) 0%, var(--violet-primary) 50%, var(--violet-dark) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
   white-space: inherit;
+}
+.hero-h1-accent {
+  background-image: linear-gradient(135deg, var(--violet-soft) 0%, var(--violet-primary) 100%);
+}
+.hero-h1-accent-2 {
+  background-image: linear-gradient(135deg, var(--lavender-bright) 0%, var(--violet-soft) 100%);
+}
+
+/* Hero badge pill (21st.dev-inspired, Cosmic Violet adapted) */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 4px 14px 4px 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--violet-primary) 0%,
+    var(--violet-dark) 100%
+  );
+  border: 3px solid color-mix(in oklab, var(--violet-soft) 35%, transparent);
+  box-shadow:
+    0 6px 20px -6px rgba(167, 139, 250, 0.5),
+    0 0 0 1px oklch(0.95 0.05 280 / 0.05);
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 1;
+}
+.hero-badge-tag {
+  background: #ffffff;
+  color: #16161c;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.hero-badge-text {
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  padding-right: 2px;
+}
+@media (max-width: 768px) {
+  .hero-badge { font-size: 12px; }
+  .hero-badge-tag { font-size: 10px; padding: 4px 8px; }
 }
 
 /* Hero grid : 2 colonnes (contenu gauche ≈ 45 / visuel droite ≈ 55) */
@@ -739,25 +787,7 @@ h1.hero,
   align-items: center;
 }
 
-/* Reveal animation at load (TimelineContent-style cascade) */
-@keyframes mockup-reveal-stage {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-    filter: blur(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-.mockup-stage {
-  animation: mockup-reveal-stage 700ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .mockup-stage { animation: none; }
-}
+/* (Note: reveal animation now only on hero content via .hero-reveal, not on mockup) */
 
 .mockup-frame {
   width: 100%;
