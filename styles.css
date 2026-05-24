@@ -353,3 +353,34 @@ h2.section {
   height: 24px;
   background: linear-gradient(to bottom, var(--lime-primary), transparent);
 }
+
+/* ============================================
+   Stars Ambient (Hero background)
+   ============================================ */
+.hero-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--lime-soft);
+  animation: star-float-a 4s ease-in-out infinite;
+}
+.star.star-b { animation: star-float-b 5s ease-in-out infinite; }
+.star.star-c { animation: star-float-c 4.5s ease-in-out infinite; }
+
+@keyframes star-float-a {
+  0%, 100% { transform: translateY(0px); opacity: 0.35; }
+  50% { transform: translateY(-6px); opacity: 0.65; }
+}
+@keyframes star-float-b {
+  0%, 100% { transform: translateY(-3px); opacity: 0.45; }
+  50% { transform: translateY(3px); opacity: 0.7; }
+}
+@keyframes star-float-c {
+  0%, 100% { transform: translateY(2px); opacity: 0.3; }
+  50% { transform: translateY(-8px); opacity: 0.55; }
+}
