@@ -33,7 +33,7 @@
   --container-max: 1100px;
 
   /* Typography sizing (réduits — hero compact, H2 sur 1 ligne) */
-  --h1-hero: clamp(2.25rem, 3.6vw, 3rem);
+  --h1-hero: clamp(2.5rem, 5.2vw, 4.5rem);
   --h1-hero-mobile: clamp(2.25rem, 10vw, 3rem);
   --h2-section: clamp(1.75rem, 3.5vw, 2.5rem);
   --h2-section-mobile: clamp(1.5rem, 5vw, 2rem);
@@ -80,16 +80,13 @@ section { padding: 120px 32px; }
 
 h1.hero {
   font-size: var(--h1-hero);
-  font-weight: 900;
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-transform: none;
   color: var(--text-primary);
 }
-h1.hero span {
-  display: block;
-  white-space: nowrap;
-}
+/* Removed forced block + nowrap on inner spans — H1 now flows naturally with inline gradient accents */
 @media (max-width: 768px) {
   h1.hero { font-size: var(--h1-hero-mobile); }
 }
@@ -353,6 +350,7 @@ h1.hero,
 h1.hero .hero-h1-accent,
 h1.hero .hero-h1-accent-2 {
   display: inline;
+  font-weight: 600;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -401,7 +399,15 @@ h1.hero .hero-h1-accent-2 {
   color: #ffffff;
   font-weight: 500;
   letter-spacing: -0.005em;
-  padding-right: 2px;
+}
+.hero-badge-emph {
+  font-weight: 700;
+}
+.hero-badge-arrow {
+  width: 12px;
+  height: 12px;
+  color: #ffffff;
+  flex-shrink: 0;
 }
 @media (max-width: 768px) {
   .hero-badge { font-size: 12px; }
@@ -799,22 +805,19 @@ h1.hero .hero-h1-accent-2 {
   width: 100%;
   max-width: 1100px;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
   margin: 0 auto;
 }
-@media (max-width: 1024px) {
-  .sector-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-}
-@media (max-width: 540px) {
-  .sector-grid { grid-template-columns: 1fr; }
+@media (max-width: 640px) {
+  .sector-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 
 .sector-card {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 3;
-  border-radius: 16px;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
   overflow: hidden;
   background: oklch(0.18 0.04 280);
   border: 1px solid oklch(0.3 0.05 280 / 0.35);
@@ -849,21 +852,20 @@ h1.hero .hero-h1-accent-2 {
   display: block;
 }
 
-/* Progressive blur veil at bottom for label legibility (21st.dev ProgressiveBlur style) */
+/* Progressive blur veil — true backdrop-filter blur (21st.dev ProgressiveBlur style)
+   Uses mask-image to fade the blur effect into transparency at the top */
 .sector-card-blur-veil {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 45%;
+  height: 25%;
   pointer-events: none;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.85) 0%,
-    rgba(0, 0, 0, 0.6) 30%,
-    rgba(0, 0, 0, 0.2) 70%,
-    transparent 100%
-  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+  mask-image: linear-gradient(to top, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 60%, transparent 100%);
 }
 
 .sector-card-label {
