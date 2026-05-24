@@ -2,56 +2,84 @@
 import { sectors } from './sectors';
 
 const sectorUrls = sectors.map((s) => s.url);
+const sectorMeta = sectors.map((s) => ({
+  id: s.id,
+  label: s.businessName,
+  sub: s.tagline,
+}));
 const sectorImages: Record<string, string> = {
   restauration: '/assets/mockup/restauration.webp',
   studio: '/assets/mockup/studio.webp',
   atelier: '/assets/mockup/atelier.webp',
   cabinet: '/assets/mockup/cabinet.webp',
 };
+const sectorTabLabels: Record<string, string> = {
+  restauration: 'Restauration',
+  studio: 'Studio',
+  atelier: 'Atelier',
+  cabinet: 'Cabinet',
+};
 ---
 
-<div
-  class="mockup-frame"
-  aria-hidden="true"
-  data-mockup
-  data-mockup-urls={JSON.stringify(sectorUrls)}
->
-  <div class="mockup-chrome">
-    <div class="mockup-dots">
-      <span class="mockup-dot mockup-dot-red"></span>
-      <span class="mockup-dot mockup-dot-yellow"></span>
-      <span class="mockup-dot mockup-dot-green"></span>
+<div class="mockup-stage" data-mockup-stage>
+  <div
+    class="mockup-frame"
+    aria-hidden="true"
+    data-mockup
+    data-mockup-urls={JSON.stringify(sectorUrls)}
+    data-mockup-meta={JSON.stringify(sectorMeta)}
+  >
+    <div class="mockup-chrome">
+      <div class="mockup-dots">
+        <span class="mockup-dot mockup-dot-red"></span>
+        <span class="mockup-dot mockup-dot-yellow"></span>
+        <span class="mockup-dot mockup-dot-green"></span>
+      </div>
+      <div class="mockup-url-bar">
+        <span class="mockup-url-protocol">https://</span>
+        <span class="mockup-url-host" data-mockup-url>{sectors[0].url}</span>
+      </div>
     </div>
-    <div class="mockup-url-bar">
-      <span class="mockup-url-protocol">https://</span>
-      <span class="mockup-url-host" data-mockup-url>{sectors[0].url}</span>
+
+    <div class="mockup-content">
+      {sectors.map((sector, idx) => (
+        <img
+          src={sectorImages[sector.id]}
+          alt=""
+          loading={idx === 0 ? 'eager' : 'lazy'}
+          decoding="async"
+          class={`mockup-shot ${idx === 0 ? 'is-active' : ''}`}
+          data-mockup-sector={idx}
+        />
+      ))}
+
+      <div class="mockup-blur-veil"></div>
+
+      <div class="mockup-overlay">
+        <span class="mockup-overlay-eyebrow" data-mockup-eyebrow>
+          {sectorTabLabels[sectors[0].id]}
+        </span>
+        <h3 class="mockup-overlay-title" data-mockup-title>
+          {sectors[0].businessName} · {sectors[0].tagline}
+        </h3>
+      </div>
     </div>
   </div>
 
-  <div class="mockup-content">
-    {sectors.map((sector, idx) => (
-      <img
-        src={sectorImages[sector.id]}
-        alt=""
-        loading={idx === 0 ? 'eager' : 'lazy'}
-        decoding="async"
-        class={`mockup-shot ${idx === 0 ? 'is-active' : ''}`}
-        data-mockup-sector={idx}
-      />
-    ))}
-  </div>
-
-  <div class="mockup-tabs">
-    {sectors.map((s, idx) => (
-      <button
-        type="button"
-        class={`mockup-tab ${idx === 0 ? 'is-active' : ''}`}
-        data-mockup-tab={idx}
-        aria-pressed={idx === 0}
-      >
-        {s.id}
-      </button>
-    ))}
+  <div class="mockup-tabs-wrap">
+    <div class="mockup-tabs" role="group" aria-label="Choisir un secteur">
+      {sectors.map((s, idx) => (
+        <button
+          type="button"
+          class={`mockup-tab ${idx === 0 ? 'is-active' : ''}`}
+          data-mockup-tab={idx}
+          aria-pressed={idx === 0}
+        >
+          {sectorTabLabels[s.id]}
+        </button>
+      ))}
+      <span class="mockup-tab-indicator" data-mockup-indicator></span>
+    </div>
   </div>
 </div>
 
@@ -95,6 +123,34 @@ const sectorImages: Record<string, string> = {
       }, SECTOR_DURATION_MS);
     }
 
+    const eyebrowEl = root.querySelector<HTMLElement>('[data-mockup-eyebrow]');
+    const titleEl = root.querySelector<HTMLElement>('[data-mockup-title]');
+    const metaAttr = root.getAttribute('data-mockup-meta');
+    const meta: Array<{ id: string; label: string; sub: string }> = metaAttr
+      ? JSON.parse(metaAttr)
+      : [];
+    const tabLabels: Record<string, string> = {
+      restauration: 'Restauration',
+      studio: 'Studio',
+      atelier: 'Atelier',
+      cabinet: 'Cabinet',
+    };
+
+    const stage = root.closest<HTMLElement>('[data-mockup-stage]');
+    const indicatorEl = stage?.querySelector<HTMLElement>('[data-mockup-indicator]');
+
+    function moveIndicator(idx: number) {
+      if (!indicatorEl) return;
+      const target = tabs[idx];
+      if (!target) return;
+      const tabsParent = target.parentElement as HTMLElement | null;
+      if (!tabsParent) return;
+      const parentRect = tabsParent.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      indicatorEl.style.width = `${targetRect.width}px`;
+      indicatorEl.style.transform = `translateX(${targetRect.left - parentRect.left}px)`;
+    }
+
     function setActive(idx: number) {
       if (idx === active) {
         scheduleNext();
@@ -108,8 +164,14 @@ const sectorImages: Record<string, string> = {
         el.classList.toggle('is-active', i === idx);
         el.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
       });
+      moveIndicator(idx);
       if (urlEl && urls[idx]) {
         urlEl.textContent = urls[idx];
+      }
+      const info = meta[idx];
+      if (info) {
+        if (eyebrowEl) eyebrowEl.textContent = tabLabels[info.id] ?? info.id;
+        if (titleEl) titleEl.textContent = `${info.label} · ${info.sub}`;
       }
       scheduleNext();
     }
@@ -126,6 +188,10 @@ const sectorImages: Record<string, string> = {
       paused = false;
       scheduleNext();
     });
+
+    // Set indicator on initial mount + recalc on resize
+    requestAnimationFrame(() => moveIndicator(0));
+    window.addEventListener('resize', () => moveIndicator(active), { passive: true });
 
     scheduleNext();
   }
