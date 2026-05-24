@@ -349,19 +349,20 @@ h1.hero,
 }
 
 /* Gradient highlights on accent words in H1 (2 colors for visual contrast) */
-.hero-h1-accent,
-.hero-h1-accent-2 {
+/* Higher specificity to override existing `h1.hero span { display: block }` */
+h1.hero .hero-h1-accent,
+h1.hero .hero-h1-accent-2 {
   display: inline;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  white-space: inherit;
+  white-space: normal;
 }
-.hero-h1-accent {
+h1.hero .hero-h1-accent {
   background-image: linear-gradient(135deg, var(--violet-soft) 0%, var(--violet-primary) 100%);
 }
-.hero-h1-accent-2 {
+h1.hero .hero-h1-accent-2 {
   background-image: linear-gradient(135deg, var(--lavender-bright) 0%, var(--violet-soft) 100%);
 }
 
@@ -791,10 +792,115 @@ h1.hero,
 }
 
 /* ============================================
-   Hero V3 — Browser Frame Mockup (Cosmic Violet + 21st-inspired)
+   Hero V3 — Sector Grid (4 separate cards, 21st.dev pattern)
    ============================================ */
 
-/* Outer stage — handles reveal animation + tabs spacing */
+.sector-grid {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0 auto;
+}
+@media (max-width: 1024px) {
+  .sector-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+}
+@media (max-width: 540px) {
+  .sector-grid { grid-template-columns: 1fr; }
+}
+
+.sector-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: oklch(0.18 0.04 280);
+  border: 1px solid oklch(0.3 0.05 280 / 0.35);
+  box-shadow:
+    0 8px 24px -8px rgba(0, 0, 0, 0.5),
+    0 0 0 1px oklch(0.95 0.05 280 / 0.04);
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sector-card:hover {
+  transform: translateY(-4px);
+  border-color: oklch(0.5 0.08 280 / 0.5);
+  box-shadow:
+    0 20px 40px -12px rgba(167, 139, 250, 0.3),
+    0 0 0 1px oklch(0.95 0.05 280 / 0.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sector-card,
+  .sector-card:hover { transition: none; transform: none; }
+}
+
+.sector-card-image-wrap {
+  position: absolute;
+  inset: 0;
+}
+.sector-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+/* Progressive blur veil at bottom for label legibility (21st.dev ProgressiveBlur style) */
+.sector-card-blur-veil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 45%;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 30%,
+    rgba(0, 0, 0, 0.2) 70%,
+    transparent 100%
+  );
+}
+
+.sector-card-label {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+  pointer-events: none;
+}
+.sector-card-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--violet-soft);
+}
+.sector-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 540px) {
+  .sector-card-title { font-size: 15px; }
+}
+
+/* ============================================
+   (Legacy mockup browser frame CSS kept below for now — unused, will clean later)
+   ============================================ */
+
 .mockup-stage {
   width: 100%;
   max-width: 620px;

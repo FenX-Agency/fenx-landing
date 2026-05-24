@@ -1,13 +1,13 @@
 ---
 import { sectors } from './sectors';
 
-const sectorUrls = sectors.map((s) => s.url);
 const sectorImages: Record<string, string> = {
   restauration: '/assets/mockup/restauration.webp',
   studio: '/assets/mockup/studio.webp',
   atelier: '/assets/mockup/atelier.webp',
   cabinet: '/assets/mockup/cabinet.webp',
 };
+
 const sectorTabLabels: Record<string, string> = {
   restauration: 'Restauration',
   studio: 'Studio',
@@ -16,152 +16,23 @@ const sectorTabLabels: Record<string, string> = {
 };
 ---
 
-<div class="mockup-stage" data-mockup-stage>
-  <div
-    class="mockup-frame"
-    aria-hidden="true"
-    data-mockup
-    data-mockup-urls={JSON.stringify(sectorUrls)}
-  >
-    <div class="mockup-chrome">
-      <div class="mockup-dots">
-        <span class="mockup-dot mockup-dot-red"></span>
-        <span class="mockup-dot mockup-dot-yellow"></span>
-        <span class="mockup-dot mockup-dot-green"></span>
-      </div>
-      <div class="mockup-url-bar">
-        <span class="mockup-url-protocol">https://</span>
-        <span class="mockup-url-host" data-mockup-url>{sectors[0].url}</span>
-      </div>
-    </div>
-
-    <div class="mockup-content">
-      {sectors.map((sector, idx) => (
+<div class="sector-grid">
+  {sectors.map((sector, idx) => (
+    <article class="sector-card">
+      <div class="sector-card-image-wrap">
         <img
           src={sectorImages[sector.id]}
-          alt=""
+          alt={`Aperçu site ${sector.businessName}`}
           loading={idx === 0 ? 'eager' : 'lazy'}
           decoding="async"
-          class={`mockup-shot ${idx === 0 ? 'is-active' : ''}`}
-          data-mockup-sector={idx}
+          class="sector-card-image"
         />
-      ))}
-    </div>
-  </div>
-
-  <div class="mockup-tabs-wrap">
-    <div class="mockup-tabs" role="group" aria-label="Choisir un secteur">
-      {sectors.map((s, idx) => (
-        <button
-          type="button"
-          class={`mockup-tab ${idx === 0 ? 'is-active' : ''}`}
-          data-mockup-tab={idx}
-          aria-pressed={idx === 0}
-        >
-          {sectorTabLabels[s.id]}
-        </button>
-      ))}
-      <span class="mockup-tab-indicator" data-mockup-indicator></span>
-    </div>
-  </div>
+        <div class="sector-card-blur-veil"></div>
+      </div>
+      <div class="sector-card-label">
+        <span class="sector-card-eyebrow">{sectorTabLabels[sector.id]}</span>
+        <h3 class="sector-card-title">{sector.businessName}</h3>
+      </div>
+    </article>
+  ))}
 </div>
-
-<script>
-  const SECTOR_DURATION_MS = 7500;
-
-  function initMockup(root: HTMLElement) {
-    const shots = Array.from(
-      root.querySelectorAll<HTMLElement>('[data-mockup-sector]')
-    );
-    const tabs = Array.from(
-      root.querySelectorAll<HTMLButtonElement>('[data-mockup-tab]')
-    );
-    const urlEl = root.querySelector<HTMLElement>('[data-mockup-url]');
-    const urlsAttr = root.getAttribute('data-mockup-urls');
-    const urls: string[] = urlsAttr ? JSON.parse(urlsAttr) : [];
-
-    const count = shots.length;
-    if (count === 0) return;
-
-    const prefersReduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    let active = 0;
-    let paused = false;
-    let timer: number | null = null;
-
-    function clearTimer() {
-      if (timer !== null) {
-        window.clearTimeout(timer);
-        timer = null;
-      }
-    }
-
-    function scheduleNext() {
-      clearTimer();
-      if (paused || prefersReduced) return;
-      timer = window.setTimeout(() => {
-        setActive((active + 1) % count);
-      }, SECTOR_DURATION_MS);
-    }
-
-    const stage = root.closest<HTMLElement>('[data-mockup-stage]');
-    const indicatorEl = stage?.querySelector<HTMLElement>('[data-mockup-indicator]');
-
-    function moveIndicator(idx: number) {
-      if (!indicatorEl) return;
-      const target = tabs[idx];
-      if (!target) return;
-      const tabsParent = target.parentElement as HTMLElement | null;
-      if (!tabsParent) return;
-      const parentRect = tabsParent.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      indicatorEl.style.width = `${targetRect.width}px`;
-      indicatorEl.style.transform = `translateX(${targetRect.left - parentRect.left}px)`;
-    }
-
-    function setActive(idx: number) {
-      if (idx === active) {
-        scheduleNext();
-        return;
-      }
-      active = idx;
-      shots.forEach((el, i) => {
-        el.classList.toggle('is-active', i === idx);
-      });
-      tabs.forEach((el, i) => {
-        el.classList.toggle('is-active', i === idx);
-        el.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
-      });
-      moveIndicator(idx);
-      if (urlEl && urls[idx]) {
-        urlEl.textContent = urls[idx];
-      }
-      scheduleNext();
-    }
-
-    tabs.forEach((tab, idx) => {
-      tab.addEventListener('click', () => setActive(idx));
-    });
-
-    root.addEventListener('mouseenter', () => {
-      paused = true;
-      clearTimer();
-    });
-    root.addEventListener('mouseleave', () => {
-      paused = false;
-      scheduleNext();
-    });
-
-    // Set indicator on initial mount + recalc on resize
-    requestAnimationFrame(() => moveIndicator(0));
-    window.addEventListener('resize', () => moveIndicator(active), { passive: true });
-
-    scheduleNext();
-  }
-
-  document
-    .querySelectorAll<HTMLElement>('[data-mockup]')
-    .forEach(initMockup);
-</script>
