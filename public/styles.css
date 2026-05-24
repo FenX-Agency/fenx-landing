@@ -853,19 +853,26 @@ h1.hero .hero-h1-accent-2 {
 }
 
 /* Progressive blur veil — true backdrop-filter blur (21st.dev ProgressiveBlur style)
-   Uses mask-image to fade the blur effect into transparency at the top */
+   Strong dark gradient at the bottom so label text reads on any image (incl. bright/white photos) */
 .sector-card-blur-veil {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 25%;
+  height: 40%;
   pointer-events: none;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
-  mask-image: linear-gradient(to top, black 60%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to top, black 60%, transparent 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.78) 25%,
+    rgba(0, 0, 0, 0.5) 55%,
+    rgba(0, 0, 0, 0.15) 85%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to top, black 65%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 65%, transparent 100%);
 }
 
 .sector-card-label {
