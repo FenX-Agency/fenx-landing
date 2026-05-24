@@ -86,6 +86,10 @@ h1.hero {
   text-transform: uppercase;
   color: var(--text-primary);
 }
+h1.hero span {
+  display: block;
+  white-space: nowrap;
+}
 @media (max-width: 768px) {
   h1.hero { font-size: var(--h1-hero-mobile); }
 }
