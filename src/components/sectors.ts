@@ -75,7 +75,7 @@ export const sectors: Sector[] = [
     accent: '#ea580c',
     tagline: 'Menuiserie sur-mesure',
     cta: 'Demander un devis',
-    heroImage: 'https://images.unsplash.com/photo-1572297974806-94c2b3b9c6c4?w=800&h=320&fit=crop&q=70',
+    heroImage: 'https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=800&h=320&fit=crop&q=70',
     sections: [
       {
         type: 'realisations',
