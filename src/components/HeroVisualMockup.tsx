@@ -117,18 +117,24 @@ function SectorTabs({ active, onSelect }: { active: number; onSelect: (idx: numb
 
 export default function HeroVisualMockup() {
   const [activeSector, setActiveSector] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setTimeout(() => {
       setActiveSector((prev) => (prev + 1) % sectors.length);
     }, SECTOR_DURATION_MS);
     return () => clearTimeout(timer);
-  }, [activeSector]);
+  }, [activeSector, isPaused]);
 
   const sector = sectors[activeSector];
 
   return (
-    <div className="mockup-frame">
+    <div
+      className="mockup-frame"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <BrowserChrome url={sector.url} />
       <div className="mockup-content">
         <AnimatePresence mode="wait">
