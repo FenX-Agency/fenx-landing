@@ -33,7 +33,7 @@
   --container-max: 1100px;
 
   /* Typography sizing (réduits — hero compact, H2 sur 1 ligne) */
-  --h1-hero: clamp(2.75rem, 5.5vw, 4.5rem);
+  --h1-hero: clamp(2.5rem, 4.2vw, 3.5rem);
   --h1-hero-mobile: clamp(2.25rem, 10vw, 3rem);
   --h2-section: clamp(1.75rem, 3.5vw, 2.5rem);
   --h2-section-mobile: clamp(1.5rem, 5vw, 2rem);

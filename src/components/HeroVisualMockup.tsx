@@ -118,8 +118,10 @@ export default function HeroVisualMockup() {
   const [activeSector, setActiveSector] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     setReducedMotion(mq.matches);
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
@@ -128,12 +130,12 @@ export default function HeroVisualMockup() {
   }, []);
 
   useEffect(() => {
-    if (isPaused || reducedMotion) return;
+    if (isPaused || reducedMotion || !hasMounted) return;
     const timer = setTimeout(() => {
       setActiveSector((prev) => (prev + 1) % sectors.length);
     }, SECTOR_DURATION_MS);
     return () => clearTimeout(timer);
-  }, [activeSector, isPaused, reducedMotion]);
+  }, [activeSector, isPaused, reducedMotion, hasMounted]);
 
   const sector = sectors[activeSector];
 
@@ -146,7 +148,7 @@ export default function HeroVisualMockup() {
     >
       <BrowserChrome url={sector.url} />
       <div className="mockup-content">
-        {reducedMotion ? (
+        {reducedMotion || !hasMounted ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div className="mockup-site-header">
               <span className="mockup-site-logo" style={{ color: sector.accent }}>
