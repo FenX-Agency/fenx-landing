@@ -407,20 +407,37 @@ h1.hero,
   .hero-badge-tag { font-size: 10px; padding: 4px 8px; }
 }
 
-/* Hero grid : 2 colonnes (contenu gauche ≈ 45 / visuel droite ≈ 55) */
-.hero-grid {
+/* Hero stack : contenu centré single-column + mockup full-width below */
+.hero-stack {
   position: relative;
   z-index: 5;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.25fr);
-  gap: 60px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 64px;
 }
-@media (max-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
+@media (max-width: 768px) {
+  .hero-stack { gap: 48px; }
+}
+
+.hero-content-center {
+  text-align: center;
+  align-items: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.hero-content-center .hero-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-content-center .hero-ctas {
+  justify-content: center;
+}
+
+.hero-visual-below {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .hero-content {
