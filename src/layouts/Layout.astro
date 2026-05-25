@@ -40,8 +40,8 @@ const {
     // Disable browser scroll restoration on reload — avoid the "jump to bottom" issue on Firefox hard refresh
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   </script>
-  <!-- Lenis + GSAP ScrollTrigger reveals disabled: were creating 2-step jerky scroll on Firefox.
-       Native Firefox/Chrome smooth scroll is enough for premium feel. -->
+  <!-- Lenis + GSAP disabled (Firefox jitter). Replaced by vanilla IntersectionObserver reveals + subtle parallax. -->
+  <script src="/scripts/scroll-fx.js" defer is:inline></script>
   <script src="/scripts/pixel-canvas.js" defer is:inline></script>
 </body>
 </html>

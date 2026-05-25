@@ -24,12 +24,12 @@ const pains = [
 ---
 <section id="probleme" class="probleme">
   <div class="container">
-    <p class="label">Le constat</p>
-    <h2 class="section">TON SITE NE RESSEMBLE PAS À TON BOULOT.</h2>
-    <p class="section-sub">4 douleurs visibles qu'on entend tout le temps.</p>
+    <p class="label" data-reveal>Le constat</p>
+    <h2 class="section" data-reveal style="--reveal-delay: 80ms">TON SITE NE RESSEMBLE PAS À TON BOULOT.</h2>
+    <p class="section-sub" data-reveal style="--reveal-delay: 160ms">4 douleurs visibles qu'on entend tout le temps.</p>
     <div class="pain-grid">
-      {pains.map((pain) => (
-        <article class="pain-card">
+      {pains.map((pain, idx) => (
+        <article class="pain-card" data-reveal style={`--reveal-delay: ${240 + idx * 100}ms`}>
           <div class="pain-icon">{pain.icon}</div>
           <h3>{pain.title}</h3>
           <p>{pain.desc}</p>

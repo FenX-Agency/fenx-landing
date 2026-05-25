@@ -24,11 +24,11 @@ const steps = [
 ---
 <section id="processus" class="processus">
   <div class="container">
-    <p class="label">Comment ça se passe</p>
-    <h2 class="section">DE LA SIGNATURE AU LIVE EN 7 JOURS.</h2>
+    <p class="label" data-reveal>Comment ça se passe</p>
+    <h2 class="section" data-reveal style="--reveal-delay: 80ms">DE LA SIGNATURE AU LIVE EN 7 JOURS.</h2>
     <ol class="steps-flow">
-      {steps.map((step) => (
-        <li class="step-card">
+      {steps.map((step, idx) => (
+        <li class="step-card" data-reveal style={`--reveal-delay: ${160 + idx * 100}ms`}>
           <div class="step-number">{step.num}</div>
           <h3>{step.title}</h3>
           <p>{step.desc}</p>

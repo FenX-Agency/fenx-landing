@@ -51,11 +51,11 @@ const packs = [
 ---
 <section id="offre" class="offre">
   <div class="container">
-    <p class="label">L'offre</p>
-    <h2 class="section">3 PRODUITS. PRIX FIXES. ZÉRO SURPRISE.</h2>
+    <p class="label" data-reveal>L'offre</p>
+    <h2 class="section" data-reveal style="--reveal-delay: 80ms">3 PRODUITS. PRIX FIXES. ZÉRO SURPRISE.</h2>
     <div class="packs-grid">
-      {packs.map((pack) => (
-        <article class="pack-card">
+      {packs.map((pack, idx) => (
+        <article class="pack-card" data-reveal style={`--reveal-delay: ${160 + idx * 120}ms`}>
           <span class="pack-tag">{pack.tag}</span>
           <h3 class="pack-name">{pack.name}</h3>
           <div class="pack-price">{pack.price}{pack.unit && <span class="pack-unit">{pack.unit}</span>}</div>
