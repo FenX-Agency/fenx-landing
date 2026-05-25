@@ -753,6 +753,25 @@ h1.hero .hero-h1-accent-2 {
   color: var(--text-muted);
   font-size: 15px;
 }
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 4px;
+  color: var(--violet-primary) !important;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--violet-primary) 40%, transparent);
+  padding-bottom: 2px;
+  transition: color 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+.footer-cta:hover {
+  color: var(--lavender-bright) !important;
+  border-color: var(--lavender-bright);
+  transform: translateX(2px);
+}
 .footer-address {
   color: var(--text-dim);
   font-size: 13px;
