@@ -177,7 +177,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     }
 
     const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const PHONE_REGEX = /^[\d\s+().\-]{6,}$/;
+    const PHONE_ALLOWED_CHARS = /^[\d\s.\-()]+$/; // digits + format separators only
 
     function validateField(name: string, value: string): string {
       const v = value.trim();
@@ -194,8 +194,9 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       }
       if (name === 'telephone') {
         if (!v) return ''; // optional
-        if (!PHONE_REGEX.test(v)) return 'Téléphone invalide (chiffres uniquement)';
-        if (v.length > 30) return '30 caractères maximum';
+        if (!PHONE_ALLOWED_CHARS.test(v)) return 'Caractères invalides (chiffres uniquement)';
+        const digits = v.replace(/\D/g, '');
+        if (digits.length !== 10) return 'Le numéro doit faire 10 chiffres';
       }
       if (name === 'message') {
         if (!v) return 'Décrivez brièvement votre projet';
