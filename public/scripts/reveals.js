@@ -14,6 +14,11 @@
   // === LENIS + SCROLLTRIGGER INTEGRATION (critique pour que les triggers marchent) ===
   function integrateLenisScrollTrigger() {
     if (!window.lenis || typeof window.lenis.on !== 'function') return false;
+    // CRITICAL: stop Lenis's own RAF before adding it to gsap.ticker —
+    // otherwise Lenis is ticked twice per frame (double-step = jerky scroll).
+    if (typeof window.stopLenisRaf === 'function') {
+      window.stopLenisRaf();
+    }
     window.lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => { window.lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);

@@ -1,5 +1,7 @@
 // Lenis Smooth Scroll Init
 // Cuberto-style silky smooth scrolling
+// Exposes window.stopLenisRaf() so other scripts (reveals.js) can take over
+// the tick loop via gsap.ticker without causing a double-step.
 
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -11,18 +13,26 @@
   }
 
   const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    lerp: 0.1,
     smoothWheel: true,
-    smoothTouch: false, // Touch reste natif (mobile)
+    syncTouch: false, // touch reste natif (mobile)
+    wheelMultiplier: 1,
+    touchMultiplier: 1.2,
   });
 
+  let rafId = null;
   function raf(time) {
     lenis.raf(time);
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
+  rafId = requestAnimationFrame(raf);
 
-  // Expose pour autres scripts qui veulent scrollTo
+  // Expose for other scripts
   window.lenis = lenis;
+  window.stopLenisRaf = function () {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  };
 })();
