@@ -13,11 +13,11 @@
   }
 
   const lenis = new Lenis({
-    lerp: 0.1,
+    duration: 1.0,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
     syncTouch: false, // touch reste natif (mobile)
     wheelMultiplier: 1,
-    touchMultiplier: 1.2,
   });
 
   let rafId = null;

@@ -11,17 +11,14 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // === LENIS + SCROLLTRIGGER INTEGRATION (critique pour que les triggers marchent) ===
+  // === LENIS + SCROLLTRIGGER INTEGRATION ===
+  // Keep Lenis on its OWN requestAnimationFrame (set up in lenis.js).
+  // Do NOT take it over with gsap.ticker — on Firefox this creates a 2-step scroll
+  // (Firefox internal wheel handling + gsap.ticker rate mismatch).
+  // We only bridge Lenis scroll events to ScrollTrigger.update.
   function integrateLenisScrollTrigger() {
     if (!window.lenis || typeof window.lenis.on !== 'function') return false;
-    // CRITICAL: stop Lenis's own RAF before adding it to gsap.ticker —
-    // otherwise Lenis is ticked twice per frame (double-step = jerky scroll).
-    if (typeof window.stopLenisRaf === 'function') {
-      window.stopLenisRaf();
-    }
     window.lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { window.lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
     ScrollTrigger.refresh();
     return true;
   }
