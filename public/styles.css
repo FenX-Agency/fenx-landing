@@ -80,13 +80,22 @@ section { padding: 120px 32px; }
 
 h1.hero {
   font-size: var(--h1-hero);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.025em;
-  text-transform: none;
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
   color: var(--text-primary);
 }
-/* Removed forced block + nowrap on inner spans — H1 now flows naturally with inline gradient accents */
+
+/* Glitch / chromatic aberration effect (RGB split style) */
+.hero-glitch {
+  text-shadow:
+    -1.5px 0 0 rgba(167, 139, 250, 0.85),
+    1.5px 0 0 rgba(96, 199, 233, 0.7);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-glitch { text-shadow: none; }
+}
 @media (max-width: 768px) {
   h1.hero { font-size: var(--h1-hero-mobile); }
 }
