@@ -36,11 +36,12 @@ const {
 
   <slot />
 
-  <script src="https://cdn.skypack.dev/@studio-freight/lenis@1.0.42" is:inline></script>
-  <script src="/scripts/lenis.js" defer is:inline></script>
-  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js" defer is:inline></script>
-  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js" defer is:inline></script>
-  <script src="/scripts/reveals.js" defer is:inline></script>
+  <script is:inline>
+    // Disable browser scroll restoration on reload — avoid the "jump to bottom" issue on Firefox hard refresh
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  </script>
+  <!-- Lenis + GSAP ScrollTrigger reveals disabled: were creating 2-step jerky scroll on Firefox.
+       Native Firefox/Chrome smooth scroll is enough for premium feel. -->
   <script src="/scripts/pixel-canvas.js" defer is:inline></script>
 </body>
 </html>

@@ -43,8 +43,8 @@
 
 /* Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-/* Native smooth scroll DISABLED — conflicts with Lenis (causes jitter). Lenis handles smoothness. */
-html { scroll-behavior: auto; }
+/* Native smooth scroll — kept simple, Lenis disabled (was jittery on Firefox) */
+html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', sans-serif;
   background: var(--charcoal-bg);
@@ -52,13 +52,6 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
 }
-
-/* Lenis recommended reset — prevents Lenis from fighting with native scroll */
-html.lenis,
-html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: hidden; }
 
 /* Container */
 .container { max-width: var(--container-max); margin: 0 auto; padding: 0 32px; }
