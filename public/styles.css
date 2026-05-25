@@ -34,7 +34,7 @@
 
   /* Typography sizing (réduits — hero compact, H2 sur 1 ligne) */
   --h1-hero: clamp(2.5rem, 5.2vw, 4.5rem);
-  --h1-hero-mobile: clamp(2.25rem, 10vw, 3rem);
+  --h1-hero-mobile: clamp(1.9rem, 8.5vw, 2.5rem);
   --h2-section: clamp(1.75rem, 3.5vw, 2.5rem);
   --h2-section-mobile: clamp(1.5rem, 5vw, 2rem);
   --body-size: 1.0625rem;
@@ -51,6 +51,16 @@ body {
   color: var(--text-primary);
   line-height: 1.5;
   overflow-x: hidden;
+}
+
+/* Global focus-visible (a11y) — visible keyboard focus on all interactive elements */
+:focus { outline: none; }
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--violet-soft);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* Container */
@@ -439,8 +449,12 @@ h1.hero .hero-h1-accent-2 {
   flex-shrink: 0;
 }
 @media (max-width: 768px) {
-  .hero-badge { font-size: 12px; }
+  .hero-badge { font-size: 12px; padding: 3px 12px 3px 3px; gap: 6px; }
   .hero-badge-tag { font-size: 10px; padding: 4px 8px; }
+}
+@media (max-width: 420px) {
+  .hero-badge { font-size: 11px; gap: 6px; padding: 3px 10px 3px 3px; }
+  .hero-badge-tag { font-size: 9px; padding: 4px 7px; }
 }
 
 /* Hero stack : contenu centré single-column + mockup full-width below */
