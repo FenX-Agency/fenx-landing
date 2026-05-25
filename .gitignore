@@ -10,5 +10,12 @@ desktop.ini
 # Cloudflare
 .wrangler/
 
+# Astro
+node_modules/
+dist/
+.astro/
+.env
+.env.local
+
 # Misc
 *.log

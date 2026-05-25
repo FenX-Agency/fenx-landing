@@ -1,0 +1,41 @@
+---
+import { sectors } from './sectors';
+
+const sectorImages: Record<string, string> = {
+  restauration: '/assets/mockup/restauration.webp',
+  studio: '/assets/mockup/studio.webp',
+  atelier: '/assets/mockup/atelier.webp',
+  cabinet: '/assets/mockup/cabinet.webp',
+};
+
+const sectorTabLabels: Record<string, string> = {
+  restauration: 'Restauration',
+  studio: 'Studio',
+  atelier: 'Atelier',
+  cabinet: 'Cabinet',
+};
+---
+
+<div class="sector-grid">
+  {sectors.map((sector, idx) => (
+    <article
+      class="sector-card hero-reveal"
+      style={`--reveal-delay: ${560 + idx * 160}ms`}
+    >
+      <div class="sector-card-image-wrap">
+        <img
+          src={sectorImages[sector.id]}
+          alt={`Aperçu site ${sector.businessName}`}
+          loading={idx === 0 ? 'eager' : 'lazy'}
+          decoding="async"
+          class="sector-card-image"
+        />
+        <div class="sector-card-blur-veil"></div>
+      </div>
+      <div class="sector-card-label">
+        <span class="sector-card-eyebrow">{sectorTabLabels[sector.id]}</span>
+        <h3 class="sector-card-title">{sector.businessName}</h3>
+      </div>
+    </article>
+  ))}
+</div>

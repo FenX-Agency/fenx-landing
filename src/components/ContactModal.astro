@@ -1,0 +1,301 @@
+---
+const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
+---
+
+<div class="contact-modal" data-contact-modal hidden aria-hidden="true" aria-labelledby="contact-modal-title" role="dialog">
+  <div class="contact-modal-backdrop" data-contact-modal-close></div>
+
+  <div class="contact-modal-panel" role="document">
+    <button
+      type="button"
+      class="contact-modal-close"
+      data-contact-modal-close
+      aria-label="Fermer le formulaire"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M5 5L15 15M5 15L15 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="contact-modal-header">
+      <span class="contact-modal-eyebrow">Discuter projet</span>
+      <h2 class="contact-modal-title" id="contact-modal-title">Parlons de votre projet</h2>
+      <p class="contact-modal-sub">Décrivez votre besoin, on revient vers vous sous 24h ouvrées.</p>
+    </div>
+
+    <form class="contact-form contact-form-grid" data-contact-form data-webhook={WEBHOOK_URL} novalidate>
+      <div class="contact-form-left">
+        <div class="contact-field">
+          <label for="contact-nom">Nom complet <span aria-hidden="true">*</span></label>
+          <input
+            id="contact-nom"
+            name="nom"
+            type="text"
+            autocomplete="name"
+            required
+            maxlength="100"
+            aria-required="true"
+            placeholder="Marie Dupont"
+          />
+          <span class="contact-field-error" data-field-error="nom"></span>
+        </div>
+
+        <div class="contact-field">
+          <label for="contact-email">Email <span aria-hidden="true">*</span></label>
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            required
+            maxlength="120"
+            aria-required="true"
+            placeholder="marie@exemple.fr"
+          />
+          <span class="contact-field-error" data-field-error="email"></span>
+        </div>
+
+        <div class="contact-field">
+          <label for="contact-tel">Téléphone <span class="contact-field-optional">(optionnel)</span></label>
+          <input
+            id="contact-tel"
+            name="telephone"
+            type="tel"
+            autocomplete="tel"
+            inputmode="tel"
+            maxlength="30"
+            placeholder="06 12 34 56 78"
+          />
+          <span class="contact-field-error" data-field-error="telephone"></span>
+        </div>
+      </div>
+
+      <div class="contact-form-right">
+        <div class="contact-field contact-field-message">
+          <label for="contact-message">Votre projet <span aria-hidden="true">*</span></label>
+          <textarea
+            id="contact-message"
+            name="message"
+            required
+            maxlength="5000"
+            aria-required="true"
+            placeholder="Ex : restaurant, ouvert mardi-dimanche, besoin d'un site avec menu et réservation. Décrivez aussi vos contraintes ou inspirations si vous en avez."
+          ></textarea>
+          <span class="contact-field-error" data-field-error="message"></span>
+        </div>
+      </div>
+
+      <div class="contact-form-bottom">
+        <p class="contact-form-error" data-form-error hidden></p>
+        <button type="submit" class="contact-form-submit" data-contact-submit>
+          <span data-submit-label>Envoyer la demande</span>
+          <span class="contact-form-spinner" data-submit-spinner hidden aria-hidden="true"></span>
+        </button>
+      </div>
+    </form>
+
+    <div class="contact-success" data-contact-success hidden>
+      <div class="contact-success-icon" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <path d="M14 24L21 31L34 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 class="contact-success-title">Demande envoyée</h3>
+      <p class="contact-success-sub" data-success-message>On revient vers vous sous 24h ouvrées.</p>
+      <button type="button" class="contact-success-close" data-contact-modal-close>Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.querySelector<HTMLElement>('[data-contact-modal]');
+  if (modal) {
+    const form = modal.querySelector<HTMLFormElement>('[data-contact-form]')!;
+    const submitBtn = modal.querySelector<HTMLButtonElement>('[data-contact-submit]')!;
+    const submitLabel = modal.querySelector<HTMLElement>('[data-submit-label]')!;
+    const spinner = modal.querySelector<HTMLElement>('[data-submit-spinner]')!;
+    const formErrorEl = modal.querySelector<HTMLElement>('[data-form-error]')!;
+    const successEl = modal.querySelector<HTMLElement>('[data-contact-success]')!;
+    const successMessageEl = modal.querySelector<HTMLElement>('[data-success-message]')!;
+    const webhook = form.dataset.webhook || '';
+
+    const fieldErrorEls: Record<string, HTMLElement> = {};
+    modal.querySelectorAll<HTMLElement>('[data-field-error]').forEach((el) => {
+      const k = el.getAttribute('data-field-error');
+      if (k) fieldErrorEls[k] = el;
+    });
+
+    let previouslyFocused: HTMLElement | null = null;
+
+    function openModal() {
+      previouslyFocused = document.activeElement as HTMLElement;
+      modal!.hidden = false;
+      modal!.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      // Reset state on each open
+      form.hidden = false;
+      successEl.hidden = true;
+      clearFieldErrors();
+      formErrorEl.hidden = true;
+      formErrorEl.textContent = '';
+      setTimeout(() => {
+        const firstInput = form.querySelector<HTMLInputElement>('input,textarea');
+        firstInput?.focus();
+      }, 50);
+    }
+
+    function closeModal() {
+      modal!.hidden = true;
+      modal!.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      previouslyFocused?.focus();
+    }
+
+    function clearFieldErrors() {
+      Object.values(fieldErrorEls).forEach((el) => {
+        el.textContent = '';
+        el.classList.remove('is-visible');
+      });
+      form.querySelectorAll<HTMLElement>('.contact-field').forEach((f) => f.classList.remove('has-error'));
+    }
+
+    function showFieldError(field: string, msg: string) {
+      const el = fieldErrorEls[field];
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('is-visible');
+      const wrapper = el.closest('.contact-field');
+      wrapper?.classList.add('has-error');
+    }
+
+    function setLoading(isLoading: boolean) {
+      submitBtn.disabled = isLoading;
+      submitLabel.style.opacity = isLoading ? '0.5' : '1';
+      spinner.hidden = !isLoading;
+    }
+
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const PHONE_ALLOWED_CHARS = /^[\d\s.\-()]+$/; // digits + format separators only
+
+    function validateField(name: string, value: string): string {
+      const v = value.trim();
+      if (name === 'nom') {
+        if (!v) return 'Indiquez votre nom';
+        if (v.length < 2) return 'Au moins 2 caractères';
+        if (v.length > 100) return '100 caractères maximum';
+        if (!/[a-zA-ZÀ-ÿ]/.test(v)) return 'Indiquez un nom valide';
+      }
+      if (name === 'email') {
+        if (!v) return "Indiquez votre email";
+        if (!EMAIL_REGEX.test(v)) return "Email invalide (ex: nom@exemple.fr)";
+        if (v.length > 120) return '120 caractères maximum';
+      }
+      if (name === 'telephone') {
+        if (!v) return ''; // optional
+        if (!PHONE_ALLOWED_CHARS.test(v)) return 'Caractères invalides (chiffres uniquement)';
+        const digits = v.replace(/\D/g, '');
+        if (digits.length !== 10) return 'Le numéro doit faire 10 chiffres';
+      }
+      if (name === 'message') {
+        if (!v) return 'Décrivez brièvement votre projet';
+        if (v.length < 10) return 'Au moins 10 caractères (un mot suffit pas)';
+        if (v.length > 5000) return '5000 caractères maximum';
+      }
+      return '';
+    }
+
+    function validateClient(): { ok: boolean; data?: Record<string, string> } {
+      clearFieldErrors();
+      const fd = new FormData(form);
+      const nom = String(fd.get('nom') || '').trim();
+      const email = String(fd.get('email') || '').trim();
+      const telephone = String(fd.get('telephone') || '').trim();
+      const message = String(fd.get('message') || '').trim();
+      let ok = true;
+      const errs: Record<string, string> = {
+        nom: validateField('nom', nom),
+        email: validateField('email', email),
+        telephone: validateField('telephone', telephone),
+        message: validateField('message', message),
+      };
+      Object.entries(errs).forEach(([field, err]) => {
+        if (err) {
+          showFieldError(field, err);
+          ok = false;
+        }
+      });
+      return ok ? { ok, data: { nom, email, telephone, message } } : { ok };
+    }
+
+    // Real-time validation on blur (each field validates as user leaves it)
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach((field) => {
+      const name = field.getAttribute('name');
+      if (!name) return;
+      field.addEventListener('blur', () => {
+        const err = validateField(name, field.value);
+        if (err) showFieldError(name, err);
+        else {
+          const errEl = fieldErrorEls[name];
+          if (errEl) {
+            errEl.textContent = '';
+            errEl.classList.remove('is-visible');
+          }
+          field.closest('.contact-field')?.classList.remove('has-error');
+        }
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const v = validateClient();
+      if (!v.ok || !v.data) return;
+      formErrorEl.hidden = true;
+      formErrorEl.textContent = '';
+      setLoading(true);
+      try {
+        const res = await fetch(webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(v.data),
+        });
+        let payload: { ok?: boolean; errors?: string[]; message?: string } = {};
+        try { payload = await res.json(); } catch { /* ignore */ }
+        if (res.ok && payload.ok) {
+          form.hidden = true;
+          successEl.hidden = false;
+          if (payload.message) successMessageEl.textContent = payload.message;
+          form.reset();
+          successEl.querySelector<HTMLButtonElement>('[data-contact-modal-close]')?.focus();
+        } else {
+          const errs = payload.errors && payload.errors.length
+            ? payload.errors.join(' · ')
+            : "Impossible d'envoyer pour le moment. Réessayez ou écrivez à contact.fenx.agency@gmail.com.";
+          formErrorEl.textContent = errs;
+          formErrorEl.hidden = false;
+        }
+      } catch {
+        formErrorEl.textContent = "Erreur réseau. Vérifiez votre connexion ou écrivez à contact.fenx.agency@gmail.com.";
+        formErrorEl.hidden = false;
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-open-contact]').forEach((trigger) => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    modal.querySelectorAll<HTMLElement>('[data-contact-modal-close]').forEach((el) => {
+      el.addEventListener('click', () => closeModal());
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal!.hidden) closeModal();
+    });
+  }
+</script>

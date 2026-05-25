@@ -1,0 +1,39 @@
+---
+const steps = [
+  {
+    num: '01',
+    title: 'Jour 1 — Brief',
+    desc: 'Call 30 min visio. Tu me partages tes contenus (logo, photos, textes, coordonnées).',
+  },
+  {
+    num: '02',
+    title: 'Jour 2-3 — Design',
+    desc: 'Je customise le template au branding de ton commerce. Tu valides en preview.',
+  },
+  {
+    num: '03',
+    title: 'Jour 4-6 — Développement',
+    desc: 'Ton site prend forme. Setup back-office. Tests cross-device.',
+  },
+  {
+    num: '04',
+    title: 'Jour 7 — Live',
+    desc: 'Mise en ligne sur ton domaine + formation 30 min back-office.',
+  },
+];
+---
+<section id="processus" class="processus">
+  <div class="container">
+    <p class="label" data-reveal>Comment ça se passe</p>
+    <h2 class="section" data-reveal style="--reveal-delay: 80ms">DE LA SIGNATURE AU LIVE EN 7 JOURS.</h2>
+    <ol class="steps-flow">
+      {steps.map((step, idx) => (
+        <li class="step-card" data-reveal style={`--reveal-delay: ${160 + idx * 100}ms`}>
+          <div class="step-number">{step.num}</div>
+          <h3>{step.title}</h3>
+          <p>{step.desc}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

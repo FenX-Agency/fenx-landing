@@ -1,0 +1,91 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'FenX Agency — Sites premium pour commerces de proximité',
+  description = "Votre commerce mérite mieux. Sites sur-mesure pour TPE locales : design propre, référencement Google, tableau de bord autonome. À partir de 990€, livrés en 7 jours.",
+} = Astro.props;
+
+const siteUrl = 'https://fenx-agency.com';
+const ogImage = `${siteUrl}/assets/og-image.jpg`;
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#16161c">
+  <meta name="color-scheme" content="dark">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <meta name="keywords" content="site web TPE, agence web Sannois, site commerce proximité, site clé en main 990€, refonte site web, SEO local, agence web Île-de-France">
+  <meta name="author" content="FenX Agency">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href={siteUrl}>
+
+  <!-- Open Graph (Facebook, LinkedIn, WhatsApp, Slack…) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FenX Agency">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:url" content={siteUrl}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="FenX Agency — Sites premium pour commerces de proximité">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={ogImage}>
+  <meta name="twitter:image:alt" content="FenX Agency — Sites premium pour commerces de proximité">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="/styles.css" as="style">
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5n-wU.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+
+  <!-- Structured data (JSON-LD) — local business -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'FenX Agency',
+    url: siteUrl,
+    logo: `${siteUrl}/assets/favicon.svg`,
+    description: description,
+    sameAs: [],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'contact.fenx.agency@gmail.com',
+      contactType: 'Customer Service',
+      availableLanguage: ['fr', 'en'],
+    },
+  })} />
+</head>
+<body>
+  <a href="#main" class="skip-link">Aller au contenu</a>
+
+  <slot />
+
+  <script is:inline>
+    // Disable browser scroll restoration on reload — avoid the "jump to bottom" issue on Firefox hard refresh
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  </script>
+  <!-- Lenis + GSAP disabled (Firefox jitter). Replaced by vanilla IntersectionObserver reveals + subtle parallax. -->
+  <script src="/scripts/scroll-fx.js" defer is:inline></script>
+  <script src="/scripts/pixel-canvas.js" defer is:inline></script>
+</body>
+</html>

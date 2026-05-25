@@ -1,0 +1,40 @@
+---
+const pains = [
+  {
+    icon: '🔍',
+    title: 'Invisible sur Google local',
+    desc: 'Tes clients potentiels à 2 km cherchent "[ton métier] [ta ville]" et tombent sur des concurrents.',
+  },
+  {
+    icon: '📱',
+    title: 'Design figé en 2015',
+    desc: 'Wix abandonné, WordPress jamais updaté, sections qui débordent sur mobile.',
+  },
+  {
+    icon: '⚙️',
+    title: 'Tu peux rien modifier seul',
+    desc: 'Changer un prix = appeler ton "webmaster" qui répond 3 semaines après.',
+  },
+  {
+    icon: '💸',
+    title: 'Prospects qui partent sans contact',
+    desc: 'Aucun call-to-action clair, juste une page "à propos" vide.',
+  },
+];
+---
+<section id="probleme" class="probleme">
+  <div class="container">
+    <p class="label" data-reveal>Le constat</p>
+    <h2 class="section" data-reveal style="--reveal-delay: 80ms">TON SITE NE RESSEMBLE PAS À TON BOULOT.</h2>
+    <p class="section-sub" data-reveal style="--reveal-delay: 160ms">4 douleurs visibles qu'on entend tout le temps.</p>
+    <div class="pain-grid">
+      {pains.map((pain, idx) => (
+        <article class="pain-card" data-reveal style={`--reveal-delay: ${240 + idx * 100}ms`}>
+          <div class="pain-icon">{pain.icon}</div>
+          <h3>{pain.title}</h3>
+          <p>{pain.desc}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
