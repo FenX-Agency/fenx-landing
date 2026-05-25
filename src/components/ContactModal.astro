@@ -176,6 +176,35 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       spinner.hidden = !isLoading;
     }
 
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const PHONE_REGEX = /^[\d\s+().\-]{6,}$/;
+
+    function validateField(name: string, value: string): string {
+      const v = value.trim();
+      if (name === 'nom') {
+        if (!v) return 'Indiquez votre nom';
+        if (v.length < 2) return 'Au moins 2 caractères';
+        if (v.length > 100) return '100 caractères maximum';
+        if (!/[a-zA-ZÀ-ÿ]/.test(v)) return 'Indiquez un nom valide';
+      }
+      if (name === 'email') {
+        if (!v) return "Indiquez votre email";
+        if (!EMAIL_REGEX.test(v)) return "Email invalide (ex: nom@exemple.fr)";
+        if (v.length > 120) return '120 caractères maximum';
+      }
+      if (name === 'telephone') {
+        if (!v) return ''; // optional
+        if (!PHONE_REGEX.test(v)) return 'Téléphone invalide (chiffres uniquement)';
+        if (v.length > 30) return '30 caractères maximum';
+      }
+      if (name === 'message') {
+        if (!v) return 'Décrivez brièvement votre projet';
+        if (v.length < 10) return 'Au moins 10 caractères (un mot suffit pas)';
+        if (v.length > 5000) return '5000 caractères maximum';
+      }
+      return '';
+    }
+
     function validateClient(): { ok: boolean; data?: Record<string, string> } {
       clearFieldErrors();
       const fd = new FormData(form);
@@ -183,17 +212,39 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       const email = String(fd.get('email') || '').trim();
       const telephone = String(fd.get('telephone') || '').trim();
       const message = String(fd.get('message') || '').trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       let ok = true;
-      if (!nom) { showFieldError('nom', 'Indiquez votre nom'); ok = false; }
-      else if (nom.length > 100) { showFieldError('nom', '100 caractères maximum'); ok = false; }
-      if (!email) { showFieldError('email', 'Indiquez votre email'); ok = false; }
-      else if (!emailRegex.test(email)) { showFieldError('email', "Email invalide (ex: nom@exemple.fr)"); ok = false; }
-      if (telephone && telephone.length > 30) { showFieldError('telephone', '30 caractères maximum'); ok = false; }
-      if (!message) { showFieldError('message', 'Décrivez brièvement votre projet'); ok = false; }
-      else if (message.length > 5000) { showFieldError('message', '5000 caractères maximum'); ok = false; }
+      const errs: Record<string, string> = {
+        nom: validateField('nom', nom),
+        email: validateField('email', email),
+        telephone: validateField('telephone', telephone),
+        message: validateField('message', message),
+      };
+      Object.entries(errs).forEach(([field, err]) => {
+        if (err) {
+          showFieldError(field, err);
+          ok = false;
+        }
+      });
       return ok ? { ok, data: { nom, email, telephone, message } } : { ok };
     }
+
+    // Real-time validation on blur (each field validates as user leaves it)
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach((field) => {
+      const name = field.getAttribute('name');
+      if (!name) return;
+      field.addEventListener('blur', () => {
+        const err = validateField(name, field.value);
+        if (err) showFieldError(name, err);
+        else {
+          const errEl = fieldErrorEls[name];
+          if (errEl) {
+            errEl.textContent = '';
+            errEl.classList.remove('is-visible');
+          }
+          field.closest('.contact-field')?.classList.remove('has-error');
+        }
+      });
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
