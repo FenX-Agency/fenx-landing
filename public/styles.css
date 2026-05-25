@@ -369,7 +369,7 @@ h1.hero .hero-h1-accent-2 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  align-self: flex-start;
+  align-self: center;
   padding: 4px 14px 4px 4px;
   border-radius: 999px;
   background: linear-gradient(
