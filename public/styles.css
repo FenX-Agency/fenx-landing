@@ -1469,7 +1469,7 @@ h1.hero .hero-h1-accent-2 {
   font-family: inherit;
 }
 .contact-field textarea {
-  resize: vertical;
+  resize: none;
   min-height: 96px;
   line-height: 1.5;
 }
