@@ -14,28 +14,71 @@ const sectorTabLabels: Record<string, string> = {
   atelier: 'Atelier',
   cabinet: 'Cabinet',
 };
+
+// Restaurant = seule démo live cliquable. Les 3 autres en maintenance pour l'instant.
+const liveDemo: Record<string, string | undefined> = {
+  restauration: 'https://demo-restaurant.fenx-agency.com',
+};
 ---
 
 <div class="sector-grid">
-  {sectors.map((sector, idx) => (
-    <article
-      class="sector-card hero-reveal"
-      style={`--reveal-delay: ${560 + idx * 160}ms`}
-    >
-      <div class="sector-card-image-wrap">
-        <img
-          src={sectorImages[sector.id]}
-          alt={`Aperçu site ${sector.businessName}`}
-          loading={idx === 0 ? 'eager' : 'lazy'}
-          decoding="async"
-          class="sector-card-image"
-        />
-        <div class="sector-card-blur-veil"></div>
-      </div>
-      <div class="sector-card-label">
-        <span class="sector-card-eyebrow">{sectorTabLabels[sector.id]}</span>
-        <h3 class="sector-card-title">{sector.businessName}</h3>
-      </div>
-    </article>
-  ))}
+  {sectors.map((sector, idx) => {
+    const href = liveDemo[sector.id];
+    const isLive = !!href;
+    const commonStyle = `--reveal-delay: ${560 + idx * 160}ms`;
+    const commonClass = `sector-card hero-reveal ${isLive ? 'is-live' : 'is-maintenance'}`;
+    return isLive ? (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener"
+        class={commonClass}
+        aria-label={`Voir la démo ${sector.businessName}`}
+        style={commonStyle}
+      >
+        <div class="sector-card-image-wrap">
+          <img
+            src={sectorImages[sector.id]}
+            alt={`Aperçu site ${sector.businessName}`}
+            loading={idx === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+            class="sector-card-image"
+          />
+          <div class="sector-card-blur-veil"></div>
+        </div>
+        <div class="sector-card-label">
+          <span class="sector-card-eyebrow">{sectorTabLabels[sector.id]}</span>
+          <h3 class="sector-card-title">{sector.businessName}</h3>
+        </div>
+      </a>
+    ) : (
+      <article
+        class={commonClass}
+        aria-label={`${sector.businessName} — en maintenance`}
+        style={commonStyle}
+      >
+        <div class="sector-card-image-wrap">
+          <img
+            src={sectorImages[sector.id]}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="sector-card-image"
+            aria-hidden="true"
+          />
+          <div class="sector-card-blur-veil"></div>
+        </div>
+        <div class="sector-card-maintenance" aria-hidden="true">
+          <svg class="maintenance-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.7 6.3a4 4 0 0 0-5.7 5.7L3 18l3 3 6-6a4 4 0 0 0 5.7-5.7l-2.3 2.3a1 1 0 0 1-1.4 0l-1.6-1.6a1 1 0 0 1 0-1.4l2.3-2.3z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="maintenance-text">En maintenance</span>
+        </div>
+        <div class="sector-card-label">
+          <span class="sector-card-eyebrow">{sectorTabLabels[sector.id]}</span>
+          <h3 class="sector-card-title">{sector.businessName}</h3>
+        </div>
+      </article>
+    );
+  })}
 </div>
