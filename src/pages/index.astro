@@ -2,17 +2,73 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import Probleme from '../components/Probleme.astro';
+import ParallaxScene from '../components/ParallaxScene.astro';
 import Offre from '../components/Offre.astro';
 import Processus from '../components/Processus.astro';
 import Footer from '../components/Footer.astro';
 import ContactModal from '../components/ContactModal.astro';
+
+const R2_BASE = 'https://r2.fenx-agency.com';
 ---
 <Layout>
   <Header />
   <main id="main">
     <Hero />
-    <Probleme />
+
+    <ParallaxScene
+      id="scene-restaurant"
+      posterSrc="/assets/mockup/restauration.webp"
+      eyebrow="RESTAURANT · LIVRÉ"
+      h2="La Table d'Hugo. Scroll, réserve, repart conquis."
+      description="Site restaurant V3 : scroll-stacking chef, ardoise glissée, modal réservation, back-office hours/services. Livré 6 jours."
+      ctaText="Voir la démo Restaurant"
+      ctaHref="https://demo-restaurant.fenx-agency.com"
+      ctaExternal={true}
+      overlayPosition="left"
+      index={1}
+    />
+
+    <ParallaxScene
+      id="scene-wok"
+      posterSrc="/assets/mockup/studio.webp"
+      eyebrow="RESTAURANT ASIATIQUE · LIVRÉ"
+      h2="Le Wok du Coin. Carte, allergènes, commande directe."
+      description="Variante restaurant asiatique : carte multi-section, filtre allergènes, commande téléphone tap-to-call. Même base technique."
+      ctaText="Voir la démo Wok"
+      ctaHref="https://demo-wok.fenx-agency.com"
+      ctaExternal={true}
+      overlayPosition="right"
+      index={2}
+    />
+
+    <ParallaxScene
+      id="scene-ia-1"
+      videoSrcDesktop={`${R2_BASE}/geely-fr-720.mp4`}
+      videoSrcMobile={`${R2_BASE}/geely-fr-540.mp4`}
+      posterSrc={`${R2_BASE}/geely-poster.webp`}
+      eyebrow="VIDÉO IA · 290€/PIÈCE"
+      h2="Une vidéo marketing IA qui retient. Pas qui s'oublie."
+      description="Génération IA + sound design + format vertical 9:16 ready Insta/TikTok. Livré 5 jours, partagé directement à ton compte."
+      ctaText="Découvrir les vidéos IA"
+      ctaHref="#offre"
+      overlayPosition="center-bottom"
+      index={3}
+    />
+
+    <ParallaxScene
+      id="scene-ia-2"
+      videoSrcDesktop={`${R2_BASE}/pub-boisson-720.mp4`}
+      videoSrcMobile={`${R2_BASE}/pub-boisson-540.mp4`}
+      posterSrc={`${R2_BASE}/pub-boisson-poster.webp`}
+      eyebrow="PACK PREMIUM · TOUT-INCLUS"
+      h2="Site + back-office + 3 vidéos IA. Un seul prestataire."
+      description="Le pack qui couvre toute ta présence digitale en un seul devis. Pensé pour les TPE qui veulent passer le cap sans jongler avec 4 freelances."
+      ctaText="Voir le Pack Premium"
+      ctaHref="#offre"
+      overlayPosition="center-top"
+      index={4}
+    />
+
     <Offre />
     <Processus />
   </main>

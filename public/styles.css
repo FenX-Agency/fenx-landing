@@ -1700,3 +1700,275 @@ h1.hero .hero-h1-accent-2 {
   color: #ffffff;
   background: var(--violet-primary);
 }
+
+/* ============================================
+   V3 — Parallax Scenes (4 scenes between Hero and Offre)
+   Spec : docs/superpowers/specs/2026-05-29-landing-fenx-v3-parallax-cinematic.md
+   ============================================ */
+
+.parallax-scene {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--cosmic-bg);
+  isolation: isolate;
+}
+
+.parallax-scene__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.parallax-scene__poster,
+.parallax-scene__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.parallax-scene__poster {
+  z-index: 1;
+  transition: opacity 600ms ease;
+}
+
+.parallax-scene__video {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 800ms ease;
+}
+
+.parallax-scene__video.is-playing {
+  opacity: 1;
+}
+
+/* Gradient overlay : sombre en bas/haut/côtés pour lisibilité texte overlay */
+.parallax-scene__gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(22, 22, 28, 0.5) 0%,
+    rgba(22, 22, 28, 0.2) 40%,
+    rgba(22, 22, 28, 0.6) 100%
+  );
+}
+
+.parallax-scene--overlay-left .parallax-scene__gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(22, 22, 28, 0.75) 0%,
+    rgba(22, 22, 28, 0.4) 50%,
+    rgba(22, 22, 28, 0.1) 100%
+  );
+}
+
+.parallax-scene--overlay-right .parallax-scene__gradient {
+  background: linear-gradient(
+    270deg,
+    rgba(22, 22, 28, 0.75) 0%,
+    rgba(22, 22, 28, 0.4) 50%,
+    rgba(22, 22, 28, 0.1) 100%
+  );
+}
+
+.parallax-scene--overlay-center-top .parallax-scene__gradient,
+.parallax-scene--overlay-center-bottom .parallax-scene__gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(22, 22, 28, 0.7) 0%,
+    rgba(22, 22, 28, 0.2) 50%,
+    rgba(22, 22, 28, 0.7) 100%
+  );
+}
+
+.parallax-scene__inner {
+  position: relative;
+  z-index: 4;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.parallax-scene--overlay-left .parallax-scene__inner {
+  justify-content: flex-start;
+}
+
+.parallax-scene--overlay-right .parallax-scene__inner {
+  justify-content: flex-end;
+}
+
+.parallax-scene--overlay-center-top .parallax-scene__inner {
+  align-items: flex-start;
+  padding-top: clamp(56px, 12vh, 120px);
+  justify-content: center;
+}
+
+.parallax-scene--overlay-center-bottom .parallax-scene__inner {
+  align-items: flex-end;
+  padding-bottom: clamp(56px, 12vh, 120px);
+  justify-content: center;
+}
+
+.parallax-scene__overlay {
+  max-width: 520px;
+  padding: 32px;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.parallax-scene__overlay.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.parallax-scene--overlay-center-top .parallax-scene__overlay,
+.parallax-scene--overlay-center-bottom .parallax-scene__overlay {
+  text-align: center;
+  align-items: center;
+}
+
+.parallax-scene__eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--violet-primary);
+}
+
+.parallax-scene__h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.parallax-scene__desc {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--lavender-bright);
+  margin: 0;
+  max-width: 460px;
+}
+
+.parallax-scene--overlay-center-top .parallax-scene__desc,
+.parallax-scene--overlay-center-bottom .parallax-scene__desc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.parallax-scene__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 12px 24px;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid var(--violet-primary);
+  border-radius: 999px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  width: fit-content;
+  transition: background 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.parallax-scene__cta:hover,
+.parallax-scene__cta:focus-visible {
+  background: var(--violet-primary);
+  color: var(--cosmic-bg);
+  transform: translateX(2px);
+}
+
+.parallax-scene__cta svg {
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+.parallax-scene__cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* Poster-only mode (scenes 1+2 without video, OR slow network fallback) :
+   - poster reste visible (déjà object-fit cover)
+   - léger Ken-Burns slow zoom pour donner du mouvement */
+.parallax-scene.poster-only .parallax-scene__poster,
+.parallax-scene.posters-only-mode .parallax-scene__poster {
+  animation: parallax-ken-burns 20s ease-in-out infinite alternate;
+}
+
+@keyframes parallax-ken-burns {
+  from { transform: scale(1.0) translate(0, 0); }
+  to   { transform: scale(1.08) translate(-1%, 1%); }
+}
+
+/* Responsive mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .parallax-scene {
+    height: 90vh;
+    min-height: 540px;
+  }
+  .parallax-scene__inner {
+    align-items: flex-end;
+    padding-bottom: 48px;
+  }
+  .parallax-scene--overlay-left .parallax-scene__inner,
+  .parallax-scene--overlay-right .parallax-scene__inner,
+  .parallax-scene--overlay-center-top .parallax-scene__inner,
+  .parallax-scene--overlay-center-bottom .parallax-scene__inner {
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 0;
+    padding-bottom: 48px;
+  }
+  .parallax-scene__overlay {
+    max-width: 100%;
+    padding: 24px;
+    text-align: center;
+    align-items: center;
+  }
+  .parallax-scene__gradient {
+    /* Sur mobile, gradient toujours bottom-heavy pour overlay bas */
+    background: linear-gradient(
+      180deg,
+      rgba(22, 22, 28, 0.3) 0%,
+      rgba(22, 22, 28, 0.2) 30%,
+      rgba(22, 22, 28, 0.85) 100%
+    ) !important;
+  }
+  .parallax-scene__h2 {
+    font-size: clamp(1.5rem, 5vw, 1.9rem);
+  }
+  .parallax-scene__desc {
+    font-size: 1rem;
+  }
+}
+
+/* Reduced motion : pas de Ken-Burns, pas d'opacity transition */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-scene__poster {
+    animation: none !important;
+  }
+  .parallax-scene__video {
+    display: none;
+  }
+  .parallax-scene__overlay {
+    opacity: 1;
+    transform: none;
+  }
+}
+
