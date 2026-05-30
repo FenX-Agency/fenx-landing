@@ -116,21 +116,22 @@
       float n2 = fbm(p * uFrequency * 1.5 + vec2(0.0, uTime * uSpeed * 0.1));
       warpedP += vec2(n1, n2) * uWarpStrength * uNoise * 0.4;
 
-      // Bands : sinusoidal pattern selon Y
-      float bandValue = sin(warpedP.y * uBandWidth * 3.0 + uTime * uSpeed * 0.3);
+      // Bands : sinusoidal pattern selon Y — contraste maximal
+      float bandValue = sin(warpedP.y * uBandWidth * 3.5 + uTime * uSpeed * 0.4);
       bandValue = bandValue * 0.5 + 0.5;
-      bandValue = smoothstep(0.3, 0.85, bandValue);
+      bandValue = smoothstep(0.15, 0.7, bandValue); // contraste plus marque
 
-      // Atténuation radiale depuis le centre (vignette inverse organique)
-      float radius = length(p);
-      float falloff = 1.0 - smoothstep(0.3, 1.8, radius);
+      // Intensite finale (PAS d'attenuation radiale — taste-skill Motion 8 visibility max)
+      float val = bandValue * uIntensity;
 
-      // Intensité finale
-      float val = bandValue * falloff * uIntensity;
-
-      // Composition couleur : violet sur fond cosmic sombre
+      // Composition couleur : violet visible sur fond cosmic sombre
       vec3 cosmicBg = vec3(0.087, 0.087, 0.110); // #16161c
-      vec3 finalColor = mix(cosmicBg, uColor, val * 0.65);
+      vec3 finalColor = mix(cosmicBg, uColor, val * 0.9); // mix 0.9 (vs 0.65 avant)
+
+      // Ajout subtle vignette periph pour focus centre (vs full-screen wash)
+      float radius = length(p);
+      float vignette = 1.0 - smoothstep(1.1, 2.2, radius) * 0.4;
+      finalColor *= vignette;
 
       gl_FragColor = vec4(finalColor, 1.0);
     }
@@ -170,18 +171,18 @@
         uResolution:     { value: [window.innerWidth, window.innerHeight] },
         uMouse:          { value: [0.5, 0.5] },
         uScrollY:        { value: 0 },
-        // Params Wibify-style (Anthony peut tweaker ici)
-        uRotation:       { value: 35.0 },
-        uAutoRotate:     { value: 1.4 },
-        uSpeed:          { value: 0.22 },
-        uFrequency:      { value: 1.1 },
-        uWarpStrength:   { value: 1.0 },
-        uMouseInfluence: { value: 1.0 },
+        // Params Wibify-style — taste-skill Motion 8 / Variance 8 (bandes plus prononcees)
+        uRotation:       { value: 28.0 },
+        uAutoRotate:     { value: 1.8 },
+        uSpeed:          { value: 0.32 },
+        uFrequency:      { value: 1.3 },
+        uWarpStrength:   { value: 1.2 },
+        uMouseInfluence: { value: 1.2 },
         uParallax:       { value: 0.7 },
-        uNoise:          { value: 0.72 },
+        uNoise:          { value: 0.85 },
         uIntensity:      { value: 1.0 },
-        uBandWidth:      { value: 3.0 },
-        uColor:          { value: [0.655, 0.545, 0.980] }, // #a78bfa violet primary
+        uBandWidth:      { value: 3.5 },
+        uColor:          { value: [0.78, 0.62, 1.0] }, // violet sature pour visibilite max
       },
     });
 

@@ -7,53 +7,69 @@ import HeroShaderBg from './HeroShaderBg.astro';
 
   <div class="hero-v3__gradient" aria-hidden="true"></div>
 
+  {/* Décorations asymétriques (taste-skill Variance 8) */}
+  <div class="hero-v3__deco hero-v3__deco--vline" aria-hidden="true"></div>
+  <div class="hero-v3__deco hero-v3__deco--hline" aria-hidden="true"></div>
+  <span class="hero-v3__corner hero-v3__corner--tr" aria-hidden="true">
+    <span class="hero-v3__corner-dot"></span>
+    FENX · 2026
+  </span>
+  <span class="hero-v3__corner hero-v3__corner--bl" aria-hidden="true">
+    <span>SCROLL</span>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M7 1v12M2 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </span>
+
   <div class="container hero-v3__inner">
     <div class="hero-v3__content">
       <span class="hero-v3__eyebrow" data-reveal>
-        <span class="hero-v3__eyebrow-dot"></span>
+        <span class="hero-v3__eyebrow-line" aria-hidden="true"></span>
         <span class="hero-v3__eyebrow-num">[01]</span>
-        Studio créatif premium · IDF
+        <span>STUDIO IA-NATIVE</span>
       </span>
 
       <h1 class="hero-v3__h1" data-reveal>
-        On construit des sites
-        <em>premium</em>
-        pour les PME
-        <em>ambitieuses</em>.
+        On livre des sites,<br />
+        des <em>vidéos pubs</em><br />
+        et l'<em>identité</em><br />
+        des PME qui veulent
+        <em>compter</em>.
       </h1>
 
       <p class="hero-v3__sub" data-reveal>
-        Sites, vidéos IA, branding, back-office —
-        livrés <em>clé en main</em>, sans intermédiaire.
+        Sites premium, vidéos IA pour réseaux sociaux, branding complet.<br />
+        Un seul prestataire. Sept jours. À partir de 1990€.
       </p>
 
       <div class="hero-v3__ctas" data-reveal>
         <Button href="#contact" text="Démarrer un projet" openContact={true} />
         <a href="#selected-work" class="hero-v3__cta-text">
-          Voir nos travaux
+          Voir ce qu'on a livré
           <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
             <path d="M0 6h15M11 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           </svg>
         </a>
       </div>
-
-      <div class="hero-v3__proof" data-reveal>
-        <span class="hero-v3__proof-item">
-          <strong>À partir de 1990€</strong>
-          <span>Pack site clé en main</span>
-        </span>
-        <span class="hero-v3__proof-sep" aria-hidden="true">·</span>
-        <span class="hero-v3__proof-item">
-          <strong>7-14 jours</strong>
-          <span>Livraison</span>
-        </span>
-        <span class="hero-v3__proof-sep" aria-hidden="true">·</span>
-        <span class="hero-v3__proof-item">
-          <strong>95+ Lighthouse</strong>
-          <span>Garanti</span>
-        </span>
-      </div>
     </div>
+
+    {/* Proof bar offset bottom-right (taste-skill Variance 8 — asymétrique) */}
+    <aside class="hero-v3__proof" data-reveal aria-label="Indicateurs de confiance">
+      <div class="hero-v3__proof-item">
+        <span class="hero-v3__proof-num">1990€</span>
+        <span class="hero-v3__proof-label">Pack site clé en main</span>
+      </div>
+      <div class="hero-v3__proof-divider" aria-hidden="true"></div>
+      <div class="hero-v3__proof-item">
+        <span class="hero-v3__proof-num">7 jours</span>
+        <span class="hero-v3__proof-label">Délai livraison moyen</span>
+      </div>
+      <div class="hero-v3__proof-divider" aria-hidden="true"></div>
+      <div class="hero-v3__proof-item">
+        <span class="hero-v3__proof-num">95+</span>
+        <span class="hero-v3__proof-label">Score Lighthouse garanti</span>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -66,88 +82,144 @@ import HeroShaderBg from './HeroShaderBg.astro';
     isolation: isolate;
   }
 
-  /* Gradient overlay : assombrit le centre-bas pour lisibilité du texte */
+  /* Gradient overlay : assombrit subtilement le bas pour lisibilité */
   .hero-v3__gradient {
     position: absolute;
     inset: 0;
     z-index: 1;
     background:
-      radial-gradient(ellipse at 50% 60%,
+      linear-gradient(180deg,
         rgba(22, 22, 28, 0.0) 0%,
-        rgba(22, 22, 28, 0.4) 40%,
-        rgba(22, 22, 28, 0.75) 80%,
-        rgba(22, 22, 28, 0.95) 100%
+        rgba(22, 22, 28, 0.15) 50%,
+        rgba(22, 22, 28, 0.55) 100%
+      ),
+      radial-gradient(ellipse at 30% 50%,
+        rgba(22, 22, 28, 0.0) 0%,
+        rgba(22, 22, 28, 0.25) 80%
       );
     pointer-events: none;
   }
 
+  /* Décorations asymétriques — taste-skill Variance 8 */
+  .hero-v3__deco {
+    position: absolute;
+    z-index: 2;
+    background: var(--border-subtle);
+    pointer-events: none;
+  }
+  .hero-v3__deco--vline {
+    left: 5vw;
+    top: 12vh;
+    bottom: 25vh;
+    width: 1px;
+    opacity: 0.5;
+  }
+  .hero-v3__deco--hline {
+    right: 8vw;
+    top: 40vh;
+    width: 80px;
+    height: 1px;
+    opacity: 0.4;
+  }
+
+  .hero-v3__corner {
+    position: absolute;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .hero-v3__corner--tr {
+    top: 32px;
+    right: 32px;
+  }
+  .hero-v3__corner-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--violet-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--violet-primary);
+    animation: hero-v3-pulse 2s ease-in-out infinite;
+  }
+  .hero-v3__corner--bl {
+    left: 32px;
+    bottom: 32px;
+    color: var(--lavender-bright);
+    animation: hero-v3-bounce 2.4s ease-in-out infinite;
+  }
+  @keyframes hero-v3-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.75); }
+  }
+  @keyframes hero-v3-bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.7; }
+    50% { transform: translateY(4px); opacity: 1; }
+  }
+
+  /* Inner asymétrique left-aligned */
   .hero-v3__inner {
     position: relative;
-    z-index: 2;
+    z-index: 4;
     min-height: 100vh;
-    display: flex;
+    display: grid;
+    grid-template-rows: 1fr auto;
     align-items: center;
-    justify-content: center;
-    padding: 120px 32px 80px;
+    padding: 140px clamp(40px, 8vw, 120px) 100px;
+    max-width: 1440px;
   }
 
+  /* Content gauche, max-width contraint (taste-skill Density 3 = aéré) */
   .hero-v3__content {
-    text-align: center;
-    max-width: 920px;
-    margin: 0 auto;
+    text-align: left;
+    max-width: 880px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 28px;
+    align-items: flex-start;
+    gap: 36px;
   }
 
-  /* Eyebrow numéroté style Wibify */
+  /* Eyebrow gauche avec ligne déco horizontale */
   .hero-v3__eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 18px;
-    background: rgba(167, 139, 250, 0.08);
-    border: 1px solid var(--border-subtle);
-    border-radius: 999px;
+    gap: 14px;
     color: var(--lavender-bright);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
     font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .hero-v3__eyebrow-line {
+    display: inline-block;
+    width: 36px;
+    height: 1px;
+    background: var(--violet-primary);
   }
   .hero-v3__eyebrow-num {
     color: var(--violet-primary);
     font-weight: 700;
   }
-  .hero-v3__eyebrow-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--violet-primary);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--violet-primary);
-    animation: hero-v3-pulse 2s ease-in-out infinite;
-  }
-  @keyframes hero-v3-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
-  }
 
-  /* H1 — taille imposante, italics emphasis style Wibify */
+  /* H1 — display imposant, italics emphasis style Wibify, left-aligned */
   .hero-v3__h1 {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(2.5rem, 6.2vw, 5.25rem);
+    font-size: clamp(2.75rem, 7.5vw, 6.5rem);
     font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1.04;
+    letter-spacing: -0.035em;
+    line-height: 1.0;
     color: var(--text-hover);
     margin: 0;
     text-wrap: balance;
   }
   .hero-v3__h1 em {
     font-style: italic;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--violet-primary);
     font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
     letter-spacing: -0.02em;
@@ -155,147 +227,158 @@ import HeroShaderBg from './HeroShaderBg.astro';
 
   /* Sub */
   .hero-v3__sub {
-    font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
-    line-height: 1.5;
+    font-size: clamp(1.0625rem, 1.45vw, 1.25rem);
+    line-height: 1.55;
     color: var(--lavender-bright);
-    max-width: 620px;
+    max-width: 580px;
     margin: 0;
     text-wrap: balance;
-  }
-  .hero-v3__sub em {
-    font-style: italic;
-    color: var(--text-hover);
-    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
-    font-weight: 500;
   }
 
   /* CTAs */
   .hero-v3__ctas {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 24px;
+    gap: 28px;
     flex-wrap: wrap;
     margin-top: 4px;
   }
   .hero-v3__cta-text {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     color: var(--lavender-bright);
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    padding: 12px 20px;
-    border-radius: 999px;
-    transition: color 200ms, background 200ms, transform 200ms;
+    padding: 10px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms, border-color 200ms;
   }
   .hero-v3__cta-text:hover,
   .hero-v3__cta-text:focus-visible {
     color: var(--text-hover);
-    background: rgba(167, 139, 250, 0.08);
+    border-color: var(--violet-primary);
   }
   .hero-v3__cta-text svg {
-    transition: transform 200ms;
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .hero-v3__cta-text:hover svg {
-    transform: translateX(4px);
+    transform: translateX(6px);
   }
 
-  /* Proof bar — inspired Wibify social proof */
+  /* Proof bar — décalé en bas, full-width inline */
   .hero-v3__proof {
-    margin-top: 16px;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 22px;
-    background: rgba(28, 28, 46, 0.5);
-    border: 1px solid var(--border-subtle);
-    border-radius: 999px;
-    backdrop-filter: blur(8px);
+    gap: 32px;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 40px;
+    max-width: 880px;
     flex-wrap: wrap;
-    justify-content: center;
   }
   .hero-v3__proof-item {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    gap: 4px;
   }
-  .hero-v3__proof-item strong {
+  .hero-v3__proof-num {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 800;
     color: var(--text-hover);
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0;
-    text-transform: none;
+    letter-spacing: -0.02em;
+    line-height: 1;
   }
-  .hero-v3__proof-sep {
-    color: var(--text-dim);
-    font-size: 14px;
+  .hero-v3__proof-label {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-v3__proof-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border-subtle);
   }
 
-  /* Reveal animation */
-  .hero-v3__content [data-reveal] {
+  /* Reveal cascade — taste-skill Motion 8 = animations marquées */
+  .hero-v3 [data-reveal] {
     opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(48px);
+    transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .hero-v3__content [data-reveal].is-revealed {
+  .hero-v3__content [data-reveal]:nth-child(1) { transition-delay: 150ms; }
+  .hero-v3__content [data-reveal]:nth-child(2) { transition-delay: 300ms; }
+  .hero-v3__content [data-reveal]:nth-child(3) { transition-delay: 500ms; }
+  .hero-v3__content [data-reveal]:nth-child(4) { transition-delay: 700ms; }
+  .hero-v3__proof { transition-delay: 900ms; }
+  .hero-v3 [data-reveal].is-revealed {
     opacity: 1;
     transform: translateY(0);
   }
-  .hero-v3__content [data-reveal]:nth-child(1) { transition-delay: 100ms; }
-  .hero-v3__content [data-reveal]:nth-child(2) { transition-delay: 250ms; }
-  .hero-v3__content [data-reveal]:nth-child(3) { transition-delay: 450ms; }
-  .hero-v3__content [data-reveal]:nth-child(4) { transition-delay: 650ms; }
-  .hero-v3__content [data-reveal]:nth-child(5) { transition-delay: 850ms; }
 
-  /* Mobile */
-  @media (max-width: 768px) {
+  /* Mobile responsive */
+  @media (max-width: 900px) {
+    .hero-v3__deco--vline,
+    .hero-v3__deco--hline {
+      display: none;
+    }
+    .hero-v3__corner--tr {
+      top: 20px;
+      right: 20px;
+      font-size: 10px;
+    }
+    .hero-v3__corner--bl {
+      left: 20px;
+      bottom: 20px;
+      font-size: 10px;
+    }
     .hero-v3__inner {
-      padding: 96px 20px 60px;
+      padding: 110px 24px 80px;
     }
     .hero-v3__content {
-      gap: 22px;
+      gap: 28px;
     }
     .hero-v3__h1 {
-      font-size: clamp(2rem, 9vw, 3rem);
+      font-size: clamp(2.5rem, 11vw, 4rem);
     }
     .hero-v3__sub {
       font-size: 1rem;
     }
     .hero-v3__ctas {
       flex-direction: column;
-      gap: 14px;
+      align-items: flex-start;
+      gap: 18px;
       width: 100%;
     }
     .hero-v3__ctas > * {
       width: 100%;
-      max-width: 320px;
-      justify-content: center;
+      max-width: 360px;
     }
     .hero-v3__proof {
       flex-direction: column;
-      gap: 10px;
-      padding: 16px 20px;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 24px 0 0;
+      margin-top: 30px;
     }
-    .hero-v3__proof-sep {
+    .hero-v3__proof-divider {
       display: none;
     }
   }
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .hero-v3__content [data-reveal] {
+    .hero-v3 [data-reveal] {
       opacity: 1 !important;
       transform: none !important;
     }
-    .hero-v3__eyebrow-dot {
+    .hero-v3__corner-dot,
+    .hero-v3__corner--bl {
       animation: none !important;
     }
   }
