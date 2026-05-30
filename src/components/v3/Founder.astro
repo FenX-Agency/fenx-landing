@@ -1,0 +1,251 @@
+---
+const stats = [
+  { value: '5+', label: 'projets livrés' },
+  { value: '95+', label: 'Lighthouse perf' },
+  { value: '0', label: 'intermédiaire' },
+];
+---
+<section id="founder" class="v3-section v3-founder">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[07] Founder</span>
+    </header>
+
+    <div class="v3-founder-grid">
+      <div class="v3-founder-portrait" data-reveal aria-hidden="true">
+        <div class="v3-portrait-frame">
+          <div class="v3-portrait-initial">AG</div>
+          <div class="v3-portrait-grain"></div>
+          <div class="v3-portrait-meta">
+            <span class="v3-portrait-eyebrow">FOUNDER · 2026</span>
+            <span class="v3-portrait-name">Anthony Grupposo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="v3-founder-text">
+        <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+          Anthony <em>Grupposo</em>
+        </h2>
+        <div class="v3-founder-body" data-reveal style="--reveal-delay: 160ms">
+          <p>
+            Ex-<em>Fnac</em> — 3 ans commercial électronique en parallèle du démarrage FenX en 2026.
+          </p>
+          <p>
+            Studio <em>AI-native</em> : Astro · React · Higgsfield · ElevenLabs · Claude.
+            Stack moderne, ultra-rapide, sans WordPress ni plugins lourds.
+          </p>
+          <p>
+            Direct, pas de chichi. <em>Si on bosse ensemble, c'est moi que tu auras au téléphone.</em>
+            Pas un account manager, pas un sous-traitant.
+          </p>
+        </div>
+
+        <ul class="v3-founder-stats" data-reveal style="--reveal-delay: 240ms">
+          {stats.map((s) => (
+            <li>
+              <span class="v3-stat-value">{s.value}</span>
+              <span class="v3-stat-label">{s.label}</span>
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href="https://www.linkedin.com/in/anthony-grupposo"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="v3-founder-link"
+          data-reveal
+          style="--reveal-delay: 320ms"
+        >
+          <span>Voir le profil LinkedIn</span>
+          <span class="v3-arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-founder {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-founder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .v3-founder-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  /* Portrait abstract — pas de photo, juste initials premium */
+  .v3-founder-portrait {
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (max-width: 900px) {
+    .v3-founder-portrait {
+      justify-self: center;
+      max-width: 280px;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  .v3-portrait-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 30% 20%, oklch(0.4 0.12 280) 0%, transparent 60%),
+      linear-gradient(160deg, oklch(0.22 0.06 280) 0%, oklch(0.12 0.03 280) 100%);
+    border: 1px solid oklch(0.3 0.06 280 / 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 30px 70px -25px rgba(167, 139, 250, 0.4),
+      0 0 0 1px oklch(0.95 0.05 280 / 0.06);
+  }
+
+  .v3-portrait-initial {
+    font-size: clamp(80px, 14vw, 140px);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: var(--text-hover);
+    line-height: 0.9;
+    text-shadow:
+      0 4px 24px rgba(167, 139, 250, 0.4),
+      0 0 60px rgba(167, 139, 250, 0.2);
+    user-select: none;
+  }
+
+  .v3-portrait-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    background-image:
+      radial-gradient(circle at 25% 30%, #fff 1px, transparent 1px),
+      radial-gradient(circle at 75% 60%, #fff 1px, transparent 1px);
+    background-size: 5px 5px;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  .v3-portrait-meta {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 2;
+  }
+
+  .v3-portrait-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--violet-primary);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .v3-portrait-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+    letter-spacing: -0.01em;
+  }
+
+  .v3-founder-text {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .v3-founder-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .v3-founder-body p {
+    font-size: 17px;
+    color: var(--lavender-bright);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 580px;
+  }
+
+  .v3-founder-stats {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .v3-founder-stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .v3-stat-value {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--violet-primary);
+    line-height: 1;
+  }
+
+  .v3-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .v3-founder-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--violet-soft);
+    text-decoration: none;
+    margin-top: 12px;
+    align-self: flex-start;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(196, 181, 253, 0.4);
+    transition: color 200ms ease, border-color 200ms ease;
+  }
+
+  .v3-founder-link:hover {
+    color: var(--text-hover);
+    border-color: var(--text-hover);
+  }
+
+  .v3-founder-link .v3-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .v3-founder-link:hover .v3-arrow {
+    transform: translate(3px, -3px);
+  }
+</style>

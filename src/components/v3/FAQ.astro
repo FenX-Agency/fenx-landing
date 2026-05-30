@@ -1,0 +1,198 @@
+---
+interface Question {
+  num: string;
+  q: string;
+  a: string;
+}
+
+const questions: Question[] = [
+  {
+    num: '01',
+    q: 'Combien ça coûte vraiment ?',
+    a: "Site clé en main : à partir de 1990€. Vidéo IA : 290€/pièce (pack 3 à 690€). Maintenance : 79€/mois. Pack Premium tout-inclus : 2790€. Devis prix fixe, jamais d'heures facturées.",
+  },
+  {
+    num: '02',
+    q: 'Combien de temps pour livrer ?',
+    a: "Site : 7-14 jours après validation brief. Vidéo IA : 5 jours. Branding : 4-6 semaines. Pas de slot dispo immédiat ? Tu réserves un créneau Q3 ou Q4 2026.",
+  },
+  {
+    num: '03',
+    q: 'Qui maintient le site après ?',
+    a: "Toi via le back-office inclus (formation 30 min en visio). Ou pack Maintenance 79€/mois : 2 modifs/mois, audit SEO trimestriel, support sous 48h.",
+  },
+  {
+    num: '04',
+    q: 'Et si je veux modifier moi-même ?',
+    a: "Back-office sur-mesure inclus dans le 1990€. Tu modifies textes, photos, horaires, menus en 2 clics. Pas de WordPress, pas de plugins à mettre à jour.",
+  },
+  {
+    num: '05',
+    q: 'Vous utilisez quoi techniquement ?',
+    a: "Astro 5 + React 19 + TypeScript + Tailwind 4 + Cloudflare Pages + R2. Stack moderne, ultra-performante, sécurisée. Lighthouse 95+ garanti.",
+  },
+  {
+    num: '06',
+    q: 'Comment se passe le paiement ?',
+    a: "50% au brief signé, 50% à la livraison. Devis prix fixe (pas d'heures facturées). Paiement par virement ou Stripe.",
+  },
+];
+---
+<section id="faq" class="v3-section v3-faq">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[08] FAQ</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Tout savoir <em>avant de signer</em>
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Les 6 questions qu'on entend tout le temps. <em>Réponses directes.</em>
+      </p>
+    </header>
+
+    <div class="v3-faq-list">
+      {questions.map((item, idx) => (
+        <details
+          class="v3-faq-item"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 80}ms`}
+          name="v3-faq"
+        >
+          <summary class="v3-faq-summary">
+            <span class="v3-faq-num">[{item.num}]</span>
+            <span class="v3-faq-q">{item.q}</span>
+            <span class="v3-faq-toggle" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </summary>
+          <div class="v3-faq-answer">
+            <p>{item.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-faq {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-faq-list {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .v3-faq-item {
+    border-top: 1px solid var(--border-subtle);
+    transition: background 200ms ease;
+  }
+
+  .v3-faq-item:last-of-type {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .v3-faq-item[open] {
+    background: rgba(167, 139, 250, 0.03);
+  }
+
+  .v3-faq-summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 8px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .v3-faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .v3-faq-summary:focus-visible {
+    outline: 2px solid var(--violet-primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .v3-faq-num {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: var(--violet-primary);
+  }
+
+  .v3-faq-q {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-hover);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 600px) {
+    .v3-faq-q {
+      font-size: 16px;
+    }
+    .v3-faq-summary {
+      padding: 20px 4px;
+      gap: 14px;
+    }
+  }
+
+  .v3-faq-toggle {
+    color: var(--violet-soft);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), color 200ms ease;
+    display: inline-flex;
+  }
+
+  .v3-faq-item[open] .v3-faq-toggle {
+    transform: rotate(180deg);
+    color: var(--violet-primary);
+  }
+
+  .v3-faq-summary:hover .v3-faq-toggle {
+    color: var(--text-hover);
+  }
+
+  .v3-faq-answer {
+    padding: 0 8px 28px 8px;
+    padding-left: calc(8px + 32px + 20px); /* aligné après le num */
+    animation: v3-faq-slide 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (max-width: 600px) {
+    .v3-faq-answer {
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+  }
+
+  .v3-faq-answer p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--lavender-bright);
+    line-height: 1.6;
+    max-width: 660px;
+  }
+
+  @keyframes v3-faq-slide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v3-faq-toggle,
+    .v3-faq-answer {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>
