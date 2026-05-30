@@ -188,15 +188,27 @@
 
     const mesh = new Mesh(gl, { geometry, program });
 
-    // Resize handler
+    // Resize handler — use parent dimensions, fallback to window
     const resize = () => {
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
+      const parent = canvas.parentElement;
+      const w = (parent?.clientWidth) || window.innerWidth;
+      const h = (parent?.clientHeight) || window.innerHeight;
+      if (w === 0 || h === 0) return;
       renderer.setSize(w, h);
       program.uniforms.uResolution.value = [w, h];
     };
-    resize();
+    // Resize on next paint to ensure layout complete
+    requestAnimationFrame(() => {
+      resize();
+      // Force second resize after layout settles
+      requestAnimationFrame(resize);
+    });
     window.addEventListener('resize', resize, { passive: true });
+    // ResizeObserver pour catch tout reflow du parent
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(() => resize());
+      if (canvas.parentElement) ro.observe(canvas.parentElement);
+    }
 
     // Mouse tracking (lerp pour smoothness)
     const targetMouse = { x: 0.5, y: 0.5 };
