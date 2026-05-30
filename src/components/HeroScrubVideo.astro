@@ -1,0 +1,393 @@
+---
+// HeroScrubVideo — scroll-driven image sequence Hero, pattern Adaline / Apple iPhone product page
+// Pattern : section h-300vh + sticky canvas + GSAP ScrollTrigger qui scrub frame-by-frame
+// Stack : Astro + vanilla JS + GSAP (free since Webflow acquisition 2026)
+// Spec : docs/superpowers/specs/2026-05-29-landing-fenx-v3-parallax-cinematic.md
+
+import Button from './Button.astro';
+
+interface Props {
+  frameCount?: number;
+  frameUrlPattern?: string; // ex: "https://r2.fenx-agency.com/hero/frame-{n}.webp" — {n} = numéro zéro-padded
+  posterUrl?: string;
+}
+
+const {
+  frameCount = 300,
+  frameUrlPattern = '/assets/hero-frames/frame-{n}.webp',
+  posterUrl = '/assets/hero-frames/frame-0001.webp',
+} = Astro.props;
+---
+<section id="hero" class="hero-scrub" aria-label="Présentation FenX Agency">
+  <div class="hero-scrub__sticky">
+    <canvas
+      class="hero-scrub__canvas"
+      id="hero-canvas"
+      aria-hidden="true"
+      data-frame-count={frameCount}
+      data-frame-pattern={frameUrlPattern}
+      data-poster={posterUrl}
+    ></canvas>
+
+    <div class="hero-scrub__overlay">
+      <div class="container hero-scrub__content">
+        <span class="hero-scrub__badge" data-fade="enter">
+          <span class="hero-scrub__badge-dot"></span>
+          STUDIO CRÉATIF PREMIUM · IDF
+        </span>
+        <h1 class="hero-scrub__h1" data-fade="enter">
+          <span class="hero-scrub__h1-line">VOTRE COMMERCE</span>
+          <span class="hero-scrub__h1-line">MÉRITE UN SITE</span>
+          <span class="hero-scrub__h1-line hero-scrub__h1-accent">QUI EN IMPOSE.</span>
+        </h1>
+        <p class="hero-scrub__sub" data-fade="enter">
+          Site sur-mesure + back-office + vidéo IA marketing.<br />
+          Un seul prestataire, livraison 7 jours.
+        </p>
+        <div class="hero-scrub__ctas" data-fade="late">
+          <Button href="#offre" text="À partir de 1990€" openContact={false} />
+          <a href="#process" class="hero-scrub__cta-text">
+            Voir comment on travaille
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+              <path d="M0 6h15M11 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-scrub {
+    position: relative;
+    height: 300vh; /* 3 viewports : permet de scroller toute la séquence avant retour au scroll normal */
+    background: var(--cosmic-bg);
+  }
+
+  .hero-scrub__sticky {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .hero-scrub__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    background: var(--cosmic-bg);
+  }
+
+  /* Gradient overlay : sombre en bas pour lisibilité texte overlay */
+  .hero-scrub__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      180deg,
+      rgba(22, 22, 28, 0.4) 0%,
+      rgba(22, 22, 28, 0.2) 40%,
+      rgba(22, 22, 28, 0.75) 100%
+    );
+    pointer-events: none;
+  }
+
+  .hero-scrub__content {
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 32px;
+    pointer-events: auto;
+  }
+
+  /* Badge pill — micro animation */
+  .hero-scrub__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(167, 139, 250, 0.10);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--lavender-bright);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1), transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 200ms;
+  }
+  .hero-scrub__badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--violet-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--violet-primary);
+    animation: hero-scrub-pulse 2s ease-in-out infinite;
+  }
+  @keyframes hero-scrub-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* H1 — large, modern, Apple-style */
+  .hero-scrub__h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--text-hover);
+    margin: 0 0 24px;
+    text-shadow: 0 2px 40px rgba(0, 0, 0, 0.5);
+  }
+  .hero-scrub__h1-line {
+    display: block;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1), transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-scrub__h1-line:nth-child(1) { transition-delay: 400ms; }
+  .hero-scrub__h1-line:nth-child(2) { transition-delay: 550ms; }
+  .hero-scrub__h1-line:nth-child(3) { transition-delay: 700ms; }
+  .hero-scrub__h1-accent {
+    background: linear-gradient(135deg, var(--violet-primary), var(--lavender-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Sub */
+  .hero-scrub__sub {
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--lavender-bright);
+    margin: 0 auto 36px;
+    max-width: 580px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1), transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 900ms;
+    text-shadow: 0 1px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* CTAs — apparition tardive (vers la fin du scroll) */
+  .hero-scrub__ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1), transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 1100ms;
+  }
+  .hero-scrub__cta-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--lavender-bright);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 999px;
+    transition: color 200ms, transform 200ms, background 200ms;
+  }
+  .hero-scrub__cta-text:hover,
+  .hero-scrub__cta-text:focus-visible {
+    color: var(--text-hover);
+    background: rgba(167, 139, 250, 0.08);
+    transform: translateX(2px);
+  }
+  .hero-scrub__cta-text svg {
+    transition: transform 200ms;
+  }
+  .hero-scrub__cta-text:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Reveal états : appliqué par scroll trigger */
+  .hero-scrub__sticky.is-active [data-fade="enter"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .hero-scrub__sticky.is-active .hero-scrub__h1-line {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .hero-scrub {
+      height: 250vh; /* moins de scroll sur mobile */
+    }
+    .hero-scrub__content {
+      padding: 0 24px;
+    }
+    .hero-scrub__h1 {
+      font-size: clamp(2rem, 9vw, 3rem);
+    }
+    .hero-scrub__sub {
+      font-size: 1rem;
+    }
+    .hero-scrub__ctas {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  /* Reduced motion — skip canvas scrub, poster statique */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-scrub {
+      height: 100vh;
+    }
+    .hero-scrub__canvas {
+      animation: none !important;
+    }
+    .hero-scrub__sticky [data-fade] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hero-scrub__sticky .hero-scrub__h1-line {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initHeroScrubVideo() {
+    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    const section = canvas.closest('.hero-scrub') as HTMLElement | null;
+    const sticky = canvas.closest('.hero-scrub__sticky') as HTMLElement | null;
+    if (!section || !sticky) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const posterUrl = canvas.dataset.poster;
+      if (posterUrl) {
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+        };
+        img.src = posterUrl;
+      }
+      sticky.classList.add('is-active');
+      return;
+    }
+
+    const frameCount = parseInt(canvas.dataset.frameCount || '300', 10);
+    const framePattern = canvas.dataset.framePattern || '';
+
+    // Generate URLs
+    const frameUrl = (index: number) => {
+      const padded = String(index + 1).padStart(4, '0');
+      return framePattern.replace('{n}', padded);
+    };
+
+    const images: HTMLImageElement[] = [];
+    let loadedCount = 0;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) return;
+
+    // Resize canvas to match displayed size for crispness
+    const resizeCanvas = () => {
+      const rect = sticky.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.scale(dpr, dpr);
+    };
+
+    const drawFrame = (index: number) => {
+      const img = images[index];
+      if (!img || !img.complete) return;
+      const rect = sticky.getBoundingClientRect();
+      const targetW = rect.width;
+      const targetH = rect.height;
+      // object-fit: cover
+      const imgAspect = img.naturalWidth / img.naturalHeight;
+      const targetAspect = targetW / targetH;
+      let drawW = targetW, drawH = targetH, dx = 0, dy = 0;
+      if (imgAspect > targetAspect) {
+        drawH = targetH;
+        drawW = drawH * imgAspect;
+        dx = (targetW - drawW) / 2;
+      } else {
+        drawW = targetW;
+        drawH = drawW / imgAspect;
+        dy = (targetH - drawH) / 2;
+      }
+      ctx.clearRect(0, 0, targetW, targetH);
+      ctx.drawImage(img, dx, dy, drawW, drawH);
+    };
+
+    // Preload all frames (could be optimized with progressive loading)
+    let firstFrameLoaded = false;
+    for (let i = 0; i < frameCount; i++) {
+      const img = new Image();
+      img.src = frameUrl(i);
+      img.onload = () => {
+        loadedCount++;
+        if (!firstFrameLoaded && i === 0) {
+          firstFrameLoaded = true;
+          resizeCanvas();
+          drawFrame(0);
+          sticky.classList.add('is-active');
+        }
+      };
+      images.push(img);
+    }
+
+    // ScrollTrigger : scrub frame index based on scroll progress within section
+    const state = { frame: 0 };
+    gsap.to(state, {
+      frame: frameCount - 1,
+      ease: 'none',
+      snap: 'frame',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.5,
+      },
+      onUpdate: () => {
+        drawFrame(Math.floor(state.frame));
+      },
+    });
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      drawFrame(Math.floor(state.frame));
+    });
+  }
+
+  // Init on initial load + Astro view transitions
+  initHeroScrubVideo();
+  document.addEventListener('astro:page-load', initHeroScrubVideo);
+</script>

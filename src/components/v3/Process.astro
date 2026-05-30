@@ -1,0 +1,175 @@
+---
+interface Phase {
+  num: string;
+  title: string;
+  items: string[];
+}
+
+const phases: Phase[] = [
+  {
+    num: '01/04',
+    title: 'Brief',
+    items: ['Atelier 30 min visio', 'Analyse concurrence', 'Roadmap chiffrée'],
+  },
+  {
+    num: '02/04',
+    title: 'Design',
+    items: ['Wireframes premium', 'UI design system', 'Validation 2 itérations'],
+  },
+  {
+    num: '03/04',
+    title: 'Build',
+    items: ['Dev Astro/React', 'Lighthouse 95+', 'SEO local + QA cross-browser'],
+  },
+  {
+    num: '04/04',
+    title: 'Launch',
+    items: ['Mise en ligne', 'Analytics + formation', 'Support 14 jours offerts'],
+  },
+];
+---
+<section id="process" class="v3-section v3-process">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[04] Process</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Du brief au <em>lancement</em>
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Quatre phases nettes — pas de réunions inutiles, pas de devis fleuve. <em>Direct.</em>
+      </p>
+    </header>
+
+    <ol class="v3-process-flow">
+      {phases.map((p, idx) => (
+        <li
+          class="v3-phase"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 120}ms`}
+        >
+          <div class="v3-phase-num">{p.num}</div>
+          <h3 class="v3-phase-title">{p.title}</h3>
+          <ul class="v3-phase-items">
+            {p.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+          {idx < phases.length - 1 && (
+            <span class="v3-phase-arrow" aria-hidden="true">→</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .v3-process {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-process-flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    position: relative;
+  }
+
+  @media (max-width: 1100px) {
+    .v3-process-flow {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .v3-process-flow {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .v3-phase {
+    position: relative;
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 300ms ease, transform 300ms ease;
+  }
+
+  .v3-phase:hover {
+    border-color: rgba(167, 139, 250, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .v3-phase-num {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: var(--violet-primary);
+    line-height: 1;
+  }
+
+  .v3-phase-title {
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--text-hover);
+    margin: 0;
+  }
+
+  .v3-phase-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .v3-phase-items li {
+    font-size: 14px;
+    color: var(--lavender-bright);
+    line-height: 1.5;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .v3-phase-items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 1px;
+    background: var(--violet-primary);
+  }
+
+  /* Connecteur fleche entre phases (desktop only) */
+  .v3-phase-arrow {
+    position: absolute;
+    right: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+    color: var(--violet-primary);
+    opacity: 0.55;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @media (max-width: 1100px) {
+    .v3-phase-arrow {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,220 @@
+---
+interface Service {
+  num: string;
+  title: string;
+  items: string[];
+  delivery: string;
+}
+
+const services: Service[] = [
+  {
+    num: '01',
+    title: 'Sites web',
+    items: [
+      'Astro 5 + React',
+      'Headless CMS / back-office',
+      'SEO local optimisé',
+      'A/B testing landing',
+    ],
+    delivery: 'Livré en 7-14 jours',
+  },
+  {
+    num: '02',
+    title: 'Vidéos IA marketing',
+    items: [
+      'Reels · TikTok · pubs',
+      'Higgsfield + ElevenLabs voix',
+      'Motion design + sound design',
+      'Format 9:16 ready Insta/TikTok',
+    ],
+    delivery: 'Livrée en 5 jours',
+  },
+  {
+    num: '03',
+    title: 'Branding',
+    items: [
+      'Logo + wordmark',
+      'Identité visuelle complète',
+      'Charte graphique éditable',
+      'Design system Figma',
+    ],
+    delivery: 'Livré en 4-6 sem',
+  },
+  {
+    num: '04',
+    title: 'Back-office',
+    items: [
+      'Édition contenu sans dev',
+      'Formation 30 min en visio',
+      'Maintenance 79€/mois optionnelle',
+      'Support sous 48h',
+    ],
+    delivery: 'Inclus dans Pack Premium',
+  },
+];
+---
+<section id="services" class="v3-section v3-services">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[03] Services</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Tout ce qu'on <em>livre</em>
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Quatre disciplines, un seul interlocuteur. Pas d'agence sous-traitée, pas d'intermédiaire.
+      </p>
+    </header>
+
+    <div class="v3-services-grid">
+      {services.map((s, idx) => (
+        <article
+          class="v3-service-card"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 100}ms`}
+        >
+          <div class="v3-service-num">{s.num}</div>
+          <h3 class="v3-service-title">{s.title}</h3>
+          <ul class="v3-service-list">
+            {s.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+          <div class="v3-service-delivery">{s.delivery}</div>
+          <a
+            href="#contact"
+            class="v3-service-cta"
+            data-open-contact
+            aria-label={`Discuter d'un projet ${s.title.toLowerCase()}`}
+          >
+            <span>Discuter projet</span>
+            <span class="v3-arrow" aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-services {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .v3-services-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  .v3-service-card {
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 36px 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+    min-height: 100%;
+  }
+
+  .v3-service-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(167, 139, 250, 0.4);
+    box-shadow: 0 12px 32px rgba(167, 139, 250, 0.12);
+  }
+
+  .v3-service-num {
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--violet-primary);
+    line-height: 0.9;
+    opacity: 0.85;
+  }
+
+  .v3-service-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-hover);
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .v3-service-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .v3-service-list li {
+    font-size: 15px;
+    color: var(--lavender-bright);
+    line-height: 1.5;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .v3-service-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 1px;
+    background: var(--violet-primary);
+  }
+
+  .v3-service-delivery {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+    padding: 6px 12px;
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 999px;
+  }
+
+  .v3-service-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--violet-soft);
+    text-decoration: none;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 4px;
+    transition: color 200ms ease;
+    cursor: pointer;
+  }
+
+  .v3-service-cta:hover {
+    color: var(--text-hover);
+  }
+
+  .v3-service-cta .v3-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .v3-service-cta:hover .v3-arrow {
+    transform: translateX(4px);
+  }
+</style>

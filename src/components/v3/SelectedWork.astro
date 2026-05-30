@@ -1,0 +1,269 @@
+---
+interface Project {
+  num: string;
+  title: string;
+  client: string;
+  services: string;
+  year: string;
+  image: string;
+  href?: string;
+  status: 'live' | 'maintenance';
+}
+
+const projects: Project[] = [
+  {
+    num: '01',
+    title: "La Table d'Hugo",
+    client: 'Restaurant français',
+    services: 'Site + Back-office',
+    year: '2026',
+    image: '/assets/mockup/restauration.webp',
+    href: 'https://demo-restaurant.fenx-agency.com',
+    status: 'live',
+  },
+  {
+    num: '02',
+    title: 'Le Wok du Coin',
+    client: 'Restaurant asiatique',
+    services: 'Site + Back-office',
+    year: '2026',
+    image: '/assets/mockup/studio.webp',
+    href: 'https://demo-wok.fenx-agency.com',
+    status: 'live',
+  },
+  {
+    num: '03',
+    title: 'Studio beauté',
+    client: 'Soins & bien-être',
+    services: 'Site vitrine + résa',
+    year: '2026',
+    image: '/assets/mockup/atelier.webp',
+    status: 'maintenance',
+  },
+  {
+    num: '04',
+    title: 'Cabinet médical',
+    client: 'Profession libérale',
+    services: 'Site + prise RDV',
+    year: '2026',
+    image: '/assets/mockup/cabinet.webp',
+    status: 'maintenance',
+  },
+];
+---
+<section id="selected-work" class="v3-section v3-selected-work">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[02] Selected Work</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Sites livrés <em>&amp; récents</em>
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Quatre commerces locaux passés en mode <em>premium</em> — démos cliquables.
+      </p>
+    </header>
+
+    <div class="v3-work-grid">
+      {projects.map((p, idx) => {
+        const isLive = p.status === 'live';
+        const Tag = isLive ? 'a' : 'div';
+        const attrs = isLive
+          ? { href: p.href!, target: '_blank', rel: 'noopener noreferrer' }
+          : {};
+        return (
+          <Tag
+            class:list={['v3-work-card', isLive ? 'is-live' : 'is-maintenance']}
+            data-reveal
+            style={`--reveal-delay: ${220 + idx * 120}ms`}
+            {...attrs}
+          >
+            <div class="v3-work-card-image-wrap">
+              <img
+                class="v3-work-card-image"
+                src={p.image}
+                alt={`Mockup ${p.title}`}
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="800"
+              />
+              {!isLive && (
+                <div class="v3-work-card-maintenance">
+                  <span class="v3-maintenance-pill">EN MAINTENANCE</span>
+                </div>
+              )}
+            </div>
+            <div class="v3-work-card-meta">
+              <span class="v3-work-card-num">[{p.num}]</span>
+              <div class="v3-work-card-body">
+                <h3 class="v3-work-card-title">{p.title}</h3>
+                <p class="v3-work-card-line">
+                  <span>{p.client}</span>
+                  <span class="v3-dot">·</span>
+                  <span>{p.services}</span>
+                  <span class="v3-dot">·</span>
+                  <span>{p.year}</span>
+                </p>
+              </div>
+              {isLive && (
+                <span class="v3-work-card-arrow" aria-hidden="true">↗</span>
+              )}
+            </div>
+          </Tag>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-selected-work {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  @media (max-width: 900px) {
+    .v3-work-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  .v3-work-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .v3-work-card.is-live {
+    cursor: pointer;
+  }
+
+  .v3-work-card.is-live:hover {
+    transform: translateY(-4px);
+  }
+
+  .v3-work-card.is-live:hover .v3-work-card-image {
+    transform: scale(1.03);
+  }
+
+  .v3-work-card.is-live:hover .v3-work-card-arrow {
+    transform: translate(4px, -4px);
+    color: var(--text-hover);
+  }
+
+  .v3-work-card.is-live:focus-visible {
+    outline: 2px solid var(--violet-primary);
+    outline-offset: 4px;
+    border-radius: 12px;
+  }
+
+  .v3-work-card-image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .v3-work-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), filter 350ms ease;
+  }
+
+  .v3-work-card.is-maintenance .v3-work-card-image {
+    filter: blur(3px) saturate(0.5) brightness(0.55);
+    transform: scale(1.05);
+  }
+
+  .v3-work-card-maintenance {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 12, 24, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 2;
+  }
+
+  .v3-maintenance-pill {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.20em;
+    color: #fff;
+    padding: 7px 16px;
+    border: 1px solid rgba(167, 139, 250, 0.5);
+    border-radius: 999px;
+    background: rgba(15, 12, 24, 0.65);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .v3-work-card-meta {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: 16px;
+    padding: 0 4px;
+  }
+
+  .v3-work-card-num {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--violet-primary);
+    margin-top: 4px;
+  }
+
+  .v3-work-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .v3-work-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-hover);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .v3-work-card-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .v3-dot {
+    color: var(--text-dim);
+  }
+
+  .v3-work-card-arrow {
+    font-size: 22px;
+    color: var(--violet-primary);
+    margin-top: 2px;
+    transition: transform 250ms ease, color 250ms ease;
+    line-height: 1;
+  }
+</style>
