@@ -1,9 +1,11 @@
 ---
+// SelectedWork V3.3 — refonte LISTE style Wibify avec hover preview floating
+// Pattern repris : lignes 01/Nom/Tags/Année/↗ + preview thumbnail qui suit le cursor au hover
+
 interface Project {
   num: string;
   title: string;
-  client: string;
-  services: string;
+  tags: string;
   year: string;
   image: string;
   href?: string;
@@ -14,8 +16,7 @@ const projects: Project[] = [
   {
     num: '01',
     title: "La Table d'Hugo",
-    client: 'Restaurant français',
-    services: 'Site + Back-office',
+    tags: 'SITE · BACK-OFFICE',
     year: '2026',
     image: '/assets/mockup/restauration.webp',
     href: 'https://demo-restaurant.fenx-agency.com',
@@ -24,8 +25,7 @@ const projects: Project[] = [
   {
     num: '02',
     title: 'Le Wok du Coin',
-    client: 'Restaurant asiatique',
-    services: 'Site + Back-office',
+    tags: 'SITE · BACK-OFFICE · SEO',
     year: '2026',
     image: '/assets/mockup/studio.webp',
     href: 'https://demo-wok.fenx-agency.com',
@@ -34,8 +34,7 @@ const projects: Project[] = [
   {
     num: '03',
     title: 'Studio beauté',
-    client: 'Soins & bien-être',
-    services: 'Site vitrine + résa',
+    tags: 'SITE VITRINE · RÉSERVATION',
     year: '2026',
     image: '/assets/mockup/atelier.webp',
     status: 'maintenance',
@@ -43,8 +42,7 @@ const projects: Project[] = [
   {
     num: '04',
     title: 'Cabinet médical',
-    client: 'Profession libérale',
-    services: 'Site + prise RDV',
+    tags: 'SITE · PRISE RDV',
     year: '2026',
     image: '/assets/mockup/cabinet.webp',
     status: 'maintenance',
@@ -54,70 +52,46 @@ const projects: Project[] = [
 <section id="selected-work" class="v3-section v3-selected-work">
   <div class="container">
     <header class="v3-section-head">
-      <span class="v3-eyebrow" data-reveal>[02] Selected Work</span>
+      <span class="v3-eyebrow" data-reveal>[02] Selected Work / 2026</span>
       <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
-        Sites livrés <em>&amp; récents</em>
+        Ce qu'on a <em>livré</em>.
       </h2>
       <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
-        Quatre commerces locaux passés en mode <em>premium</em> — démos cliquables.
+        Démos cliquables. <em>Survole pour voir.</em>
       </p>
     </header>
 
-    <div class="v3-work-grid">
-      {projects.map((p, idx) => {
+    <ul class="v3-work-list" data-reveal style="--reveal-delay: 240ms">
+      {projects.map((p) => {
         const isLive = p.status === 'live';
         const Tag = isLive ? 'a' : 'div';
         const attrs = isLive
           ? { href: p.href!, target: '_blank', rel: 'noopener noreferrer' }
           : {};
         return (
-          <Tag
-            class:list={['v3-work-card', isLive ? 'is-live' : 'is-maintenance']}
-            data-reveal
-            style={`--reveal-delay: ${220 + idx * 120}ms`}
-            {...attrs}
-          >
-            <div class="v3-work-card-image-wrap">
-              <img
-                class="v3-work-card-image"
-                src={p.image}
-                alt={`Mockup ${p.title}`}
-                loading="lazy"
-                decoding="async"
-                width="800"
-                height="800"
-              />
-              {!isLive && (
-                <div class="v3-work-card-maintenance">
-                  <span class="v3-maintenance-pill">EN MAINTENANCE</span>
-                </div>
-              )}
-            </div>
-            <div class="v3-work-card-meta">
-              <span class="v3-work-card-num">[{p.num}]</span>
-              <div class="v3-work-card-body">
-                <h3 class="v3-work-card-title">{p.title}</h3>
-                <p class="v3-work-card-line">
-                  <span>{p.client}</span>
-                  <span class="v3-dot">·</span>
-                  <span>{p.services}</span>
-                  <span class="v3-dot">·</span>
-                  <span>{p.year}</span>
-                </p>
-              </div>
-              {isLive && (
-                <span class="v3-work-card-arrow" aria-hidden="true">↗</span>
-              )}
-            </div>
-          </Tag>
+          <li class:list={['v3-work-row', isLive ? 'is-live' : 'is-maintenance']} data-preview={p.image}>
+            <Tag class="v3-work-row-link" {...attrs}>
+              <span class="v3-work-row-num">{p.num}</span>
+              <span class="v3-work-row-title">{p.title}</span>
+              <span class="v3-work-row-tags">{p.tags}</span>
+              <span class="v3-work-row-year">{p.year}</span>
+              <span class="v3-work-row-status" aria-hidden="true">
+                {isLive ? '↗' : 'EN MAINTENANCE'}
+              </span>
+            </Tag>
+          </li>
         );
       })}
-    </div>
+    </ul>
+  </div>
+
+  {/* Floating preview thumbnail — suit la souris au hover */}
+  <div class="v3-work-preview" id="v3-work-preview" aria-hidden="true">
+    <img class="v3-work-preview-img" id="v3-work-preview-img" src="" alt="" loading="lazy" />
   </div>
 </section>
 
-<!-- Styles globaux V3 — partagés par tous les composants v3/* (utilitaires section, eyebrow, h2, sub).
-     Posés ici parce que SelectedWork est le premier composant V3 dans le DOM (section [02]). -->
+<!-- Styles globaux V3 — partagés par tous les composants v3/* -->
 <style is:global>
   .v3-section {
     padding: var(--pad-section-desktop);
@@ -152,38 +126,49 @@ const projects: Project[] = [
   }
 
   .v3-eyebrow {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
     font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.18em;
+    font-weight: 600;
+    letter-spacing: 0.20em;
     text-transform: uppercase;
     color: var(--violet-primary);
     line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .v3-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--violet-primary);
   }
 
   @media (max-width: 540px) {
     .v3-eyebrow {
       font-size: 10px;
     }
+    .v3-eyebrow::before {
+      width: 20px;
+    }
   }
 
   .v3-h2 {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
     color: var(--text-hover);
     margin: 0;
   }
 
   .v3-h2 em {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
     font-style: italic;
-    font-weight: 700;
-    background-image: linear-gradient(135deg, var(--violet-soft) 0%, var(--violet-primary) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    font-weight: 400;
+    color: var(--violet-primary);
+    letter-spacing: -0.02em;
   }
 
   .v3-section-sub {
@@ -206,7 +191,6 @@ const projects: Project[] = [
     }
   }
 
-  /* Arrow utility — used across CTAs */
   .v3-arrow {
     display: inline-block;
     font-style: normal;
@@ -216,152 +200,250 @@ const projects: Project[] = [
 
 <style>
   .v3-selected-work {
-    background: var(--cosmic-bg);
+    position: relative;
   }
 
-  .v3-work-grid {
+  /* Liste de lignes (style Wibify) */
+  .v3-work-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .v3-work-row {
+    border-bottom: 1px solid var(--border-subtle);
+    position: relative;
+  }
+
+  .v3-work-row-link {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 60px 1fr auto auto auto;
+    align-items: center;
     gap: 32px;
+    padding: 32px 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: padding-left 350ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  @media (max-width: 900px) {
-    .v3-work-grid {
-      grid-template-columns: 1fr;
-      gap: 28px;
+  @media (max-width: 768px) {
+    .v3-work-row-link {
+      grid-template-columns: 40px 1fr auto;
+      grid-template-rows: auto auto;
+      gap: 6px 18px;
+      padding: 24px 4px;
     }
   }
 
-  .v3-work-card {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* Hover state — Wibify-style : padding shifts right + title brightens */
+  .v3-work-row.is-live .v3-work-row-link:hover,
+  .v3-work-row.is-live .v3-work-row-link:focus-visible {
+    padding-left: 24px;
   }
-
-  .v3-work-card.is-live {
-    cursor: pointer;
-  }
-
-  .v3-work-card.is-live:hover {
-    transform: translateY(-4px);
-  }
-
-  .v3-work-card.is-live:hover .v3-work-card-image {
-    transform: scale(1.03);
-  }
-
-  .v3-work-card.is-live:hover .v3-work-card-arrow {
-    transform: translate(4px, -4px);
+  .v3-work-row.is-live:hover .v3-work-row-title,
+  .v3-work-row.is-live .v3-work-row-link:focus-visible .v3-work-row-title {
     color: var(--text-hover);
   }
-
-  .v3-work-card.is-live:focus-visible {
-    outline: 2px solid var(--violet-primary);
-    outline-offset: 4px;
-    border-radius: 12px;
+  .v3-work-row.is-live:hover .v3-work-row-status,
+  .v3-work-row.is-live .v3-work-row-link:focus-visible .v3-work-row-status {
+    color: var(--violet-primary);
+    transform: translate(4px, -4px);
+  }
+  .v3-work-row.is-live:hover {
+    background: linear-gradient(90deg,
+      rgba(167, 139, 250, 0.04) 0%,
+      transparent 80%);
   }
 
-  .v3-work-card-image-wrap {
-    position: relative;
-    aspect-ratio: 1 / 1;
+  /* Numéro */
+  .v3-work-row-num {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+  }
+
+  /* Titre */
+  .v3-work-row-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--lavender-bright);
+    transition: color 250ms ease;
+    min-width: 0;
+  }
+
+  /* Tags */
+  .v3-work-row-tags {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Année */
+  .v3-work-row-year {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+
+  /* Status (↗ ou EN MAINTENANCE) */
+  .v3-work-row-status {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dim);
+    transition: color 250ms ease, transform 250ms ease;
+    white-space: nowrap;
+  }
+  .v3-work-row.is-maintenance .v3-work-row-status {
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    padding: 4px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+  .v3-work-row.is-maintenance .v3-work-row-link {
+    cursor: default;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 768px) {
+    .v3-work-row-tags {
+      grid-column: 2 / 4;
+      grid-row: 2;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+    }
+    .v3-work-row-year {
+      display: none;
+    }
+    .v3-work-row-title {
+      font-size: 1.5rem;
+    }
+    .v3-work-row.is-live .v3-work-row-link:hover {
+      padding-left: 12px;
+    }
+  }
+
+  /* ============ Floating preview thumbnail ============ */
+  .v3-work-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 280px;
     border-radius: 14px;
     overflow: hidden;
-    background: var(--cosmic-card);
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: opacity 220ms ease, transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
     border: 1px solid var(--border-subtle);
+    background: var(--cosmic-card);
+    box-shadow:
+      0 30px 80px -20px rgba(0, 0, 0, 0.65),
+      0 0 60px -10px rgba(167, 139, 250, 0.25);
+    will-change: transform, opacity;
   }
 
-  .v3-work-card-image {
+  .v3-work-preview.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .v3-work-preview-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: top center;
     display: block;
-    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), filter 350ms ease;
   }
 
-  .v3-work-card.is-maintenance .v3-work-card-image {
-    filter: blur(3px) saturate(0.5) brightness(0.55);
-    transform: scale(1.05);
+  @media (max-width: 900px) {
+    .v3-work-preview {
+      display: none; /* Mobile : pas de preview floating */
+    }
   }
 
-  .v3-work-card-maintenance {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(15, 12, 24, 0.55);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    z-index: 2;
-  }
-
-  .v3-maintenance-pill {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.20em;
-    color: #fff;
-    padding: 7px 16px;
-    border: 1px solid rgba(167, 139, 250, 0.5);
-    border-radius: 999px;
-    background: rgba(15, 12, 24, 0.65);
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
-  }
-
-  .v3-work-card-meta {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: start;
-    gap: 16px;
-    padding: 0 4px;
-  }
-
-  .v3-work-card-num {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    color: var(--violet-primary);
-    margin-top: 4px;
-  }
-
-  .v3-work-card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-  }
-
-  .v3-work-card-title {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--text-hover);
-    margin: 0;
-    line-height: 1.25;
-  }
-
-  .v3-work-card-line {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0;
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
-  .v3-dot {
-    color: var(--text-dim);
-  }
-
-  .v3-work-card-arrow {
-    font-size: 22px;
-    color: var(--violet-primary);
-    margin-top: 2px;
-    transition: transform 250ms ease, color 250ms ease;
-    line-height: 1;
+  @media (prefers-reduced-motion: reduce) {
+    .v3-work-preview {
+      transition: opacity 100ms ease;
+    }
+    .v3-work-row.is-live .v3-work-row-link {
+      transition: none;
+    }
   }
 </style>
+
+<script>
+  // Floating preview : suit le cursor + smooth lerp position
+  function initSelectedWorkPreview() {
+    const preview = document.getElementById('v3-work-preview');
+    const previewImg = document.getElementById('v3-work-preview-img') as HTMLImageElement | null;
+    if (!preview || !previewImg) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(max-width: 900px)').matches) return;
+
+    const liveRows = document.querySelectorAll<HTMLElement>('.v3-work-row.is-live');
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isHovering = false;
+    let currentImage = '';
+
+    const handleMouseMove = (e: MouseEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    };
+
+    liveRows.forEach((row) => {
+      const image = row.getAttribute('data-preview');
+      if (!image) return;
+
+      row.addEventListener('mouseenter', () => {
+        if (currentImage !== image) {
+          previewImg.src = image;
+          currentImage = image;
+        }
+        isHovering = true;
+        preview.classList.add('is-visible');
+      });
+      row.addEventListener('mouseleave', () => {
+        isHovering = false;
+        preview.classList.remove('is-visible');
+      });
+    });
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    // Animation loop : lerp smooth position
+    const tick = () => {
+      currentX += (targetX - currentX) * 0.12;
+      currentY += (targetY - currentY) * 0.12;
+      if (isHovering) {
+        preview.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%) scale(1)`;
+      } else {
+        preview.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%) scale(0.85)`;
+      }
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  initSelectedWorkPreview();
+  document.addEventListener('astro:page-load', initSelectedWorkPreview);
+</script>
