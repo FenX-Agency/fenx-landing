@@ -82,7 +82,30 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
 <body>
   <a href="#main" class="skip-link">Aller au contenu</a>
 
+  {/* V4 Scroll progress bar top 2px (Web Designer agent reco) */}
+  <div class="v4-scroll-progress" aria-hidden="true"></div>
+
   <slot />
+
+  <script is:inline>
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const bar = document.querySelector('.v4-scroll-progress');
+      if (!bar) return;
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+        bar.style.setProperty('--scroll-progress', progress.toFixed(3));
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(update); ticking = true; }
+      }, { passive: true });
+      update();
+    })();
+  </script>
 
   <script is:inline>
     // Disable browser scroll restoration on reload — avoid the "jump to bottom" issue on Firefox hard refresh
