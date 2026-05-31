@@ -105,13 +105,13 @@ const phases: Phase[] = [
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px; /* V3.5 : 32 -> 24 (gap rows plus serre Wibify-like) */
     position: relative;
   }
 
   @media (max-width: 768px) {
     .v3-process-list {
-      gap: 24px;
+      gap: 18px;
     }
   }
 
@@ -160,7 +160,8 @@ const phases: Phase[] = [
   /* ============ Visuel illustration 3D blueprint ============ */
   .v3-process-row-visual {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 10; /* V3.5 : 1:1 -> 16:10 (allonge horizontal Wibify-like) */
+    min-height: 380px;
     background: radial-gradient(
       ellipse at center,
       rgba(167, 139, 250, 0.04) 0%,
@@ -197,8 +198,8 @@ const phases: Phase[] = [
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: clamp(32px, 4vw, 56px);
-    gap: 20px;
+    padding: clamp(40px, 5vw, 80px); /* V3.5 : 32-56 -> 40-80 (plus genereux Wibify-like) */
+    gap: 24px;
   }
 
   .v3-process-row-num {

@@ -130,13 +130,13 @@ const icons = {
   .v3-services-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: 16px; /* V3.5 : gap plus serre Wibify-like (24 -> 16) */
   }
 
   @media (max-width: 900px) {
     .v3-services-grid {
       grid-template-columns: 1fr;
-      gap: 18px;
+      gap: 14px;
     }
   }
 
@@ -145,15 +145,15 @@ const icons = {
     position: relative;
     background: var(--cosmic-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 18px;
-    padding: 32px 32px 24px;
+    border-radius: 16px; /* V3.5 : 18 -> 16 (Wibify legerement moins arrondi) */
+    padding: 40px; /* V3.5 : 32 -> 40 (padding interne plus genereux Wibify-like) */
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 28px; /* V3.5 : 24 -> 28 (plus d'air entre header/body/tags) */
     transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 450ms ease;
     overflow: hidden;
-    min-height: 360px;
+    min-height: 300px; /* V3.5 : 360 -> 300 (cards moins hautes Wibify-like) */
   }
 
   .v3-service-card:hover {
