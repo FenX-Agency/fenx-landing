@@ -62,21 +62,135 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <link rel="preload" href="/styles.css" as="style">
   <link rel="stylesheet" href="/styles.css">
 
-  <!-- Structured data (JSON-LD) — local business -->
+  <!-- Structured data (JSON-LD) @graph — LocalBusiness + FAQPage + Services (SEO agent) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'FenX Agency',
-    url: siteUrl,
-    logo: `${siteUrl}/assets/favicon.svg`,
-    description: description,
-    sameAs: [],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'contact.fenx.agency@gmail.com',
-      contactType: 'Customer Service',
-      availableLanguage: ['fr', 'en'],
-    },
+    '@graph': [
+      {
+        '@type': 'LocalBusiness',
+        '@id': `${siteUrl}/#business`,
+        name: 'FenX Agency',
+        alternateName: 'Fen X Agency',
+        url: siteUrl,
+        logo: `${siteUrl}/assets/favicon.svg`,
+        image: `${siteUrl}/assets/og-image.jpg`,
+        description: description,
+        priceRange: '€€',
+        telephone: '+33-1-00-00-00-00',
+        email: 'contact.fenx.agency@gmail.com',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Sannois',
+          postalCode: '95110',
+          addressRegion: 'Île-de-France',
+          addressCountry: 'FR',
+        },
+        areaServed: [
+          { '@type': 'AdministrativeArea', name: 'Île-de-France' },
+          { '@type': 'Country', name: 'France' },
+        ],
+        founder: { '@type': 'Person', name: 'Anthony Grupposo' },
+        knowsAbout: [
+          'Création de sites web',
+          'SEO local',
+          'Vidéos IA',
+          'Branding',
+          'Identité visuelle',
+          'Astro',
+          'Cloudflare',
+        ],
+        sameAs: [],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'contact.fenx.agency@gmail.com',
+          contactType: 'Customer Service',
+          availableLanguage: ['fr', 'en'],
+        },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'FenX Agency',
+        description: description,
+        inLanguage: 'fr-FR',
+        publisher: { '@id': `${siteUrl}/#business` },
+      },
+      {
+        '@type': 'Service',
+        '@id': `${siteUrl}/#service-sites`,
+        serviceType: 'Création de site web',
+        provider: { '@id': `${siteUrl}/#business` },
+        name: 'Site web premium pour TPE',
+        description: "Site clé en main pour commerces de proximité. SEO local Google Business, back-office autonome, Lighthouse 95+.",
+        areaServed: 'Île-de-France',
+        offers: {
+          '@type': 'Offer',
+          price: '1990',
+          priceCurrency: 'EUR',
+          priceSpecification: {
+            '@type': 'PriceSpecification',
+            price: '1990',
+            priceCurrency: 'EUR',
+            valueAddedTaxIncluded: false,
+          },
+        },
+      },
+      {
+        '@type': 'Service',
+        '@id': `${siteUrl}/#service-videos`,
+        serviceType: 'Production vidéo IA',
+        provider: { '@id': `${siteUrl}/#business` },
+        name: 'Vidéos IA pour réseaux sociaux',
+        description: "Vingt vidéos par mois pour TikTok, Reels et Shorts. Voix clonée, montage pro, prêtes à poster.",
+        areaServed: 'France',
+      },
+      {
+        '@type': 'Service',
+        '@id': `${siteUrl}/#service-branding`,
+        serviceType: 'Branding',
+        provider: { '@id': `${siteUrl}/#business` },
+        name: 'Identité visuelle complète',
+        description: "Logo, charte couleurs, design system éditable. Cohérence garantie sur tous les supports.",
+        areaServed: 'France',
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${siteUrl}/#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Combien ça coûte vraiment ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Site clé en main : à partir de 1990€. Vidéo IA : 290€/pièce (pack 3 à 690€). Maintenance : 79€/mois. Pack Premium tout-inclus : 2790€. Devis prix fixe, jamais d'heures facturées." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Combien de temps pour livrer ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Site : 7-14 jours après validation brief. Vidéo IA : 5 jours. Branding : 4-6 semaines. Pas de slot dispo immédiat ? Tu réserves un créneau Q3 ou Q4 2026." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Qui maintient le site après ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Toi via le back-office inclus (formation 30 min en visio). Ou pack Maintenance 79€/mois : 2 modifs/mois, audit SEO trimestriel, support sous 48h." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Et si je veux modifier moi-même ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Back-office sur-mesure inclus dans le 1990€. Tu modifies textes, photos, horaires, menus en 2 clics. Pas de WordPress, pas de plugins à mettre à jour." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Vous utilisez quoi techniquement ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Astro 5 + React 19 + TypeScript + Tailwind 4 + Cloudflare Pages + R2. Stack moderne, ultra-performante, sécurisée. Lighthouse 95+ garanti." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Comment se passe le paiement ?',
+            acceptedAnswer: { '@type': 'Answer', text: "50% au brief signé, 50% à la livraison. Devis prix fixe (pas d'heures facturées). Paiement par virement ou Stripe." },
+          },
+        ],
+      },
+    ],
   })} />
 </head>
 <body>
