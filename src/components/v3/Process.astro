@@ -98,58 +98,86 @@ const phases: Phase[] = [
     position: relative;
   }
 
-  /* Liste de phases — STICKY STACKING (style Wibify v3) */
+  /* Liste de phases — STICKY STACKING (V3.7 : pas de gap pour eviter le bug transparence) */
   .v3-process-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 24px; /* V3.5 : 32 -> 24 (gap rows plus serre Wibify-like) */
+    gap: 0; /* V3.7 : retire le gap pour eviter le trou entre rows sticky (bug transparence Anthony) */
     position: relative;
   }
 
-  @media (max-width: 768px) {
-    .v3-process-list {
-      gap: 18px;
-    }
-  }
-
-  /* ============ Row split 50/50 — STICKY au scroll avec offset progressif ============ */
-  /* Chaque row se colle au top avec un offset croissant → les rows s'empilent visuellement au scroll */
+  /* ============ Row split 50/50 — STICKY avec fade out scroll-driven ============ */
   .v3-process-row {
     position: sticky;
     top: calc(80px + var(--row-index, 0) * 28px);
+    margin-bottom: 24px; /* V3.7 : remplace gap parent par margin sur row */
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0;
-    background: linear-gradient(180deg, var(--cosmic-card) 0%, #14141c 100%);
+    /* V3.7 : background opaque uniforme (pas gradient) + cosmic-card solide */
+    background: var(--cosmic-card);
     border: 1px solid var(--border-subtle);
     border-radius: 20px;
     overflow: hidden;
-    transition: border-color 350ms ease;
     box-shadow: 0 -1px 0 rgba(167, 139, 250, 0.06),
                 0 24px 60px -16px rgba(0, 0, 0, 0.85);
+    /* V3.7 : scroll-driven fade quand la row sort du viewport (recouverte par suivante) */
+    transform-origin: center top;
   }
 
-  /* Désactive le sticky sur mobile (pas de space pour le stacking) + reduced-motion */
+  /* Fade out progressif quand row recouverte (CSS modern scroll-driven animation) */
+  @supports (animation-timeline: view()) {
+    .v3-process-row {
+      animation: v3-process-row-fade linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 90%;
+    }
+  }
+  @keyframes v3-process-row-fade {
+    0%   { opacity: 1; transform: scale(1); filter: brightness(1); }
+    100% { opacity: 0.35; transform: scale(0.97); filter: brightness(0.65); }
+  }
+
+  /* ::before garantit 100% opacite (couche cosmic-card en arriere-plan) */
+  .v3-process-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cosmic-card);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* V3.7 : RETIRE le hover effect (Anthony : "pas de hover sur Process") */
+  /* Les hover :hover on .v3-process-row-img / .v3-process-row-tag sont retires plus bas */
+
+  /* Désactive le sticky + scroll-driven sur mobile / reduced-motion */
   @media (max-width: 900px) {
     .v3-process-row {
       position: relative;
       top: auto;
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      margin-bottom: 18px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
     .v3-process-row {
       position: relative;
       top: auto;
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
     }
   }
 
-  .v3-process-row:hover {
-    border-color: rgba(167, 139, 250, 0.2);
-    background: rgba(28, 28, 46, 0.55);
-  }
+  /* V3.7 : retire le hover (Anthony : pas de hover sur Process) */
 
   @media (max-width: 900px) {
     .v3-process-row {
@@ -182,10 +210,7 @@ const phases: Phase[] = [
     filter: brightness(0.95);
   }
 
-  .v3-process-row:hover .v3-process-row-img {
-    transform: scale(1.04);
-    filter: brightness(1.05);
-  }
+  /* V3.7 : retire hover image scale (Anthony : pas de hover Process) */
 
   @media (max-width: 900px) {
     .v3-process-row-visual {
@@ -251,10 +276,7 @@ const phases: Phase[] = [
     transition: color 250ms ease, border-color 250ms ease;
   }
 
-  .v3-process-row:hover .v3-process-row-tag {
-    color: var(--lavender-bright);
-    border-color: rgba(167, 139, 250, 0.25);
-  }
+  /* V3.7 : retire hover tags brighten (Anthony : pas de hover Process) */
 
   @media (max-width: 540px) {
     .v3-process-row-content {

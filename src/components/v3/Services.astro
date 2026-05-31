@@ -140,27 +140,34 @@ const icons = {
     }
   }
 
-  /* ========== Card ========== */
+  /* ========== Card (V3.7 : plus longue + hover bg pulse) ========== */
   .v3-service-card {
     position: relative;
     background: var(--cosmic-card);
     border: 1px solid var(--border-subtle);
     border-radius: 16px;
-    padding: 40px;
+    padding: 48px 40px 36px; /* V3.7 : padding y plus genereux pour plus d'air */
     display: flex;
     flex-direction: column;
-    gap: 28px;
-    /* V3.6 Fix #7 : retire transform translateY -4px (Wibify ne fait pas lift card) */
+    gap: 32px; /* V3.7 : gap 28 -> 32 (plus d'espace entre header/body/tags/footer) */
     transition: box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 500ms ease;
+                border-color 500ms ease,
+                background 600ms cubic-bezier(0.22, 1, 0.36, 1);
     overflow: hidden;
-    min-height: 300px;
+    min-height: 420px; /* V3.7 : 300 -> 420px (cards plus longues Anthony priorite) */
   }
 
+  /* V3.7 Hover ameliore : glow violet plus prononce + bg pulse subtil */
   .v3-service-card:hover {
-    /* V3.6 : pas de translateY, juste shadow subtle */
-    box-shadow: 0 24px 48px -16px rgba(167, 139, 250, 0.18);
-    border-color: rgba(167, 139, 250, 0.18);
+    box-shadow:
+      0 24px 56px -12px rgba(167, 139, 250, 0.28),
+      0 0 0 1px rgba(167, 139, 250, 0.25) inset; /* double glow : drop + inset border */
+    border-color: rgba(167, 139, 250, 0.35);
+    background: linear-gradient(
+      180deg,
+      rgba(167, 139, 250, 0.04) 0%,
+      var(--cosmic-card) 100%
+    );
   }
 
   /* ========== Border trace SVG (style Wibify : parcourt moitié puis fade) ========== */
