@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import SelectedWork from '../components/v3/SelectedWork.astro';
 import Services from '../components/v3/Services.astro';
+import Pricing from '../components/v3/Pricing.astro';
 import Process from '../components/v3/Process.astro';
 import Contact from '../components/v3/Contact.astro';
 import FAQ from '../components/v3/FAQ.astro';
@@ -16,9 +17,10 @@ import ContactModal from '../components/ContactModal.astro';
     <Hero />              {/* [01] */}
     <SelectedWork />      {/* [02] */}
     <Services />          {/* [03] */}
-    <Process />           {/* [04] */}
-    <Contact />           {/* [05] */}
-    <FAQ />               {/* [06] */}
+    <Pricing />           {/* [04] — NEW Branding agent */}
+    <Process />           {/* [05] */}
+    <FAQ />               {/* [06] — moved before Contact (UX-UI reco : objections puis action) */}
+    <Contact />           {/* [07] */}
   </main>
   <Footer />
   <ContactModal />
