@@ -1,0 +1,141 @@
+---
+// Garantie V4 — 3 promesses concrètes (UX-UI agent reco)
+// Mieux que faux testimonials : engagements vérifiables qui réduisent le risque perçu.
+interface Promise {
+  num: string;
+  title: string;
+  description: string;
+  icon: 'shield' | 'clock' | 'refund';
+}
+
+const promises: Promise[] = [
+  {
+    num: '01',
+    title: 'Lighthouse 95+',
+    description: "Si ton site livré n'atteint pas 95 sur Performance et SEO, on optimise gratuitement jusqu'à atteinte. Mesure publique vérifiable.",
+    icon: 'shield',
+  },
+  {
+    num: '02',
+    title: 'Livré en 7 jours',
+    description: "Site Pack Démarrage livré sous 7 jours ouvrés après brief signé. Au-delà, chaque jour de retard = 50€ de remise sur ta facture.",
+    icon: 'clock',
+  },
+  {
+    num: '03',
+    title: 'Remboursé si pas livré',
+    description: "Si on n'a pas livré le périmètre signé sous 30 jours (cas extrême), 100% du paiement initial remboursé. Pas de question.",
+    icon: 'refund',
+  },
+];
+
+const icons = {
+  shield: '<path d="M12 2L4 5v6c0 5 3.5 9.4 8 11 4.5-1.6 8-6 8-11V5l-8-3z" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  clock: '<circle cx="12" cy="12" r="9" stroke-width="1.5"/><path d="M12 7v5l3.5 2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  refund: '<path d="M3 12a9 9 0 1 0 3-6.7" stroke-width="1.5" stroke-linecap="round"/><path d="M3 4v5h5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v5l3 2" stroke-width="1.8" stroke-linecap="round"/>',
+};
+---
+<section id="garantie" class="v3-section v3-garantie">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[06] Garantie / Risque zéro</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Trois <em>engagements</em>. Vérifiables.
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Pas de témoignages bidons. Des <em>promesses chiffrées</em> avec conditions claires si on les rate.
+      </p>
+    </header>
+
+    <div class="v3-garantie-grid">
+      {promises.map((p, idx) => (
+        <article
+          class="v3-garantie-card"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 110}ms`}
+        >
+          <span class="v3-garantie-num">{p.num} / 03</span>
+          <span class="v3-garantie-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" set:html={icons[p.icon]}></svg>
+          </span>
+          <h3 class="v3-garantie-title">{p.title}</h3>
+          <p class="v3-garantie-description">{p.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-garantie {
+    background: var(--cosmic-bg);
+    position: relative;
+  }
+
+  .v3-garantie-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 900px) {
+    .v3-garantie-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+
+  .v3-garantie-card {
+    position: relative;
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 40px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: border-color 400ms ease, box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .v3-garantie-card:hover {
+    border-color: rgba(167, 139, 250, 0.28);
+    box-shadow: 0 20px 48px -16px rgba(167, 139, 250, 0.22);
+  }
+
+  .v3-garantie-num {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+  }
+
+  .v3-garantie-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: rgba(167, 139, 250, 0.10);
+    border: 1px solid rgba(167, 139, 250, 0.20);
+    border-radius: 14px;
+    color: var(--violet-primary);
+  }
+
+  .v3-garantie-title {
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text-hover);
+    margin: 0;
+  }
+
+  .v3-garantie-description {
+    font-size: 0.9375rem;
+    color: var(--lavender-bright);
+    line-height: 1.55;
+    margin: 0;
+  }
+</style>
