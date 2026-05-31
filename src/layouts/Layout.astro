@@ -50,12 +50,16 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
-  <!-- Fonts -->
+  <!-- Fonts — V3.6 : Switzer (Fontshare distinctive) replaces Inter for body/H1/H2 (skill frontend-design : eviter Inter = AI slop) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <!-- Switzer (Fontshare distinctive font, replaces Inter) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,700,800,900&display=swap" rel="stylesheet">
+  <!-- Instrument Serif (italics emphasis) + JetBrains Mono (eyebrow/tags monospace) -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="preload" href="/styles.css" as="style">
-  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5n-wU.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
 
   <!-- Structured data (JSON-LD) — local business -->

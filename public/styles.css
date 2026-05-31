@@ -27,9 +27,9 @@
   --lime-dark: var(--violet-dark);
   --lime-gradient-top: var(--violet-soft);
 
-  /* Spacing */
-  --pad-section-desktop: 120px 32px;
-  --pad-section-mobile: 64px 24px;
+  /* Spacing — V3.6 : padding sections plus genereux (Wibify-like air) */
+  --pad-section-desktop: 160px 32px;
+  --pad-section-mobile: 80px 24px;
   --container-max: 1100px;
 
   /* Typography sizing (réduits — hero compact, H2 sur 1 ligne) */
@@ -46,11 +46,13 @@
 /* Native smooth scroll — kept simple, Lenis disabled (was jittery on Firefox) */
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Switzer', 'Inter', system-ui, sans-serif;
   background: var(--charcoal-bg);
   color: var(--text-primary);
   line-height: 1.5;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Global focus-visible (a11y) — visible keyboard focus on all interactive elements */

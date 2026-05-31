@@ -145,20 +145,22 @@ const icons = {
     position: relative;
     background: var(--cosmic-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px; /* V3.5 : 18 -> 16 (Wibify legerement moins arrondi) */
-    padding: 40px; /* V3.5 : 32 -> 40 (padding interne plus genereux Wibify-like) */
+    border-radius: 16px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 28px; /* V3.5 : 24 -> 28 (plus d'air entre header/body/tags) */
-    transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 450ms ease;
+    gap: 28px;
+    /* V3.6 Fix #7 : retire transform translateY -4px (Wibify ne fait pas lift card) */
+    transition: box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 500ms ease;
     overflow: hidden;
-    min-height: 300px; /* V3.5 : 360 -> 300 (cards moins hautes Wibify-like) */
+    min-height: 300px;
   }
 
   .v3-service-card:hover {
-    transform: translateY(-4px);
+    /* V3.6 : pas de translateY, juste shadow subtle */
     box-shadow: 0 24px 48px -16px rgba(167, 139, 250, 0.18);
+    border-color: rgba(167, 139, 250, 0.18);
   }
 
   /* ========== Border trace SVG (style Wibify : parcourt moitié puis fade) ========== */
@@ -206,31 +208,33 @@ const icons = {
   /* ========== Numéro fantôme géant outlined (style Wibify) ========== */
   .v3-service-ghost-num {
     position: absolute;
-    top: -8px;
-    right: 18px;
-    font-family: 'Inter', sans-serif;
-    font-size: 160px;
+    /* V3.6 Fix #6 : top:-8 right:18 -> top:24 right:28 (mieux contenu dans card) */
+    top: 24px;
+    right: 28px;
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: 130px;
     font-weight: 900;
     letter-spacing: -0.04em;
-    line-height: 1;
+    line-height: 0.9;
     color: transparent;
-    -webkit-text-stroke: 1px var(--border-subtle);
-    text-stroke: 1px var(--border-subtle);
+    /* V3.6 Fix #6 : stroke 1.5px violet 30% (plus visible que border-subtle) */
+    -webkit-text-stroke: 1.5px rgba(167, 139, 250, 0.18);
+    text-stroke: 1.5px rgba(167, 139, 250, 0.18);
     pointer-events: none;
     user-select: none;
-    transition: -webkit-text-stroke-color 400ms ease;
+    transition: -webkit-text-stroke-color 600ms cubic-bezier(0.22, 1, 0.36, 1);
     z-index: 0;
   }
 
   .v3-service-card:hover .v3-service-ghost-num {
-    -webkit-text-stroke-color: rgba(167, 139, 250, 0.35);
+    -webkit-text-stroke-color: rgba(167, 139, 250, 0.5);
   }
 
   @media (max-width: 900px) {
     .v3-service-ghost-num {
-      font-size: 120px;
-      top: -4px;
-      right: 12px;
+      font-size: 100px;
+      top: 18px;
+      right: 20px;
     }
   }
 
@@ -253,8 +257,9 @@ const icons = {
     border: 1px solid var(--border-subtle);
     border-radius: 10px;
     color: var(--violet-primary);
-    transition: background 280ms ease, border-color 280ms ease,
-                transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    /* V3.6 Fix #5 : easeOutBack pour rotation (snap dynamique caractère vif) */
+    transition: background 320ms ease-out, border-color 320ms ease-out,
+                transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
     will-change: transform;
   }
 
@@ -286,7 +291,7 @@ const icons = {
   /* H3 wave : 2 couches superposées (texte normal blanc + texte violet en dessous)
      Au hover : le texte blanc sort par le haut, le violet rentre par le bas → effet wave inversion couleur */
   .v3-service-title {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Switzer', 'Inter', sans-serif;
     font-size: clamp(1.75rem, 2.2vw, 2.25rem);
     font-weight: 800;
     letter-spacing: -0.025em;
