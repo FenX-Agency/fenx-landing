@@ -1,8 +1,12 @@
 ---
+// Services V3.3 — refonte cards Wibify-style :
+// icon top-left + numéro fantôme géant outline top-right + tags pills monospace
 interface Service {
   num: string;
   title: string;
-  items: string[];
+  description: string;
+  tags: string[];
+  icon: 'monitor' | 'video' | 'star' | 'cog';
   delivery: string;
 }
 
@@ -10,58 +14,53 @@ const services: Service[] = [
   {
     num: '01',
     title: 'Sites web',
-    items: [
-      'Astro 5 + React',
-      'Headless CMS / back-office',
-      'SEO local optimisé',
-      'A/B testing landing',
-    ],
+    description: 'Sites premium pour PME locales. Performance maximale, design moderne, back-office inclus.',
+    tags: ['ASTRO · REACT', 'HEADLESS CMS', 'SEO LOCAL', 'A/B TESTING'],
+    icon: 'monitor',
     delivery: 'Livré en 7-14 jours',
   },
   {
     num: '02',
-    title: 'Vidéos IA marketing',
-    items: [
-      'Reels · TikTok · pubs',
-      'Higgsfield + ElevenLabs voix',
-      'Motion design + sound design',
-      'Format 9:16 ready Insta/TikTok',
-    ],
+    title: 'Vidéos IA',
+    description: 'Reels, TikTok, pubs YouTube. Génération IA + voix clonée + motion design pro.',
+    tags: ['HIGGSFIELD', 'ELEVENLABS', 'MOTION DESIGN', '9:16 · 16:9'],
+    icon: 'video',
     delivery: 'Livrée en 5 jours',
   },
   {
     num: '03',
     title: 'Branding',
-    items: [
-      'Logo + wordmark',
-      'Identité visuelle complète',
-      'Charte graphique éditable',
-      'Design system Figma',
-    ],
+    description: 'Identité visuelle complète. Logo, charte, design system éditable. Cohérence garantie.',
+    tags: ['LOGO · WORDMARK', 'CHARTE', 'DESIGN SYSTEM', 'FIGMA'],
+    icon: 'star',
     delivery: 'Livré en 4-6 sem',
   },
   {
     num: '04',
     title: 'Back-office',
-    items: [
-      'Édition contenu sans dev',
-      'Formation 30 min en visio',
-      'Maintenance 79€/mois optionnelle',
-      'Support sous 48h',
-    ],
+    description: 'Édition de contenu sans dev. Formation 30 min visio. Maintenance optionnelle.',
+    tags: ['ÉDITION CMS', 'FORMATION', 'MAINTENANCE 79€/MO', 'SUPPORT 48H'],
+    icon: 'cog',
     delivery: 'Inclus dans Pack Premium',
   },
 ];
+
+const icons = {
+  monitor: '<rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke-width="1.5" stroke-linecap="round"/>',
+  video: '<rect x="2" y="6" width="14" height="12" rx="2" stroke-width="1.5"/><path d="m22 8-6 4 6 4V8z" stroke-width="1.5" stroke-linejoin="round"/>',
+  star: '<path d="M12 2l2.5 6 6.5.5-5 4.5 1.5 6.5L12 16l-5.5 3.5L8 13 3 8.5 9.5 8 12 2z" stroke-width="1.5" stroke-linejoin="round"/>',
+  cog: '<circle cx="12" cy="12" r="3" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke-width="1.5"/>',
+};
 ---
 <section id="services" class="v3-section v3-services">
   <div class="container">
     <header class="v3-section-head">
-      <span class="v3-eyebrow" data-reveal>[03] Services</span>
+      <span class="v3-eyebrow" data-reveal>[03] Services / Ce qu'on fait</span>
       <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
-        Tout ce qu'on <em>livre</em>
+        Quatre <em>disciplines</em>. Un seul interlocuteur.
       </h2>
       <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
-        Quatre disciplines, un seul interlocuteur. Pas d'agence sous-traitée, pas d'intermédiaire.
+        Pas d'agence sous-traitée, pas d'intermédiaire, pas d'account manager. <em>Direct.</em>
       </p>
     </header>
 
@@ -72,23 +71,44 @@ const services: Service[] = [
           data-reveal
           style={`--reveal-delay: ${220 + idx * 100}ms`}
         >
-          <div class="v3-service-num">{s.num}</div>
-          <h3 class="v3-service-title">{s.title}</h3>
-          <ul class="v3-service-list">
-            {s.items.map((item) => (
-              <li>{item}</li>
+          {/* Numéro fantôme géant outlined (style Wibify) */}
+          <span class="v3-service-ghost-num" aria-hidden="true">{s.num}</span>
+
+          {/* Header : icône + numéro petit */}
+          <div class="v3-service-header">
+            <span class="v3-service-icon-box" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" set:html={icons[s.icon]}></svg>
+            </span>
+            <span class="v3-service-num-small">{s.num} / 04</span>
+          </div>
+
+          {/* Title + description */}
+          <div class="v3-service-body">
+            <h3 class="v3-service-title">
+              {s.title}<em>.</em>
+            </h3>
+            <p class="v3-service-description">{s.description}</p>
+          </div>
+
+          {/* Tags pills monospace */}
+          <ul class="v3-service-tags">
+            {s.tags.map((tag) => (
+              <li class="v3-service-tag">{tag}</li>
             ))}
           </ul>
-          <div class="v3-service-delivery">{s.delivery}</div>
-          <a
-            href="#contact"
-            class="v3-service-cta"
-            data-open-contact
-            aria-label={`Discuter d'un projet ${s.title.toLowerCase()}`}
-          >
-            <span>Discuter projet</span>
-            <span class="v3-arrow" aria-hidden="true">→</span>
-          </a>
+
+          {/* Footer : delivery pill + CTA arrow */}
+          <div class="v3-service-footer">
+            <span class="v3-service-delivery">{s.delivery}</span>
+            <a
+              href="#contact"
+              class="v3-service-cta"
+              data-open-contact
+              aria-label={`Discuter d'un projet ${s.title.toLowerCase()}`}
+            >
+              <span class="v3-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
         </article>
       ))}
     </div>
@@ -98,123 +118,225 @@ const services: Service[] = [
 <style>
   .v3-services {
     background: var(--cosmic-bg);
+    position: relative;
   }
 
   .v3-services-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
+    gap: 24px;
   }
 
   @media (max-width: 900px) {
     .v3-services-grid {
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 18px;
     }
   }
 
+  /* ========== Card ========== */
   .v3-service-card {
+    position: relative;
     background: var(--cosmic-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    padding: 36px 32px 28px;
+    border-radius: 18px;
+    padding: 32px 32px 24px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
-    min-height: 100%;
+    gap: 24px;
+    transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 350ms ease,
+                box-shadow 350ms ease;
+    overflow: hidden;
+    min-height: 360px;
   }
 
   .v3-service-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(167, 139, 250, 0.4);
-    box-shadow: 0 12px 32px rgba(167, 139, 250, 0.12);
+    transform: translateY(-4px);
+    border-color: rgba(167, 139, 250, 0.35);
+    box-shadow: 0 24px 48px -16px rgba(167, 139, 250, 0.18);
   }
 
-  .v3-service-num {
-    font-size: 56px;
+  /* ========== Numéro fantôme géant outlined (style Wibify) ========== */
+  .v3-service-ghost-num {
+    position: absolute;
+    top: -8px;
+    right: 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 160px;
     font-weight: 900;
     letter-spacing: -0.04em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border-subtle);
+    text-stroke: 1px var(--border-subtle);
+    pointer-events: none;
+    user-select: none;
+    transition: -webkit-text-stroke-color 400ms ease;
+    z-index: 0;
+  }
+
+  .v3-service-card:hover .v3-service-ghost-num {
+    -webkit-text-stroke-color: rgba(167, 139, 250, 0.35);
+  }
+
+  @media (max-width: 900px) {
+    .v3-service-ghost-num {
+      font-size: 120px;
+      top: -4px;
+      right: 12px;
+    }
+  }
+
+  /* ========== Header (icon + num small) ========== */
+  .v3-service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-service-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    background: rgba(167, 139, 250, 0.10);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
     color: var(--violet-primary);
-    line-height: 0.9;
-    opacity: 0.85;
+    transition: background 280ms ease, border-color 280ms ease;
+  }
+
+  .v3-service-card:hover .v3-service-icon-box {
+    background: rgba(167, 139, 250, 0.18);
+    border-color: rgba(167, 139, 250, 0.45);
+  }
+
+  .v3-service-num-small {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+  }
+
+  /* ========== Body ========== */
+  .v3-service-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    flex: 1;
   }
 
   .v3-service-title {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.75rem, 2.2vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
     color: var(--text-hover);
     margin: 0;
-    text-transform: uppercase;
   }
 
-  .v3-service-list {
+  .v3-service-title em {
+    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--violet-primary);
+    letter-spacing: -0.02em;
+  }
+
+  .v3-service-description {
+    font-size: 0.9375rem;
+    color: var(--lavender-bright);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ========== Tags pills monospace ========== */
+  .v3-service-tags {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
-  }
-
-  .v3-service-list li {
-    font-size: 15px;
-    color: var(--lavender-bright);
-    line-height: 1.5;
-    padding-left: 18px;
+    flex-wrap: wrap;
+    gap: 6px;
     position: relative;
+    z-index: 1;
   }
 
-  .v3-service-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 8px;
-    height: 1px;
-    background: var(--violet-primary);
+  .v3-service-tag {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    background: rgba(167, 139, 250, 0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: color 250ms ease, border-color 250ms ease, background 250ms ease;
+  }
+
+  .v3-service-card:hover .v3-service-tag {
+    color: var(--lavender-bright);
+    border-color: rgba(167, 139, 250, 0.25);
+    background: rgba(167, 139, 250, 0.10);
+  }
+
+  /* ========== Footer ========== */
+  .v3-service-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
+    position: relative;
+    z-index: 1;
   }
 
   .v3-service-delivery {
-    display: inline-block;
-    align-self: flex-start;
-    font-size: 12px;
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--violet-soft);
-    padding: 6px 12px;
-    background: rgba(167, 139, 250, 0.1);
-    border: 1px solid rgba(167, 139, 250, 0.3);
-    border-radius: 999px;
   }
 
   .v3-service-cta {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--violet-soft);
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--violet-primary);
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
     text-decoration: none;
-    padding-top: 10px;
-    border-top: 1px solid var(--border-subtle);
-    margin-top: 4px;
-    transition: color 200ms ease;
-    cursor: pointer;
+    transition: background 250ms ease, border-color 250ms ease, transform 250ms ease;
+    font-size: 16px;
   }
 
   .v3-service-cta:hover {
-    color: var(--text-hover);
+    background: rgba(167, 139, 250, 0.18);
+    border-color: rgba(167, 139, 250, 0.45);
+    transform: rotate(-15deg);
   }
 
   .v3-service-cta .v3-arrow {
-    transition: transform 200ms ease;
+    transition: transform 250ms ease;
+    display: inline-block;
   }
 
   .v3-service-cta:hover .v3-arrow {
-    transform: translateX(4px);
+    transform: translateX(2px);
   }
 </style>
