@@ -63,7 +63,7 @@ const phases: Phase[] = [
         <li
           class="v3-process-row"
           data-reveal
-          style={`--reveal-delay: ${240 + idx * 100}ms`}
+          style={`--reveal-delay: ${240 + idx * 100}ms; --row-index: ${idx}; z-index: ${idx + 1};`}
         >
           <div class="v3-process-row-visual">
             <img
@@ -98,32 +98,52 @@ const phases: Phase[] = [
     position: relative;
   }
 
-  /* Liste de phases */
+  /* Liste de phases — STICKY STACKING (style Wibify v3) */
   .v3-process-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 32px;
+    position: relative;
   }
 
   @media (max-width: 768px) {
     .v3-process-list {
-      gap: 18px;
+      gap: 24px;
     }
   }
 
-  /* ============ Row split 50/50 ============ */
+  /* ============ Row split 50/50 — STICKY au scroll avec offset progressif ============ */
+  /* Chaque row se colle au top avec un offset croissant → les rows s'empilent visuellement au scroll */
   .v3-process-row {
+    position: sticky;
+    top: calc(80px + var(--row-index, 0) * 28px);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0;
-    background: rgba(28, 28, 46, 0.4);
+    background: linear-gradient(180deg, var(--cosmic-card) 0%, #14141c 100%);
     border: 1px solid var(--border-subtle);
     border-radius: 20px;
     overflow: hidden;
-    transition: border-color 350ms ease, background 350ms ease;
+    transition: border-color 350ms ease;
+    box-shadow: 0 -1px 0 rgba(167, 139, 250, 0.06),
+                0 24px 60px -16px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Désactive le sticky sur mobile (pas de space pour le stacking) + reduced-motion */
+  @media (max-width: 900px) {
+    .v3-process-row {
+      position: relative;
+      top: auto;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v3-process-row {
+      position: relative;
+      top: auto;
+    }
   }
 
   .v3-process-row:hover {

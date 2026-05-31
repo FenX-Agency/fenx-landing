@@ -84,7 +84,39 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
     // Disable browser scroll restoration on reload — avoid the "jump to bottom" issue on Firefox hard refresh
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   </script>
-  <!-- Lenis + GSAP disabled (Firefox jitter). Replaced by vanilla IntersectionObserver reveals + subtle parallax. -->
+
+  {/* Lenis smooth scroll — V3.3 reactivated avec params Wibify-like (slow + smooth) */}
+  <script>
+    import Lenis from 'lenis';
+
+    function initLenis() {
+      // Respecte prefers-reduced-motion : pas de smooth scroll
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const lenis = new Lenis({
+        duration: 1.4,                          // slow + smooth (Wibify-like)
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ease out expo
+        smoothWheel: true,
+        wheelMultiplier: 0.85,                  // mollette légèrement ralentie
+        touchMultiplier: 2,                     // touchscreen reste réactif
+        infinite: false,
+      });
+
+      // RAF loop
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Expose pour debug / autres scripts
+      (window as any).__lenis = lenis;
+    }
+
+    initLenis();
+    document.addEventListener('astro:page-load', initLenis);
+  </script>
+
   <script src="/scripts/scroll-fx.js" defer is:inline></script>
   <script src="/scripts/pixel-canvas.js" defer is:inline></script>
 </body>
