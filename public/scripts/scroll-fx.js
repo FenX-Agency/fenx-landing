@@ -125,4 +125,42 @@
       scenes.forEach((scene) => playObserver.observe(scene));
     }
   }
+
+  // === 3. Counter animation on [data-counter] (V4 polish craft) ==========
+  if (!reducedMotion) {
+    const counterEls = document.querySelectorAll('[data-counter]');
+    if (counterEls.length) {
+      const animateCounter = (el) => {
+        const target = parseInt(el.dataset.counter, 10);
+        const suffix = el.dataset.suffix || '';
+        if (isNaN(target)) return;
+        const duration = 1400;
+        const startTime = performance.now();
+        const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+        const tick = (now) => {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const value = Math.round(target * easeOutExpo(progress));
+          el.textContent = value + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = target + suffix;
+        };
+        requestAnimationFrame(tick);
+      };
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counterEls.forEach((el) => counterObserver.observe(el));
+    }
+  } else {
+    document.querySelectorAll('[data-counter]').forEach((el) => {
+      const target = parseInt(el.dataset.counter, 10);
+      const suffix = el.dataset.suffix || '';
+      if (!isNaN(target)) el.textContent = target + suffix;
+    });
+  }
 })();
