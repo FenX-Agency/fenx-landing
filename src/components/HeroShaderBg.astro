@@ -89,6 +89,13 @@
       haloCenter.x += sin(uTime * 0.13) * 0.08;
       haloCenter.y += cos(uTime * 0.11) * 0.06;
 
+      // SCROLL PARALLAX — halo bouge plus vite que le contenu au scroll (effet Wibify)
+      // Le halo glisse vers le HAUT quand on scroll DOWN (effet "le halo reste derrière")
+      // parallax factor 0.0012 = halo descend de ~120px pour 1000px de scroll
+      haloCenter.y += uScrollY * 0.0012;
+      // Léger drift horizontal pour effet diagonal
+      haloCenter.x += uScrollY * 0.0005;
+
       // Mouse parallax (subtile, 6% influence)
       vec2 mouseInfluence = (uMouse - vec2(0.5)) * 0.06;
       mouseInfluence.x *= aspect;
@@ -109,8 +116,10 @@
       intensity = clamp(intensity, 0.0, 1.0);
 
       // ====== Halo secondaire — petit, plus bas-droite, doux ======
+      // Bouge en sens INVERSE du halo principal au scroll (effet de profondeur multi-couches)
       vec2 halo2Center = vec2(0.4, -0.35);
       halo2Center.x += sin(uTime * 0.18 + 1.5) * 0.08;
+      halo2Center.y -= uScrollY * 0.0008; // halo2 monte quand on scroll
       float dist2 = distance(p, halo2Center);
       float intensity2 = (1.0 - smoothstep(0.0, 0.95, dist2)) * 0.35;
       intensity = max(intensity, intensity2);
