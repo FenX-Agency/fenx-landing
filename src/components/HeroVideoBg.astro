@@ -136,6 +136,8 @@ const { videoSrc, poster } = Astro.props;
     const canvas = document.getElementById('hero-video-canvas') as HTMLCanvasElement | null;
     if (!canvas) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ((canvas as any).__heroBgInit) return;
+    (canvas as any).__heroBgInit = true;
 
     let renderer, gl;
     try {
@@ -183,6 +185,13 @@ const { videoSrc, poster } = Astro.props;
       video.play().catch(() => { /* autoplay bloqué : placeholder reste */ });
     }
 
+    // ====== Hero height caché (évite un reflow à chaque scroll) ======
+    let heroH = window.innerHeight;
+    const measureHero = () => {
+      const hero = document.getElementById('hero');
+      heroH = hero?.offsetHeight || window.innerHeight;
+    };
+
     // ====== Resize robuste ======
     const resize = () => {
       const parent = canvas.parentElement;
@@ -191,25 +200,26 @@ const { videoSrc, poster } = Astro.props;
       if (w === 0 || h === 0) return;
       renderer.setSize(w, h);
       program.uniforms.uResolution.value = [w, h];
+      measureHero();
     };
     requestAnimationFrame(() => {
       resize();
       requestAnimationFrame(resize);
     });
     window.addEventListener('resize', resize, { passive: true });
+    let ro: ResizeObserver | null = null;
     if ('ResizeObserver' in window && canvas.parentElement) {
-      const ro = new ResizeObserver(() => resize());
+      ro = new ResizeObserver(() => resize());
       ro.observe(canvas.parentElement);
     }
 
     // ====== Scroll progress (0 -> 1 sur la hauteur du hero) ======
     let scrollProgress = 0;
     const updateScroll = () => {
-      const hero = document.getElementById('hero');
-      const heroH = hero?.offsetHeight || window.innerHeight;
       scrollProgress = Math.min(Math.max(window.scrollY / heroH, 0), 1);
     };
     window.addEventListener('scroll', updateScroll, { passive: true });
+    measureHero();
     updateScroll();
 
     // ====== Render loop ======
@@ -233,9 +243,17 @@ const { videoSrc, poster } = Astro.props;
     };
     tick();
 
-    document.addEventListener('astro:before-swap', () => {
+    // ====== Teardown complet (évite l'accumulation au re-init astro:page-load) ======
+    const cleanup = () => {
       cancelAnimationFrame(raf);
-    }, { once: true });
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', updateScroll);
+      if (ro) { ro.disconnect(); ro = null; }
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      (canvas as any).__heroBgInit = false;
+      document.removeEventListener('astro:before-swap', cleanup);
+    };
+    document.addEventListener('astro:before-swap', cleanup);
   }
 
   initHeroVideoBg();
