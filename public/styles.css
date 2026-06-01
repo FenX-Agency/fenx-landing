@@ -56,9 +56,9 @@
   --s-16: 64px;
   --s-24: 96px;
   --s-40: 160px;
-  --pad-section-desktop: 160px 32px;
+  --pad-section-desktop: 160px clamp(32px, 5vw, 80px);
   --pad-section-mobile: 80px 24px;
-  --container-max: 1100px;
+  --container-max: 1440px;
 
   /* === Radius scale (V4) === */
   --radius-xs: 2px;
@@ -480,18 +480,15 @@ h1.hero,
   animation-delay: var(--reveal-delay, 0ms);
 }
 
-/* Scroll-triggered reveals (IntersectionObserver — scroll-fx.js) */
+/* Scroll-triggered reveals (V5 : pilotés par GSAP + ScrollTrigger via src/scripts/scroll-fx.ts) */
+/* Initial state évite FOUC avant que GSAP prenne le contrôle */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-              transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
-[data-reveal].is-revealed {
-  opacity: 1;
-  transform: translateY(0);
+/* No-JS fallback : si JS désactivé, on affiche quand même */
+.no-js [data-reveal] {
+  opacity: 1 !important;
 }
 
 /* Parallax-driven decorative elements use translate3d via scroll-fx.js — must have will-change set */

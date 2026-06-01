@@ -258,7 +258,10 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
     document.addEventListener('astro:page-load', initLenis);
   </script>
 
-  <script src="/scripts/scroll-fx.js" defer is:inline></script>
+  {/* V5 : scroll-fx migré vers GSAP + ScrollTrigger (TS module Astro-bundlé) */}
+  <script>
+    import '../scripts/scroll-fx.ts';
+  </script>
   <script src="/scripts/pixel-canvas.js" defer is:inline></script>
 </body>
 </html>

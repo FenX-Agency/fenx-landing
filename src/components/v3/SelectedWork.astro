@@ -106,7 +106,7 @@ const projects: Project[] = [
   }
 
   .v3-section .container {
-    max-width: 1280px; /* V3.5 : container plus large pour matcher proportions Wibify */
+    max-width: 1440px; /* V4 : 1280 -> 1440 (Anthony : tout le site prend plus d'espace) */
     margin: 0 auto;
   }
 
@@ -114,8 +114,8 @@ const projects: Project[] = [
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-bottom: 64px;
-    max-width: 760px;
+    margin-bottom: 80px; /* V4 : 64 -> 80 (plus d'air sous le header) */
+    max-width: 920px; /* V4 : 760 -> 920 (plus large mais reste readable) */
   }
 
   @media (max-width: 768px) {
