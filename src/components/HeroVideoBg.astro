@@ -1,0 +1,243 @@
+---
+// HeroVideoBg V1 — fond hero vidéo WebGL (ogl)
+// Remplace HeroShaderBg (shader FBM "nuage" retiré).
+// Mode placeholder : dégradé radial violet/ink animé + parallax/zoom au scroll.
+// Mode vidéo (Task 2) : texture vidéo plein écran en `cover`.
+interface Props {
+  videoSrc?: string;
+  poster?: string;
+}
+const { videoSrc, poster } = Astro.props;
+---
+<div class="hero-video-bg" aria-hidden="true">
+  {videoSrc && (
+    <video
+      id="hero-video"
+      class="hero-video-bg__video"
+      src={videoSrc}
+      poster={poster}
+      muted
+      loop
+      autoplay
+      playsinline
+      preload="auto"
+    ></video>
+  )}
+  <canvas id="hero-video-canvas" class="hero-video-bg__canvas"></canvas>
+</div>
+
+<style>
+  .hero-video-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    /* Fallback CSS si WebGL/JS indispo : dégradé charte statique */
+    background:
+      radial-gradient(120% 90% at 30% 40%, #1a1530 0%, #0a0a0f 60%),
+      #0a0a0f;
+  }
+  .hero-video-bg__video {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .hero-video-bg__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* Pas de WebGL : on garde le background CSS statique du conteneur */
+    .hero-video-bg__canvas { display: none; }
+  }
+</style>
+
+<script>
+  import { Renderer, Program, Triangle, Mesh, Texture } from 'ogl';
+
+  const fragmentShader = `
+    precision highp float;
+
+    uniform float uTime;
+    uniform vec2  uResolution;
+    uniform float uScrollProgress;
+    uniform float uUseVideo;
+    uniform sampler2D uVideoTexture;
+    uniform vec2  uMediaRes;
+    uniform vec3  uColorA;  // violet
+    uniform vec3  uColorB;  // ink
+
+    varying vec2 vUv;
+
+    void main() {
+      // ====== Zoom au scroll (autour du centre) ======
+      float scale = mix(1.05, 1.12, clamp(uScrollProgress, 0.0, 1.0));
+      vec2 uv = (vUv - 0.5) / scale + 0.5;
+
+      // ====== Parallax vertical : la vidéo "reste derrière" ======
+      uv.y += uScrollProgress * 0.06;
+
+      vec3 color;
+
+      if (uUseVideo > 0.5) {
+        // ====== cover : remplir le canvas sans déformer ======
+        float canvasAspect = uResolution.x / uResolution.y;
+        float mediaAspect = uMediaRes.x / uMediaRes.y;
+        vec2 coverUv = uv;
+        if (canvasAspect > mediaAspect) {
+          // canvas plus large : on crop verticalement
+          float s = mediaAspect / canvasAspect;
+          coverUv.y = (uv.y - 0.5) * s + 0.5;
+        } else {
+          // canvas plus haut : on crop horizontalement
+          float s = canvasAspect / mediaAspect;
+          coverUv.x = (uv.x - 0.5) * s + 0.5;
+        }
+        color = texture2D(uVideoTexture, coverUv).rgb;
+      } else {
+        // ====== Placeholder : dégradé radial violet/ink animé (pas de noise) ======
+        vec2 p = uv;
+        float aspect = uResolution.x / uResolution.y;
+        p.x = (p.x - 0.5) * aspect + 0.5;
+        // centre-gauche, léger drift lent
+        vec2 c = vec2(0.32 + sin(uTime * 0.12) * 0.03, 0.42 + cos(uTime * 0.10) * 0.025);
+        float d = distance(p, c);
+        float g = 1.0 - smoothstep(0.0, 0.95, d);
+        g = pow(g, 1.3);
+        color = mix(uColorB, uColorA, g);
+      }
+
+      // ====== Vignette douce périphérie (focus centre) ======
+      vec2 vp = vUv * 2.0 - 1.0;
+      float vignette = 1.0 - smoothstep(1.1, 2.2, length(vp)) * 0.35;
+      color *= vignette;
+
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `;
+
+  const vertexShader = `
+    attribute vec2 uv;
+    attribute vec2 position;
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 0.0, 1.0);
+    }
+  `;
+
+  function initHeroVideoBg() {
+    const canvas = document.getElementById('hero-video-canvas') as HTMLCanvasElement | null;
+    if (!canvas) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let renderer, gl;
+    try {
+      renderer = new Renderer({
+        canvas,
+        dpr: Math.min(window.devicePixelRatio || 1, 2),
+        alpha: false,
+        antialias: false,
+      });
+      gl = renderer.gl;
+    } catch (e) {
+      // WebGL indisponible : on garde le background CSS du conteneur
+      return;
+    }
+
+    const geometry = new Triangle(gl);
+
+    // Texture vidéo (placeholder 1x1 tant qu'aucune vidéo n'est prête)
+    const videoTexture = new Texture(gl, {
+      generateMipmaps: false,
+      width: 1,
+      height: 1,
+    });
+
+    const program = new Program(gl, {
+      vertex: vertexShader,
+      fragment: fragmentShader,
+      uniforms: {
+        uTime:           { value: 0 },
+        uResolution:     { value: [window.innerWidth, window.innerHeight] },
+        uScrollProgress: { value: 0 },
+        uUseVideo:       { value: 0 },
+        uVideoTexture:   { value: videoTexture },
+        uMediaRes:       { value: [1, 1] },
+        uColorA:         { value: [0.655, 0.545, 0.980] }, // #a78bfa violet
+        uColorB:         { value: [0.040, 0.040, 0.058] }, // #0a0a0f ink
+      },
+    });
+
+    const mesh = new Mesh(gl, { geometry, program });
+
+    // ====== Vidéo (présente seulement si videoSrc fourni — Task 2) ======
+    const video = document.getElementById('hero-video') as HTMLVideoElement | null;
+    if (video) {
+      video.play().catch(() => { /* autoplay bloqué : placeholder reste */ });
+    }
+
+    // ====== Resize robuste ======
+    const resize = () => {
+      const parent = canvas.parentElement;
+      const w = (parent?.clientWidth) || window.innerWidth;
+      const h = (parent?.clientHeight) || window.innerHeight;
+      if (w === 0 || h === 0) return;
+      renderer.setSize(w, h);
+      program.uniforms.uResolution.value = [w, h];
+    };
+    requestAnimationFrame(() => {
+      resize();
+      requestAnimationFrame(resize);
+    });
+    window.addEventListener('resize', resize, { passive: true });
+    if ('ResizeObserver' in window && canvas.parentElement) {
+      const ro = new ResizeObserver(() => resize());
+      ro.observe(canvas.parentElement);
+    }
+
+    // ====== Scroll progress (0 -> 1 sur la hauteur du hero) ======
+    let scrollProgress = 0;
+    const updateScroll = () => {
+      const hero = document.getElementById('hero');
+      const heroH = hero?.offsetHeight || window.innerHeight;
+      scrollProgress = Math.min(Math.max(window.scrollY / heroH, 0), 1);
+    };
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    updateScroll();
+
+    // ====== Render loop ======
+    let raf = 0;
+    const start = performance.now();
+    const tick = () => {
+      const t = (performance.now() - start) / 1000;
+      program.uniforms.uTime.value = t;
+      program.uniforms.uScrollProgress.value = scrollProgress;
+
+      // Mise à jour texture vidéo quand prête (Task 2 active uUseVideo)
+      if (video && video.readyState >= 2) {
+        videoTexture.image = video;
+        videoTexture.needsUpdate = true;
+        program.uniforms.uMediaRes.value = [video.videoWidth || 1, video.videoHeight || 1];
+        program.uniforms.uUseVideo.value = 1;
+      }
+
+      renderer.render({ scene: mesh });
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+
+    document.addEventListener('astro:before-swap', () => {
+      cancelAnimationFrame(raf);
+    }, { once: true });
+  }
+
+  initHeroVideoBg();
+  document.addEventListener('astro:page-load', initHeroVideoBg);
+</script>

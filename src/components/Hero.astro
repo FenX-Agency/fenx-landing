@@ -1,11 +1,9 @@
 ---
 import Button from './Button.astro';
-import HeroShaderBg from './HeroShaderBg.astro';
-import HeroOrbit3D from './HeroOrbit3D.astro';
+import HeroVideoBg from './HeroVideoBg.astro';
 ---
 <section id="hero" class="hero-v3" aria-label="Présentation FenX Agency">
-  <HeroShaderBg />
-  <HeroOrbit3D />
+  <HeroVideoBg />
 
   <div class="hero-v3__gradient" aria-hidden="true"></div>
 
@@ -31,8 +29,7 @@ import HeroOrbit3D from './HeroOrbit3D.astro';
 
       <h1 class="hero-v3__h1" data-reveal>
         Un site qui <em>vend</em>.<br />
-        Des vidéos qu'on <em>regarde</em>.<br />
-        Pour ta <em>PME</em>.
+        Des vidéos qu'on <em>regarde</em>.
       </h1>
 
       <p class="hero-v3__sub" data-reveal>
@@ -135,24 +132,25 @@ import HeroOrbit3D from './HeroOrbit3D.astro';
     50% { transform: translateY(4px); opacity: 1; }
   }
 
-  /* Inner : split content gauche / 3D droite */
+  /* Inner : V4.6 content shifté plus à gauche + plus haut (Anthony) */
   .hero-v3__inner {
     position: relative;
     z-index: 4;
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    padding: 140px clamp(40px, 8vw, 120px) 100px;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(160px, 18vh, 220px) clamp(200px, 22vw, 480px) 100px clamp(40px, 8vw, 120px);
     max-width: 100%;
   }
 
   .hero-v3__content {
     text-align: left;
-    max-width: 720px;
+    max-width: 1120px; /* V4.3 : 920 -> 1120 (Anthony : plus gros) */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 32px;
+    gap: 40px;
   }
 
   /* Eyebrow */
@@ -179,12 +177,13 @@ import HeroOrbit3D from './HeroOrbit3D.astro';
   }
 
   /* H1 court & impactful (Wibify style) + V4 glow pulse violet (Web Designer agent) */
+  /* V4.3 : plus gros (Anthony) — clamp 3/6.5vw/6.5rem */
   .hero-v3__h1 {
     font-family: 'Switzer', 'Inter', sans-serif;
-    font-size: clamp(3rem, 8.5vw, 7.5rem);
+    font-size: clamp(3rem, 6.5vw, 6.5rem);
     font-weight: 900;
-    letter-spacing: -0.04em;
-    line-height: 0.95;
+    letter-spacing: -0.035em;
+    line-height: 1.0;
     color: var(--text-hover);
     margin: 0;
     text-wrap: balance;
@@ -216,18 +215,22 @@ import HeroOrbit3D from './HeroOrbit3D.astro';
     letter-spacing: -0.02em;
     position: relative;
   }
-  /* Underline animation sur les <em> au reveal */
+  /* V4.1 Underline hand-drawn courbe (Wibify style) — SVG inline avec wave subtle */
   .hero-v3__h1 em::after {
     content: '';
     position: absolute;
-    left: 0;
-    bottom: 0.05em;
-    width: 100%;
-    height: 2px;
-    background: var(--violet-primary);
+    left: -2%;
+    bottom: -0.12em;
+    width: 104%;
+    height: 0.22em;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M 3 9 Q 50 3, 100 7 T 197 9' stroke='%238b6bff' stroke-width='3.5' stroke-linecap='round' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
     transform: scaleX(0);
-    transform-origin: left;
+    transform-origin: left center;
     transition: transform 1200ms cubic-bezier(0.16, 1, 0.3, 1) 1400ms;
+    filter: drop-shadow(0 0 8px rgba(139, 107, 255, 0.35));
   }
   .hero-v3__h1.is-revealed em::after {
     transform: scaleX(1);
@@ -235,10 +238,10 @@ import HeroOrbit3D from './HeroOrbit3D.astro';
 
   /* Sub */
   .hero-v3__sub {
-    font-size: clamp(1.0625rem, 1.45vw, 1.25rem);
+    font-size: clamp(1.0625rem, 1.45vw, 1.3125rem);
     line-height: 1.55;
     color: var(--lavender-bright);
-    max-width: 540px;
+    max-width: 680px; /* V4 : 540 -> 680 (matche élargissement) */
     margin: 0;
   }
   .hero-v3__sub strong {
@@ -291,9 +294,9 @@ import HeroOrbit3D from './HeroOrbit3D.astro';
     border-top: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 36px;
     flex-wrap: wrap;
-    max-width: 720px;
+    max-width: 920px; /* V4 : matche content */
   }
   .hero-v3__badge {
     display: inline-flex;
