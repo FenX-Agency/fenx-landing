@@ -141,40 +141,6 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
           <span>Brief envoyé. Réponse sous 24h ouvrées.</span>
         </div>
       </form>
-
-      <aside class="v3-contact-aside" data-reveal style="--reveal-delay: 200ms">
-        <div class="v3-contact-block">
-          <span class="v3-aside-eyebrow">CONTACT DIRECT</span>
-          <a href="mailto:contact.fenx.agency@gmail.com" class="v3-aside-link">
-            contact.fenx.agency@gmail.com
-            <span class="v3-arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div class="v3-contact-block">
-          <span class="v3-aside-eyebrow">LINKEDIN</span>
-          <a
-            href="https://www.linkedin.com/in/anthony-grupposo"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="v3-aside-link"
-          >
-            Anthony Grupposo
-            <span class="v3-arrow" aria-hidden="true">↗</span>
-          </a>
-        </div>
-        <div class="v3-contact-block">
-          <span class="v3-aside-eyebrow">DISPO</span>
-          <p class="v3-aside-text">
-            <em>Q3 / Q4 2026</em> ouverts. 4 projets max par trimestre.
-          </p>
-        </div>
-        <div class="v3-contact-block">
-          <span class="v3-aside-eyebrow">ZONE</span>
-          <p class="v3-aside-text">
-            Île-de-France · à distance partout en France.
-          </p>
-        </div>
-      </aside>
     </div>
   </div>
 </section>
@@ -355,7 +321,8 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
 
   .v3-contact-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: minmax(0, 680px);
+    justify-content: center;
     gap: 64px;
     align-items: start;
   }

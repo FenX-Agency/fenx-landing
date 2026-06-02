@@ -479,10 +479,13 @@ h2.section {
   visibility: hidden;
   pointer-events: none;
   overflow: hidden; /* le panel translaté hors-écran ne crée jamais de scroll horizontal */
+  /* à la fermeture : on retarde le passage à hidden pour laisser le panel slider dehors (sens inverse) */
+  transition: visibility 0s linear 440ms;
 }
 .mobile-drawer.is-open {
   visibility: visible;
   pointer-events: auto;
+  transition-delay: 0s; /* à l'ouverture : visible immédiatement */
 }
 .mobile-drawer-backdrop {
   position: absolute;
