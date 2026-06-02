@@ -78,6 +78,8 @@ const projects: Project[] = [
               <span class="v3-work-row-status" aria-hidden="true">
                 {isLive ? '↗' : 'EN MAINTENANCE'}
               </span>
+              {/* Image visible uniquement sur mobile (le survol gère le preview sur desktop) */}
+              <img class="v3-work-row-thumb" src={p.image} alt={`Aperçu du site ${p.title}`} loading="lazy" />
             </Tag>
           </li>
         );
@@ -234,6 +236,28 @@ const projects: Project[] = [
       grid-template-rows: auto auto;
       gap: 6px 18px;
       padding: 24px 4px;
+    }
+  }
+
+  /* Miniature projet : masquée desktop (preview au survol), visible + centrée sur mobile */
+  .v3-work-row-thumb {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .v3-work-row-thumb {
+      display: block;
+      grid-column: 1 / -1;
+      width: 100%;
+      max-width: 440px;
+      margin: 14px auto 2px;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+    .is-maintenance .v3-work-row-thumb {
+      opacity: 0.7;
+      filter: grayscale(0.3);
     }
   }
 

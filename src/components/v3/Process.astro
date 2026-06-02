@@ -128,28 +128,38 @@ const phases: Phase[] = [
   }
 
   /* V3.8 Fade out COMPLET quand row recouverte (Anthony : "effet de disparition", pas d'ombre persistante) */
+  /* Scroll-driven : APPARITION en entrant + MAINTIEN + DISPARITION quand recouverte
+     (pur CSS via animation-timeline, pas de data-reveal qui "poppait" tout d'un coup) */
   @supports (animation-timeline: view()) {
     .v3-process-row {
-      animation: v3-process-row-fade linear both;
+      animation: v3-process-row-life linear both;
       animation-timeline: view();
-      /* V3.8 : range plus serre (0% -> 45%) pour disparition plus rapide et nette */
-      animation-range: exit 0% exit 45%;
+      animation-range: entry 12% exit 48%;
     }
   }
-  @keyframes v3-process-row-fade {
-    0% {
+  @keyframes v3-process-row-life {
+    0% { /* apparition (la card entre par le bas) */
+      opacity: 0;
+      transform: translateY(46px) scale(0.97);
+      filter: brightness(1) blur(0);
+    }
+    14% {
       opacity: 1;
-      transform: scale(1) translateY(0);
+      transform: translateY(0) scale(1);
+    }
+    72% { /* maintien net pendant qu'elle est "active" */
+      opacity: 1;
+      transform: translateY(0) scale(1);
       filter: brightness(1) blur(0);
       box-shadow:
         0 -1px 0 rgba(167, 139, 250, 0.06),
         0 24px 60px -16px rgba(0, 0, 0, 0.85);
     }
-    100% {
-      opacity: 0; /* V3.8 : 0.35 -> 0 (disparition complete, pas de residual) */
+    100% { /* disparition quand recouverte par la suivante */
+      opacity: 0;
       transform: scale(0.96) translateY(-12px);
-      filter: brightness(0.4) blur(2px); /* V3.8 : ajoute blur pour effet "out of focus" */
-      box-shadow: none; /* V3.8 : retire ombre quand fade out */
+      filter: brightness(0.4) blur(2px);
+      box-shadow: none;
     }
   }
 
