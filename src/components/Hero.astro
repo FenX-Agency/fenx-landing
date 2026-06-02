@@ -27,7 +27,7 @@ import HeroVideoBg from './HeroVideoBg.astro';
         <span>STUDIO CRÉATIF · ÎLE-DE-FRANCE</span>
       </span>
 
-      <h1 class="hero-v3__h1">
+      <h1 class="hero-v3__h1" id="hero-h1">
         Sites web &amp; vidéos IA<br />
         qui font <em>convertir</em>.
       </h1>
@@ -38,12 +38,56 @@ import HeroVideoBg from './HeroVideoBg.astro';
       </p>
 
       <div class="hero-v3__ctas">
-        <Button href="#contact" text="Audit gratuit en 15 min" />
+        <span id="hero-cta">
+          <Button href="#contact" text="Audit gratuit en 15 min" />
+        </span>
         <a href="#selected-work" class="hero-v3__cta-text">
           <span class="hero-v3__cta-marker" aria-hidden="true"></span>
           Voir nos derniers projets
         </a>
       </div>
+
+      {/* ===== A/B test hero (homemade, sticky par visiteur) =====
+         SSR rend la Variante A (control) → SEO/no-JS voit la version canonique.
+         Ce script inline s'exécute pendant le parse (avant paint) et swap en B si assigné.
+         ⬇️⬇️  COPY VARIANTE B éditable ici (objet AB_VARIANTS.B)  ⬇️⬇️ */}
+      <script is:inline>
+        (function () {
+          var AB_VARIANTS = {
+            A: {
+              h1: 'Sites web &amp; vidéos IA<br />qui font <em>convertir</em>.',
+              cta: 'Audit gratuit en 15 min',
+            },
+            B: {
+              h1: 'Plus de clients grâce à<br />votre <em>présence en ligne</em>.',
+              cta: 'Je veux mon projet',
+            },
+          };
+          var KEY = 'fenx_ab_hero';
+          var variant = 'A';
+          try {
+            var stored = localStorage.getItem(KEY);
+            if (stored === 'A' || stored === 'B') {
+              variant = stored;
+            } else {
+              variant = Math.random() < 0.5 ? 'A' : 'B';
+              localStorage.setItem(KEY, variant);
+            }
+          } catch (e) {
+            variant = 'A';
+          }
+          window.__abHero = variant;
+          if (variant === 'B') {
+            try {
+              var h1 = document.getElementById('hero-h1');
+              if (h1) h1.innerHTML = AB_VARIANTS.B.h1;
+              var ctaWrap = document.getElementById('hero-cta');
+              var ctaLabel = ctaWrap && ctaWrap.querySelector('.text');
+              if (ctaLabel) ctaLabel.textContent = AB_VARIANTS.B.cta;
+            } catch (e) {}
+          }
+        })();
+      </script>
 
       {/* Social proof badges style Wibify + counter anim (Web Designer agent) */}
       <ul class="hero-v3__badges" aria-label="Indicateurs">

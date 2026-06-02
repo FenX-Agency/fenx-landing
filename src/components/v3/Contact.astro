@@ -116,6 +116,9 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
           <span class="v3-field-error" data-v3-error="message"></span>
         </div>
 
+        <!-- A/B test hero : variante attribuée au lead (rempli par JS depuis localStorage) -->
+        <input type="hidden" name="ab_hero" id="ab-hero-field" value="A" />
+
         <!-- Honeypot anti-spam — caché des humains -->
         <div class="v3-honeypot" aria-hidden="true">
           <label for="v3-website">Site web (ne pas remplir)</label>
@@ -195,6 +198,18 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const PHONE_ALLOWED = /^[\d\s.\-()+]+$/;
 
+    // A/B test hero : récupère la variante attribuée au visiteur (sticky localStorage)
+    const abHeroField = form.querySelector<HTMLInputElement>('#ab-hero-field');
+    function readAbHero(): string {
+      try {
+        const v = localStorage.getItem('fenx_ab_hero');
+        return v === 'A' || v === 'B' ? v : 'A';
+      } catch {
+        return 'A';
+      }
+    }
+    if (abHeroField) abHeroField.value = readAbHero();
+
     function clearErrors() {
       Object.values(fieldErrorEls).forEach((el) => {
         el.textContent = '';
@@ -261,6 +276,9 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       }
 
       if (!ok) return { ok };
+      // Rafraîchit la variante A/B juste avant l'envoi (au cas où le hidden field aurait changé)
+      const ab_hero = readAbHero();
+      if (abHeroField) abHeroField.value = ab_hero;
       return {
         ok,
         data: {
@@ -273,6 +291,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
           entreprise,
           site_actuel,
           message: message || '(Pas de message — formulaire section Contact)',
+          ab_hero,
         },
       };
     }

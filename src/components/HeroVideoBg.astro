@@ -8,13 +8,16 @@ interface Props {
   poster?: string;
 }
 const { videoSrc, poster } = Astro.props;
+// variante mobile plus légère (ex: /hero.mp4 -> /hero-mobile.mp4), chargée sur petit écran
+const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : undefined;
 ---
 <div class="hero-video-bg" aria-hidden="true" style={poster ? `--hero-poster: url('${poster}')` : undefined}>
   {videoSrc && (
     <video
       id="hero-video"
       class="hero-video-bg__video"
-      src={videoSrc}
+      data-src={videoSrc}
+      data-src-mobile={videoSrcMobile}
       poster={poster}
       muted
       playsinline
@@ -82,6 +85,14 @@ const { videoSrc, poster } = Astro.props;
     (hero as any).__heroVidInit = true;
 
     const black = hero.querySelector('.hero-video-bg__black') as HTMLElement | null;
+
+    // ===== Source responsive : variante mobile plus légère sur petit écran =====
+    // (le src n'est pas posé en HTML → on évite de charger la version desktop sur mobile)
+    if (!video.src) {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const chosen = (isMobile && video.dataset.srcMobile) ? video.dataset.srcMobile : video.dataset.src;
+      if (chosen) video.src = chosen;
+    }
 
     // ===== Autoplay natif (lecture fluide, toujours vivante) =====
     video.muted = true;
