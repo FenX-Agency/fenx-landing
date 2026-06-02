@@ -226,7 +226,14 @@ const phases: Phase[] = [
     filter: brightness(0.95);
   }
 
-  /* Première card (Méthode) : l'image remplit tout le cadre, pas de bande en bas */
+  /* Première card (Méthode) : l'image remplit TOUT le cadre (largeur + hauteur),
+     pas de bande ni d'espace. On retire l'aspect-ratio figé pour qu'elle s'étire
+     sur toute la hauteur de la card, et cover pour combler sans déformer. */
+  .v3-process-row:first-of-type .v3-process-row-visual {
+    aspect-ratio: auto;
+    min-height: 100%;
+    align-self: stretch;
+  }
   .v3-process-row:first-of-type .v3-process-row-img {
     object-fit: cover;
   }
