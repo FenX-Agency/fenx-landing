@@ -1,0 +1,460 @@
+---
+// Services V3.3 — refonte cards Wibify-style :
+// icon top-left + numéro fantôme géant outline top-right + tags pills monospace
+interface Service {
+  num: string;
+  title: string;
+  description: string;
+  tags: string[];
+  icon: 'monitor' | 'video' | 'star' | 'cog';
+  delivery: string;
+}
+
+const services: Service[] = [
+  {
+    num: '01',
+    title: 'Sites web',
+    description: "Un site qui apparaît sur Google local et convertit les passants en clients. Livré clé en main en 7 à 14 jours.",
+    tags: ['VISIBLE SUR GOOGLE', 'FICHE GOOGLE MAPS', 'PARFAIT SUR MOBILE', 'VOUS GÉREZ VOS TEXTES'],
+    icon: 'monitor',
+    delivery: 'Livré en 7-14 jours',
+  },
+  {
+    num: '02',
+    title: 'Vidéos IA',
+    description: "Des vidéos courtes pour TikTok, Reels et Shorts. Voix clonée, prêtes à poster, pas besoin de filmer.",
+    tags: ['FORMAT TIKTOK / REELS', 'VOIX SUR-MESURE', 'LOT SUR-MESURE', 'MONTAGE PRO'],
+    icon: 'video',
+    delivery: 'Livrée en 5 jours',
+  },
+  {
+    num: '03',
+    title: 'Branding',
+    description: "Identité visuelle complète. Logo, charte couleurs, kit de marque complet. Cohérence garantie partout.",
+    tags: ['LOGO', 'CHARTE COULEURS', 'KIT DE MARQUE COMPLET', 'FICHIERS LIVRÉS'],
+    icon: 'star',
+    delivery: 'Livré en 4-6 sem',
+  },
+  {
+    num: '04',
+    title: 'Vous gardez la main',
+    description: "Tu changes tes horaires, tes prix, tes photos toi-même. Formation visio en trente minutes incluse.",
+    tags: ['ÉDITION AUTONOME', 'FORMATION VISIO', 'ENTRETIEN 79€/MOIS', 'SUPPORT 48H'],
+    icon: 'cog',
+    delivery: 'Inclus dans le Pack Signature',
+  },
+];
+
+const icons = {
+  monitor: '<rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke-width="1.5" stroke-linecap="round"/>',
+  video: '<rect x="2" y="6" width="14" height="12" rx="2" stroke-width="1.5"/><path d="m22 8-6 4 6 4V8z" stroke-width="1.5" stroke-linejoin="round"/>',
+  star: '<path d="M12 2l2.5 6 6.5.5-5 4.5 1.5 6.5L12 16l-5.5 3.5L8 13 3 8.5 9.5 8 12 2z" stroke-width="1.5" stroke-linejoin="round"/>',
+  cog: '<circle cx="12" cy="12" r="3" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke-width="1.5"/>',
+};
+---
+<section id="services" class="v3-section v3-services">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[03] Services / Ce qu'on fait</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Quatre <em>disciplines</em>.<br />Un seul interlocuteur.
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Pas d'agence sous-traitée, pas d'intermédiaire, pas d'account manager. <em>Direct.</em>
+      </p>
+    </header>
+
+    <div class="v3-services-grid">
+      {services.map((s, idx) => (
+        <article
+          class="v3-service-card"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 100}ms`}
+        >
+          {/* Numéro fantôme géant outlined (style Wibify) */}
+          <span class="v3-service-ghost-num" aria-hidden="true">{s.num}</span>
+
+          {/* Header : icône + numéro petit */}
+          <div class="v3-service-header">
+            <span class="v3-service-icon-box" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" set:html={icons[s.icon]}></svg>
+            </span>
+          </div>
+
+          {/* Title + description — H3 avec effet wave inversion couleur au hover */}
+          <div class="v3-service-body">
+            <h3 class="v3-service-title" data-title={s.title}>
+              <span class="v3-service-title-inner">{s.title}</span>
+            </h3>
+            <p class="v3-service-description">{s.description}</p>
+          </div>
+
+          {/* Tags pills monospace */}
+          <ul class="v3-service-tags">
+            {s.tags.map((tag) => (
+              <li class="v3-service-tag">{tag}</li>
+            ))}
+          </ul>
+
+          {/* Footer : delivery pill + CTA arrow */}
+          <div class="v3-service-footer">
+            <span class="v3-service-delivery">{s.delivery}</span>
+            <a
+              href="#contact"
+              class="v3-service-cta"
+              aria-label={`Discuter d'un projet ${s.title.toLowerCase()}`}
+            >
+              <span class="v3-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-services {
+    background: var(--cosmic-bg);
+    position: relative;
+  }
+
+  .v3-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px; /* V3.5 : gap plus serre Wibify-like (24 -> 16) */
+  }
+
+  @media (max-width: 900px) {
+    .v3-services-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+
+  /* ========== Card (V3.7 : plus longue + hover bg pulse) ========== */
+  .v3-service-card {
+    position: relative;
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 48px 40px 36px; /* V3.7 : padding y plus genereux pour plus d'air */
+    display: flex;
+    flex-direction: column;
+    gap: 32px; /* V3.7 : gap 28 -> 32 (plus d'espace entre header/body/tags/footer) */
+    transition: box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 500ms ease,
+                background 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+    min-height: 420px; /* V3.7 : 300 -> 420px (cards plus longues Anthony priorite) */
+  }
+
+  /* Hover premium : glow doux + léger fond violet. Le beam (::after) parcourt la moitié du contour. */
+  .v3-service-card:hover {
+    box-shadow: 0 22px 50px -18px rgba(167, 139, 250, 0.32);
+    border-color: rgba(167, 139, 250, 0.16);
+    background: linear-gradient(
+      180deg,
+      rgba(167, 139, 250, 0.05) 0%,
+      var(--cosmic-card) 100%
+    );
+  }
+
+  /* ========== Bordure premium : comète violette qui parcourt la moitié du contour ========== */
+  /* ::after (mask) → s'affiche de façon fiable, suit le radius. L'angle du conic est piloté
+     en JS sur la card (parcourt au hover, rembobine au leave). Dégradé = bouts fondus. */
+  .v3-service-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+      from var(--v3-beam-angle, -90deg),
+      rgba(167, 139, 250, 0) 0%,
+      rgba(167, 139, 250, 1) 4%,
+      rgba(167, 139, 250, 0.5) 11%,
+      rgba(167, 139, 250, 0.14) 19%,
+      rgba(167, 139, 250, 0) 27%,
+      rgba(167, 139, 250, 0) 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 320ms ease;
+    pointer-events: none;
+    z-index: 3;
+    filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.7));
+  }
+  /* :hover → visible de façon fiable (pur CSS, indépendant du JS) ;
+     is-beam-active → garde visible pendant le rembobinage piloté JS. */
+  .v3-service-card:hover::after,
+  .v3-service-card.is-beam-active::after {
+    opacity: 1;
+    animation: v3-beam-twinkle 1.1s ease-in-out infinite;
+  }
+  @keyframes v3-beam-twinkle {
+    0%, 100% { filter: drop-shadow(0 0 3px rgba(167, 139, 250, 0.6)); }
+    50%      { filter: drop-shadow(0 0 8px rgba(167, 139, 250, 1)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v3-service-card:hover::after,
+    .v3-service-card.is-beam-active::after { animation: none; }
+  }
+
+  /* ========== Numéro fantôme géant outlined (style Wibify) ========== */
+  .v3-service-ghost-num {
+    position: absolute;
+    /* V3.6 Fix #6 : top:-8 right:18 -> top:24 right:28 (mieux contenu dans card) */
+    top: 24px;
+    right: 28px;
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: 130px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: transparent;
+    /* V3.6 Fix #6 : stroke 1.5px violet 30% (plus visible que border-subtle) */
+    -webkit-text-stroke: 1.5px rgba(167, 139, 250, 0.18);
+    text-stroke: 1.5px rgba(167, 139, 250, 0.18);
+    pointer-events: none;
+    user-select: none;
+    transition: -webkit-text-stroke-color 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 0;
+  }
+
+  .v3-service-card:hover .v3-service-ghost-num {
+    -webkit-text-stroke-color: rgba(167, 139, 250, 0.5);
+  }
+
+  @media (max-width: 900px) {
+    .v3-service-ghost-num {
+      font-size: 100px;
+      top: 18px;
+      right: 20px;
+    }
+  }
+
+  /* ========== Header (icon + num small) ========== */
+  .v3-service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-service-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    background: rgba(167, 139, 250, 0.10);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    color: var(--violet-primary);
+    /* V3.6 Fix #5 : easeOutBack pour rotation (snap dynamique caractère vif) */
+    transition: background 320ms ease-out, border-color 320ms ease-out,
+                transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+  }
+
+  /* Logo rotation 10° au hover (style Wibify) */
+  .v3-service-card:hover .v3-service-icon-box {
+    background: rgba(167, 139, 250, 0.18);
+    border-color: rgba(167, 139, 250, 0.45);
+    transform: rotate(10deg);
+  }
+
+  .v3-service-num-small {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+  }
+
+  /* ========== Body ========== */
+  .v3-service-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+  }
+
+  /* H3 wave : 2 couches superposées (texte normal blanc + texte violet en dessous)
+     Au hover : le texte blanc sort par le haut, le violet rentre par le bas → effet wave inversion couleur */
+  .v3-service-title {
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: clamp(1.75rem, 2.2vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--text-hover);
+    margin: 0;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    height: 1.05em;
+  }
+  .v3-service-title-inner {
+    display: inline-block;
+    transform: translateY(0);
+    transition: transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+    will-change: transform;
+  }
+  .v3-service-title::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--violet-primary);
+    transform: translateY(100%);
+    transition: transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+    will-change: transform;
+  }
+  .v3-service-card:hover .v3-service-title-inner {
+    transform: translateY(-105%);
+  }
+  .v3-service-card:hover .v3-service-title::after {
+    transform: translateY(0);
+  }
+
+  .v3-service-description {
+    font-size: 0.9375rem;
+    color: var(--lavender-bright);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ========== Tags pills monospace ========== */
+  .v3-service-tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-service-tag {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    background: rgba(167, 139, 250, 0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: color 250ms ease, border-color 250ms ease, background 250ms ease;
+  }
+
+  .v3-service-card:hover .v3-service-tag {
+    color: var(--lavender-bright);
+    border-color: rgba(167, 139, 250, 0.25);
+    background: rgba(167, 139, 250, 0.10);
+  }
+
+  /* ========== Footer ========== */
+  .v3-service-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-service-delivery {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+  }
+
+  .v3-service-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--violet-primary);
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: background 250ms ease, border-color 250ms ease, transform 250ms ease;
+    font-size: 16px;
+  }
+
+  .v3-service-cta:hover {
+    background: rgba(167, 139, 250, 0.18);
+    border-color: rgba(167, 139, 250, 0.45);
+    transform: rotate(-15deg);
+  }
+
+  .v3-service-cta .v3-arrow {
+    transition: transform 250ms ease;
+    display: inline-block;
+  }
+
+  .v3-service-cta:hover .v3-arrow {
+    transform: translateX(2px);
+  }
+</style>
+
+<script>
+  function initServiceBeams() {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cards = document.querySelectorAll('.v3-service-card');
+    for (var i = 0; i < cards.length; i++) {
+      (function (card) {
+        if (card.__beamInit) return;
+        card.__beamInit = true;
+
+        var START = -90;  // haut
+        var SPAN = 180;   // moitié du contour
+        var DUR = 850;    // ms
+        var prog = 0, dir = 0, raf = 0, last = 0;
+
+        function apply() { card.style.setProperty('--v3-beam-angle', (START + prog * SPAN) + 'deg'); }
+        function tick(t) {
+          if (!last) last = t;
+          var dt = t - last; last = t;
+          prog += dir * (dt / DUR);
+          if (prog >= 1) { prog = 1; dir = 0; }
+          if (prog <= 0) { prog = 0; dir = 0; card.classList.remove('is-beam-active'); }
+          apply();
+          raf = dir !== 0 ? requestAnimationFrame(tick) : 0;
+        }
+        function run(d) { dir = d; last = 0; if (!raf) raf = requestAnimationFrame(tick); }
+        apply();
+
+        card.addEventListener('mouseenter', function () {
+          card.classList.add('is-beam-active');
+          if (reduce) { prog = 0.5; apply(); return; }
+          run(1);
+        });
+        card.addEventListener('mouseleave', function () {
+          if (reduce) { prog = 0; apply(); card.classList.remove('is-beam-active'); return; }
+          run(-1); // rembobine le long du contour (reste visible), puis se masque
+        });
+      })(cards[i]);
+    }
+  }
+
+  initServiceBeams();
+  document.addEventListener('astro:page-load', initServiceBeams);
+</script>

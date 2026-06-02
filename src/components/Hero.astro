@@ -1,34 +1,451 @@
 ---
 import Button from './Button.astro';
-import HeroVisualMockup from './HeroVisualMockup.astro';
+import HeroVideoBg from './HeroVideoBg.astro';
 ---
-<section id="hero" class="hero" aria-label="Présentation FenX">
-  <div class="hero-stars" aria-hidden="true" data-parallax="0.25">
-    <span class="star" style="width: 2px; height: 2px; top: 25%; left: 15%; animation-delay: 0s;"></span>
-    <span class="star" style="width: 1.5px; height: 1.5px; top: 18%; left: 35%; animation-delay: 0.5s;"></span>
-    <span class="star" style="width: 1.5px; height: 1.5px; top: 32%; right: 28%; animation-delay: 1s;"></span>
-    <span class="star" style="width: 2px; height: 2px; top: 70%; left: 22%; animation-delay: 1.5s;"></span>
-    <span class="star" style="width: 1.5px; height: 1.5px; top: 78%; right: 18%; animation-delay: 2s;"></span>
-    <span class="star" style="width: 2px; height: 2px; top: 12%; right: 40%; animation-delay: 1.3s;"></span>
-  </div>
+<section id="hero" class="hero-v3" aria-label="Présentation FenX Agency">
+  <HeroVideoBg videoSrc="/hero.mp4" poster="/hero-poster.webp" />
 
-  <div class="container hero-stack">
-    <div class="hero-content hero-content-center">
-      <span class="hero-badge hero-reveal" style="--reveal-delay: 0ms">
-        <span class="hero-badge-tag">Nouveau</span>
-        <span class="hero-badge-text">✨ Sites premium pour <span class="hero-badge-emph">commerces de proximité</span></span>
+  <div class="hero-v3__gradient" aria-hidden="true"></div>
+
+  {/* Décoration scroll (coin bas-gauche) */}
+  <span class="hero-v3__corner hero-v3__corner--bl" aria-hidden="true">
+    <span>SCROLL</span>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M7 1v12M2 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </span>
+
+  <div class="hero-v3__inner">
+    <div class="hero-v3__content">
+      <span class="hero-v3__eyebrow">
+        <span class="hero-v3__eyebrow-line" aria-hidden="true"></span>
+        <span class="hero-v3__eyebrow-num">[01]</span>
+        <span>STUDIO CRÉATIF · ÎLE-DE-FRANCE</span>
       </span>
-      <h1 class="hero hero-glitch hero-reveal" style="--reveal-delay: 140ms">
-        VOTRE COMMERCE<br />MÉRITE MIEUX.
+
+      <h1 class="hero-v3__h1" id="hero-h1">
+        Sites web &amp; vidéos IA<br />
+        qui font <em>convertir</em>.
       </h1>
-      <p class="hero-sub hero-reveal" style="--reveal-delay: 280ms">Un site qui transforme vos visiteurs en clients. Livré en 7 jours, à partir de 990€.</p>
-      <div class="hero-ctas hero-reveal" style="--reveal-delay: 420ms">
-        <Button href="#contact" text="Discuter projet" openContact={true} />
-        <a href="https://demo-wok.fenx-agency.com" target="_blank" rel="noopener" class="btn-text">Voir une démo →</a>
+
+      <p class="hero-v3__sub">
+        Site premium, branding complet, vidéos IA pour réseaux sociaux.<br />
+        Livré en <strong>7 à 14 jours</strong>. À partir de <strong>1990€</strong>.
+      </p>
+
+      <div class="hero-v3__ctas">
+        <span id="hero-cta">
+          <Button href="#contact" text="Audit gratuit en 15 min" />
+        </span>
+        <a href="#selected-work" class="hero-v3__cta-text">
+          <span class="hero-v3__cta-marker" aria-hidden="true"></span>
+          Voir nos derniers projets
+        </a>
       </div>
-    </div>
-    <div class="hero-visual hero-visual-below">
-      <HeroVisualMockup />
+
+      {/* ===== A/B test hero (homemade, sticky par visiteur) =====
+         SSR rend la Variante A (control) → SEO/no-JS voit la version canonique.
+         Ce script inline s'exécute pendant le parse (avant paint) et swap en B si assigné.
+         ⬇️⬇️  COPY VARIANTE B éditable ici (objet AB_VARIANTS.B)  ⬇️⬇️ */}
+      <script is:inline>
+        (function () {
+          var AB_VARIANTS = {
+            A: {
+              h1: 'Sites web &amp; vidéos IA<br />qui font <em>convertir</em>.',
+              cta: 'Audit gratuit en 15 min',
+            },
+            B: {
+              h1: 'Plus de clients grâce à<br />votre <em>présence en ligne</em>.',
+              cta: 'Je veux mon projet',
+            },
+          };
+          var KEY = 'fenx_ab_hero';
+          var variant = 'A';
+          try {
+            var stored = localStorage.getItem(KEY);
+            if (stored === 'A' || stored === 'B') {
+              variant = stored;
+            } else {
+              variant = Math.random() < 0.5 ? 'A' : 'B';
+              localStorage.setItem(KEY, variant);
+            }
+          } catch (e) {
+            variant = 'A';
+          }
+          window.__abHero = variant;
+          if (variant === 'B') {
+            try {
+              var h1 = document.getElementById('hero-h1');
+              if (h1) h1.innerHTML = AB_VARIANTS.B.h1;
+              var ctaWrap = document.getElementById('hero-cta');
+              var ctaLabel = ctaWrap && ctaWrap.querySelector('.text');
+              if (ctaLabel) ctaLabel.textContent = AB_VARIANTS.B.cta;
+            } catch (e) {}
+          }
+        })();
+      </script>
+
+      {/* Social proof badges style Wibify + counter anim (Web Designer agent) */}
+      <ul class="hero-v3__badges" aria-label="Indicateurs">
+        <li class="hero-v3__badge">
+          <span class="hero-v3__badge-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 0l1.8 4.4 4.7.4-3.6 3.1 1.1 4.6L7 10l-4 2.5 1.1-4.6L.5 4.8l4.7-.4L7 0z"/></svg>
+          </span>
+          <strong data-counter="5" data-suffix="+">0</strong> projets livrés
+        </li>
+        <li class="hero-v3__badge">
+          <span class="hero-v3__badge-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5.5"/><path d="M7 3v4l2.5 1.5"/></svg>
+          </span>
+          <strong data-counter="7" data-suffix=" jours">0</strong> délai moyen
+        </li>
+        <li class="hero-v3__badge">
+          <span class="hero-v3__badge-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l3 3 7-7"/></svg>
+          </span>
+          <strong data-counter="95" data-suffix="/100">0</strong> vitesse mobile
+        </li>
+      </ul>
     </div>
   </div>
 </section>
+
+<style>
+  .hero-v3 {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: var(--cosmic-bg);
+    isolation: isolate;
+  }
+
+  /* Gradient overlay : darken centré + vignette pour lisibilité du texte centré (V5) */
+  .hero-v3__gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background:
+      radial-gradient(120% 95% at 50% 42%, rgba(10, 10, 15, 0.30) 0%, rgba(10, 10, 15, 0.72) 100%),
+      linear-gradient(180deg, rgba(10, 10, 15, 0.50) 0%, rgba(10, 10, 15, 0.12) 38%, rgba(10, 10, 15, 0.45) 100%);
+    pointer-events: none;
+  }
+
+  .hero-v3__corner {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .hero-v3__corner--tr {
+    top: 32px;
+    right: 32px;
+  }
+  .hero-v3__corner-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--violet-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--violet-primary);
+    animation: hero-v3-pulse 2s ease-in-out infinite;
+  }
+  .hero-v3__corner--bl {
+    left: 32px;
+    bottom: 32px;
+    color: var(--lavender-bright);
+    animation: hero-v3-bounce 2.4s ease-in-out infinite;
+  }
+  @keyframes hero-v3-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.75); }
+  }
+  @keyframes hero-v3-bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.7; }
+    50% { transform: translateY(4px); opacity: 1; }
+  }
+
+  /* Inner : V5 layout centré (réf Anthony — bloc texte centré horizontalement) */
+  .hero-v3__inner {
+    position: relative;
+    z-index: 4;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(120px, 14vh, 180px) clamp(24px, 6vw, 80px) 100px;
+    max-width: 100%;
+  }
+
+  .hero-v3__content {
+    text-align: center;
+    max-width: 720px; /* V5 : centré (réf) */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    transform: translateY(-6vh); /* légèrement plus haut (Anthony) */
+  }
+
+  /* Eyebrow */
+  .hero-v3__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--lavender-bright);
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .hero-v3__eyebrow-line {
+    display: inline-block;
+    width: 36px;
+    height: 1px;
+    background: var(--violet-primary);
+  }
+  .hero-v3__eyebrow-num {
+    color: var(--violet-primary);
+    font-weight: 700;
+  }
+
+  /* H1 court & impactful (Wibify style) + V4 glow pulse violet (Web Designer agent) */
+  /* V4.3 : plus gros (Anthony) — clamp 3/6.5vw/6.5rem */
+  .hero-v3__h1 {
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: clamp(2.1rem, 4.6vw, 4.2rem);
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    color: var(--text-hover);
+    margin: 0;
+    white-space: nowrap; /* garantit 2 lignes (les <br/> only) */
+    text-shadow:
+      0 0 32px rgba(139, 107, 255, 0.0),
+      0 0 80px rgba(139, 107, 255, 0.0);
+    /* lisibilité sur la vidéo (V5) */
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.55));
+    animation: hero-h1-glow 8s ease-in-out 1.6s infinite;
+  }
+  @keyframes hero-h1-glow {
+    0%, 100% {
+      text-shadow:
+        0 0 32px rgba(139, 107, 255, 0.10),
+        0 0 80px rgba(139, 107, 255, 0.06);
+    }
+    50% {
+      text-shadow:
+        0 0 48px rgba(139, 107, 255, 0.22),
+        0 0 120px rgba(139, 107, 255, 0.14);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-v3__h1 { animation: none; text-shadow: 0 0 32px rgba(139, 107, 255, 0.12); }
+  }
+  .hero-v3__h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--violet-primary);
+    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+  /* V4.1 Underline hand-drawn courbe (Wibify style) — SVG inline avec wave subtle */
+  .hero-v3__h1 em::after {
+    content: '';
+    position: absolute;
+    left: -2%;
+    bottom: -0.12em;
+    width: 104%;
+    height: 0.22em;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M 3 9 Q 50 3, 100 7 T 197 9' stroke='%238b6bff' stroke-width='3.5' stroke-linecap='round' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    transform: scaleX(1); /* statique : soulignement toujours visible */
+    transform-origin: left center;
+    filter: drop-shadow(0 0 8px rgba(139, 107, 255, 0.35));
+  }
+
+  /* Sub */
+  .hero-v3__sub {
+    font-size: clamp(1.0625rem, 1.45vw, 1.3125rem);
+    line-height: 1.55;
+    color: var(--lavender-bright);
+    max-width: 680px; /* V4 : 540 -> 680 (matche élargissement) */
+    margin: 0;
+  }
+  .hero-v3__sub strong {
+    color: var(--text-hover);
+    font-weight: 700;
+  }
+
+  /* CTAs */
+  .hero-v3__ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .hero-v3__cta-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--lavender-bright);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 220ms, border-color 220ms;
+  }
+  .hero-v3__cta-marker {
+    width: 8px;
+    height: 8px;
+    background: var(--violet-primary);
+    display: inline-block;
+    border-radius: 2px;
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 320ms;
+  }
+  .hero-v3__cta-text:hover {
+    color: var(--text-hover);
+    border-color: var(--violet-primary);
+  }
+  .hero-v3__cta-text:hover .hero-v3__cta-marker {
+    transform: rotate(45deg) scale(1.3);
+    box-shadow: 0 0 14px var(--violet-primary);
+  }
+
+  /* Social proof badges (Wibify-style) */
+  .hero-v3__badges {
+    list-style: none;
+    margin: 32px 0 0;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    flex-wrap: wrap;
+    max-width: 720px; /* V5 : matche content centré */
+  }
+  .hero-v3__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-v3__badge strong {
+    color: var(--text-hover);
+    font-weight: 700;
+    margin-right: 2px;
+  }
+  .hero-v3__badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(167, 139, 250, 0.12);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    color: var(--violet-primary);
+  }
+
+  /* Reveal cascade */
+  .hero-v3 [data-reveal] {
+    opacity: 0;
+    transform: translateY(48px);
+    transition: opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-v3__content [data-reveal]:nth-child(1) { transition-delay: 150ms; }
+  .hero-v3__content [data-reveal]:nth-child(2) { transition-delay: 300ms; }
+  .hero-v3__content [data-reveal]:nth-child(3) { transition-delay: 500ms; }
+  .hero-v3__content [data-reveal]:nth-child(4) { transition-delay: 700ms; }
+  .hero-v3__content [data-reveal]:nth-child(5) { transition-delay: 900ms; }
+  .hero-v3 [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 900px) {
+    .hero-v3__corner--tr {
+      top: 20px;
+      right: 20px;
+      font-size: 10px;
+    }
+    .hero-v3__corner--bl {
+      left: 20px;
+      bottom: 20px;
+      font-size: 10px;
+    }
+    .hero-v3__inner {
+      padding: 110px 24px 80px;
+    }
+    .hero-v3__gradient {
+      /* mobile : assombri au centre (lisibilité texte) mais BAS transparent
+         → laisse le masque du hero révéler le NeuralBg = fusion avec la section 2 */
+      background: linear-gradient(180deg,
+        rgba(22, 22, 28, 0.0) 0%,
+        rgba(22, 22, 28, 0.45) 52%,
+        rgba(22, 22, 28, 0.5) 74%,
+        rgba(22, 22, 28, 0.0) 100%
+      );
+    }
+    .hero-v3__h1 {
+      font-size: clamp(1.7rem, 7.6vw, 2.6rem);
+      white-space: normal; /* mobile : on autorise le wrap (nowrap déborderait) */
+    }
+    .hero-v3__sub {
+      font-size: 1rem;
+    }
+    .hero-v3__ctas {
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
+    }
+    .hero-v3__ctas > * {
+      width: 100%;
+      max-width: 360px;
+    }
+    .hero-v3__cta-text {
+      justify-content: center;
+    }
+    .hero-v3__badges {
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 0 0;
+      margin-top: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-v3 [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hero-v3__h1 em::after {
+      transform: scaleX(1) !important;
+    }
+    .hero-v3__corner-dot,
+    .hero-v3__corner--bl {
+      animation: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,310 @@
+---
+// Process V3.3 — refonte rows horizontales split 50/50 (style Wibify)
+// Layout : illustration 3D blueprint gauche / texte+tags droite, 4 phases stacked
+
+interface Phase {
+  num: string;
+  title: string;
+  description: string;
+  tags: string[];
+  image: string;
+  imageAlt: string;
+}
+
+const phases: Phase[] = [
+  {
+    num: '01',
+    title: 'Brief',
+    description: "On démarre par 30 minutes en visio pour cerner ton projet. Analyse concurrence, audit de l'existant, roadmap chiffrée et devis fixe — pas d'heures facturées.",
+    tags: ['BRIEF VISIO 30MIN', 'ANALYSE CONCURRENCE', 'ROADMAP CHIFFRÉE', 'DEVIS FIXE'],
+    image: '/assets/process/brief.webp',
+    imageAlt: 'Étape 1 — Brief : on cadre votre projet',
+  },
+  {
+    num: '02',
+    title: 'Maquette',
+    description: "On vous montre une maquette cliquable de votre site avant tout codage. Vous validez, on ajuste — deux allers-retours maximum.",
+    tags: ['MAQUETTE CLIQUABLE', 'UI PREMIUM', 'KIT DE MARQUE', '2 ITÉRATIONS MAX'],
+    image: '/assets/process/design.webp',
+    imageAlt: 'Étape 2 — La maquette de votre site',
+  },
+  {
+    num: '03',
+    title: 'Création',
+    description: "On code votre site sur-mesure, optimisé pour être ultra-rapide sur mobile, bien référencé sur Google et impeccable sur tous les téléphones et ordinateurs.",
+    tags: ['SITE SUR-MESURE', 'ULTRA-RAPIDE', 'VISIBLE SUR GOOGLE', 'TESTÉ PARTOUT'],
+    image: '/assets/process/build.webp',
+    imageAlt: 'Étape 3 — Création de votre site',
+  },
+  {
+    num: '04',
+    title: 'Mise en ligne',
+    description: "Mise en ligne en 24 heures. Formation en visio de 30 min pour gérer votre site. Quatorze jours de support gratuit après livraison.",
+    tags: ['MISE EN LIGNE 24H', 'FORMATION VISIO', 'SUPPORT 14J OFFERTS', 'MAINTENANCE OPT.'],
+    image: '/assets/process/launch.webp',
+    imageAlt: 'Étape 4 — Mise en ligne',
+  },
+];
+---
+<section id="process" class="v3-section v3-process">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[05] Méthode / Comment on travaille</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Du premier <em>appel</em> à la <em>mise en ligne</em>.
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Quatre étapes claires. Pas d'aller-retour interminable, pas de <em>rallonges sans fin</em>.
+      </p>
+    </header>
+
+    <ol class="v3-process-list">
+      {phases.map((phase, idx) => (
+        <li
+          class="v3-process-row"
+          data-reveal
+          data-reveal-mobile="scrub"
+          style={`--reveal-delay: ${240 + idx * 100}ms; --row-index: ${idx}; z-index: ${idx + 1};`}
+        >
+          <div class="v3-process-row-visual">
+            <img
+              src={phase.image}
+              alt={phase.imageAlt}
+              class="v3-process-row-img"
+              loading="lazy"
+              decoding="async"
+              width="1280"
+              height="1280"
+            />
+          </div>
+          <div class="v3-process-row-content">
+            <span class="v3-process-row-num">{phase.num} / 04</span>
+            <h3 class="v3-process-row-title">{phase.title}</h3>
+            <p class="v3-process-row-description">{phase.description}</p>
+            <ul class="v3-process-row-tags">
+              {phase.tags.map((tag) => (
+                <li class="v3-process-row-tag">{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .v3-process {
+    background: var(--cosmic-bg);
+    position: relative;
+  }
+
+  /* Liste de phases — STICKY STACKING (V3.7 : pas de gap pour eviter le bug transparence) */
+  .v3-process-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* V3.7 : retire le gap pour eviter le trou entre rows sticky (bug transparence Anthony) */
+    position: relative;
+  }
+
+  /* ============ Row split 50/50 — STICKY avec fade out scroll-driven ============ */
+  .v3-process-row {
+    position: sticky;
+    top: calc(80px + var(--row-index, 0) * 28px);
+    margin-bottom: 24px; /* V3.7 : remplace gap parent par margin sur row */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0;
+    /* V3.7 : background opaque uniforme (pas gradient) + cosmic-card solide */
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 -1px 0 rgba(167, 139, 250, 0.06),
+                0 24px 60px -16px rgba(0, 0, 0, 0.85);
+    /* V3.7 : scroll-driven fade quand la row sort du viewport (recouverte par suivante) */
+    transform-origin: center top;
+  }
+
+  /* Fade out COMPLET quand row recouverte (Anthony : "effet de disparition") — scroll-driven CSS
+     (animation-timeline suit correctement la position d'une row STICKY, contrairement à GSAP). */
+  /* DESKTOP UNIQUEMENT : l'effet d'empilement/disparition (les rows sont sticky en desktop).
+     Sur mobile les rows sont en flux normal → pas de fade-out scroll (apparition propre via data-reveal). */
+  @media (min-width: 901px) {
+    @supports (animation-timeline: view()) {
+      .v3-process-row {
+        animation: v3-process-row-fade linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 45%;
+      }
+    }
+  }
+  @keyframes v3-process-row-fade {
+    0% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: brightness(1) blur(0);
+      box-shadow:
+        0 -1px 0 rgba(167, 139, 250, 0.06),
+        0 24px 60px -16px rgba(0, 0, 0, 0.85);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.96) translateY(-12px);
+      filter: brightness(0.4) blur(2px);
+      box-shadow: none;
+    }
+  }
+
+  /* ::before garantit 100% opacite (couche cosmic-card en arriere-plan) */
+  .v3-process-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cosmic-card);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* V3.7 : RETIRE le hover effect (Anthony : "pas de hover sur Process") */
+  /* Les hover :hover on .v3-process-row-img / .v3-process-row-tag sont retires plus bas */
+
+  /* Mobile : désactive le sticky. PAS de opacity/transform !important ici —
+     ils annulaient le reveal GSAP (cards visibles d'un coup). Le reveal mobile
+     est géré en scroll-scrub par card dans scroll-fx.ts (fluide). */
+  @media (max-width: 900px) {
+    .v3-process-row {
+      position: relative;
+      top: auto;
+      margin-bottom: 18px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v3-process-row {
+      position: relative;
+      top: auto;
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+
+  /* V3.7 : retire le hover (Anthony : pas de hover sur Process) */
+
+  @media (max-width: 900px) {
+    .v3-process-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ============ Visuel illustration 3D blueprint ============ */
+  .v3-process-row-visual {
+    position: relative;
+    aspect-ratio: 16 / 10; /* V3.5 : 1:1 -> 16:10 (allonge horizontal Wibify-like) */
+    min-height: 380px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(167, 139, 250, 0.04) 0%,
+      transparent 70%
+    ), #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .v3-process-row-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    filter: brightness(0.95);
+  }
+
+  /* V3.7 : retire hover image scale (Anthony : pas de hover Process) */
+
+  @media (max-width: 900px) {
+    .v3-process-row-visual {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  /* ============ Content droite ============ */
+  .v3-process-row-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(40px, 5vw, 80px); /* V3.5 : 32-56 -> 40-80 (plus genereux Wibify-like) */
+    gap: 24px;
+  }
+
+  .v3-process-row-num {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.20em;
+    color: var(--text-dim);
+  }
+
+  .v3-process-row-title {
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: clamp(2rem, 3.2vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.0;
+    color: var(--text-hover);
+    margin: 0;
+  }
+
+  .v3-process-row-description {
+    font-size: 0.9375rem;
+    color: var(--lavender-bright);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Tags pills monospace */
+  .v3-process-row-tags {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .v3-process-row-tag {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    background: rgba(167, 139, 250, 0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: color 250ms ease, border-color 250ms ease;
+  }
+
+  /* V3.7 : retire hover tags brighten (Anthony : pas de hover Process) */
+
+  @media (max-width: 540px) {
+    .v3-process-row-content {
+      padding: 28px 24px 32px;
+      gap: 14px;
+    }
+    .v3-process-row-title {
+      font-size: 1.75rem;
+    }
+    .v3-process-row-tag {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+  }
+</style>

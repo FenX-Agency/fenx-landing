@@ -1,0 +1,162 @@
+---
+interface StackItem {
+  category: string;
+  tools: string;
+  usage: string;
+}
+
+const stack: StackItem[] = [
+  {
+    category: 'Framework',
+    tools: 'Astro 5 · React 19 · TypeScript 5',
+    usage: 'Sites statiques rapides, islands React quand nécessaire.',
+  },
+  {
+    category: 'Styling',
+    tools: 'Tailwind CSS 4',
+    usage: 'Design system tokens, dark mode, zéro CSS legacy.',
+  },
+  {
+    category: 'Hosting',
+    tools: 'Cloudflare Pages · R2 · Workers',
+    usage: 'CDN global, stockage assets, API edge sans serveur.',
+  },
+  {
+    category: 'CMS',
+    tools: 'Sanity · Payload · JSON-driven custom',
+    usage: 'Back-office sur-mesure ou headless selon le projet.',
+  },
+  {
+    category: 'AI',
+    tools: 'Claude · Higgsfield · ElevenLabs · fal.ai · OpenAI',
+    usage: 'Texte, vidéos, voix, images. Stack hybride par usage.',
+  },
+  {
+    category: 'Automation',
+    tools: 'n8n · webhooks · cron jobs',
+    usage: 'Workflows visuels, intégrations, monitoring custom.',
+  },
+  {
+    category: 'Database',
+    tools: 'Cloudflare D1 · Supabase',
+    usage: 'SQLite edge ou Postgres managé selon volume.',
+  },
+  {
+    category: 'Analytics',
+    tools: 'Plausible',
+    usage: 'Privacy-first, conforme RGPD, sans cookies.',
+  },
+];
+---
+<section id="stack" class="v3-section v3-stack">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[09] Stack technique</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        On ne cache <em>rien</em> de ce qu'on utilise
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Pas de boîte noire, pas de prestataire mystère. Tu sais sur quoi <em>tu construis.</em>
+      </p>
+    </header>
+
+    <div class="v3-stack-grid">
+      {stack.map((item, idx) => (
+        <article
+          class="v3-stack-card"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 60}ms`}
+        >
+          <span class="v3-stack-category">{item.category}</span>
+          <h3 class="v3-stack-tools">{item.tools}</h3>
+          <p class="v3-stack-usage">{item.usage}</p>
+        </article>
+      ))}
+    </div>
+
+    <p class="v3-stack-footer" data-reveal style="--reveal-delay: 700ms">
+      Stack <em>moderne</em> — no WordPress, no PHP, no jQuery.
+    </p>
+  </div>
+</section>
+
+<style>
+  .v3-stack {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-stack-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 1100px) {
+    .v3-stack-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .v3-stack-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .v3-stack-card {
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 300ms ease, transform 300ms ease;
+    min-height: 160px;
+  }
+
+  .v3-stack-card:hover {
+    border-color: rgba(167, 139, 250, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .v3-stack-category {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--violet-primary);
+  }
+
+  .v3-stack-tools {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-hover);
+    margin: 0;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+  }
+
+  .v3-stack-usage {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+    margin-top: auto;
+  }
+
+  .v3-stack-footer {
+    margin: 48px 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .v3-stack-footer em {
+    color: var(--violet-soft);
+    font-style: italic;
+  }
+</style>

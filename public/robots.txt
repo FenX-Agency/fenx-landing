@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fenx-agency.com/sitemap.xml

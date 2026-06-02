@@ -1,0 +1,588 @@
+---
+const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
+---
+<section id="contact" class="v3-section v3-contact">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[08] Contact / On démarre quand ?</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Un <em>audit gratuit</em> en 15 minutes.
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Direct avec Anthony, par visio — <em>réponse sous 24h</em>.
+      </p>
+    </header>
+
+    <div class="v3-contact-grid">
+      <form
+        class="v3-contact-form"
+        data-v3-contact-form
+        data-webhook={WEBHOOK_URL}
+        novalidate
+        data-reveal
+      >
+        <div class="v3-field-row">
+          <div class="v3-field">
+            <label for="v3-prenom">Prénom <span aria-hidden="true">*</span></label>
+            <input
+              id="v3-prenom"
+              name="prenom"
+              type="text"
+              autocomplete="given-name"
+              required
+              maxlength="60"
+              placeholder="Marie"
+            />
+            <span class="v3-field-error" data-v3-error="prenom"></span>
+          </div>
+          <div class="v3-field">
+            <label for="v3-nom">Nom <span aria-hidden="true">*</span></label>
+            <input
+              id="v3-nom"
+              name="nom_famille"
+              type="text"
+              autocomplete="family-name"
+              required
+              maxlength="60"
+              placeholder="Dupont"
+            />
+            <span class="v3-field-error" data-v3-error="nom_famille"></span>
+          </div>
+        </div>
+
+        <div class="v3-field">
+          <label for="v3-email">Email <span aria-hidden="true">*</span></label>
+          <input
+            id="v3-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            required
+            maxlength="120"
+            placeholder="marie@exemple.fr"
+          />
+          <span class="v3-field-error" data-v3-error="email"></span>
+        </div>
+
+        <div class="v3-field">
+          <label for="v3-tel">Téléphone <span aria-hidden="true">*</span></label>
+          <input
+            id="v3-tel"
+            name="telephone"
+            type="tel"
+            autocomplete="tel"
+            inputmode="tel"
+            required
+            maxlength="20"
+            placeholder="06 12 34 56 78"
+          />
+          <span class="v3-field-error" data-v3-error="telephone"></span>
+        </div>
+
+        <div class="v3-field-row">
+          <div class="v3-field">
+            <label for="v3-entreprise">Entreprise <span class="v3-field-optional">(opt.)</span></label>
+            <input
+              id="v3-entreprise"
+              name="entreprise"
+              type="text"
+              autocomplete="organization"
+              maxlength="120"
+              placeholder="Ton entreprise"
+            />
+          </div>
+          <div class="v3-field">
+            <label for="v3-site">Site actuel <span class="v3-field-optional">(opt.)</span></label>
+            <input
+              id="v3-site"
+              name="site_actuel"
+              type="url"
+              autocomplete="url"
+              maxlength="200"
+              placeholder="https://"
+            />
+          </div>
+        </div>
+
+        <div class="v3-field">
+          <label for="v3-message">Message <span class="v3-field-optional">(opt.)</span></label>
+          <textarea
+            id="v3-message"
+            name="message"
+            maxlength="3000"
+            placeholder="Quelques lignes sur ton projet, tes contraintes, tes inspirations…"
+          ></textarea>
+          <span class="v3-field-error" data-v3-error="message"></span>
+        </div>
+
+        <!-- A/B test hero : variante attribuée au lead (rempli par JS depuis localStorage) -->
+        <input type="hidden" name="ab_hero" id="ab-hero-field" value="A" />
+
+        <!-- Honeypot anti-spam — caché des humains -->
+        <div class="v3-honeypot" aria-hidden="true">
+          <label for="v3-website">Site web (ne pas remplir)</label>
+          <input id="v3-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <p class="v3-form-error" data-v3-form-error hidden></p>
+
+        <button type="submit" class="v3-form-submit" data-v3-submit>
+          <span data-v3-submit-label>Envoyer le brief</span>
+          <span class="v3-arrow" aria-hidden="true">→</span>
+          <span class="v3-form-spinner" data-v3-spinner hidden aria-hidden="true"></span>
+        </button>
+
+        <div class="v3-form-success" data-v3-success hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+            <path d="M7 12L11 16L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Brief envoyé. Réponse sous 24h ouvrées.</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-v3-contact-form]');
+  if (form) {
+    const webhook = form.dataset.webhook || '';
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-v3-submit]')!;
+    const submitLabel = form.querySelector<HTMLElement>('[data-v3-submit-label]')!;
+    const spinner = form.querySelector<HTMLElement>('[data-v3-spinner]')!;
+    const formErrorEl = form.querySelector<HTMLElement>('[data-v3-form-error]')!;
+    const successEl = form.querySelector<HTMLElement>('[data-v3-success]')!;
+
+    const fieldErrorEls: Record<string, HTMLElement> = {};
+    form.querySelectorAll<HTMLElement>('[data-v3-error]').forEach((el) => {
+      const k = el.getAttribute('data-v3-error');
+      if (k) fieldErrorEls[k] = el;
+    });
+
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const PHONE_ALLOWED = /^[\d\s.\-()+]+$/;
+
+    // A/B test hero : récupère la variante attribuée au visiteur (sticky localStorage)
+    const abHeroField = form.querySelector<HTMLInputElement>('#ab-hero-field');
+    function readAbHero(): string {
+      try {
+        const v = localStorage.getItem('fenx_ab_hero');
+        return v === 'A' || v === 'B' ? v : 'A';
+      } catch {
+        return 'A';
+      }
+    }
+    if (abHeroField) abHeroField.value = readAbHero();
+
+    function clearErrors() {
+      Object.values(fieldErrorEls).forEach((el) => {
+        el.textContent = '';
+        el.classList.remove('is-visible');
+      });
+      form!.querySelectorAll<HTMLElement>('.v3-field').forEach((f) => f.classList.remove('has-error'));
+      formErrorEl.hidden = true;
+      formErrorEl.textContent = '';
+    }
+
+    function showFieldError(name: string, msg: string) {
+      const el = fieldErrorEls[name];
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('is-visible');
+      el.closest('.v3-field')?.classList.add('has-error');
+    }
+
+    function validate(): { ok: boolean; data?: Record<string, string> } {
+      clearErrors();
+      const fd = new FormData(form!);
+      const prenom = String(fd.get('prenom') || '').trim();
+      const nom_famille = String(fd.get('nom_famille') || '').trim();
+      const email = String(fd.get('email') || '').trim();
+      const telephone = String(fd.get('telephone') || '').trim();
+      const entreprise = String(fd.get('entreprise') || '').trim();
+      const site_actuel = String(fd.get('site_actuel') || '').trim();
+      const message = String(fd.get('message') || '').trim();
+      const honeypot = String(fd.get('website') || '').trim();
+
+      // Honeypot rempli = bot
+      if (honeypot) {
+        return { ok: false };
+      }
+
+      let ok = true;
+      if (!prenom || prenom.length < 2) {
+        showFieldError('prenom', 'Au moins 2 caractères');
+        ok = false;
+      }
+      if (!nom_famille || nom_famille.length < 2) {
+        showFieldError('nom_famille', 'Au moins 2 caractères');
+        ok = false;
+      }
+      if (!email) {
+        showFieldError('email', "Indiquez votre email");
+        ok = false;
+      } else if (!EMAIL_REGEX.test(email)) {
+        showFieldError('email', 'Email invalide');
+        ok = false;
+      }
+      if (!telephone) {
+        showFieldError('telephone', 'Indiquez votre téléphone');
+        ok = false;
+      } else if (!PHONE_ALLOWED.test(telephone)) {
+        showFieldError('telephone', 'Caractères invalides');
+        ok = false;
+      } else {
+        const digits = telephone.replace(/\D/g, '');
+        if (digits.length < 9 || digits.length > 13) {
+          showFieldError('telephone', 'Numéro invalide');
+          ok = false;
+        }
+      }
+
+      if (!ok) return { ok };
+      // Rafraîchit la variante A/B juste avant l'envoi (au cas où le hidden field aurait changé)
+      const ab_hero = readAbHero();
+      if (abHeroField) abHeroField.value = ab_hero;
+      return {
+        ok,
+        data: {
+          // Compatible avec le webhook n8n existant (nom + message)
+          nom: `${prenom} ${nom_famille}`.trim(),
+          prenom,
+          nom_famille,
+          email,
+          telephone,
+          entreprise,
+          site_actuel,
+          message: message || '(Pas de message — formulaire section Contact)',
+          ab_hero,
+        },
+      };
+    }
+
+    function setLoading(loading: boolean) {
+      submitBtn.disabled = loading;
+      submitLabel.style.opacity = loading ? '0.5' : '1';
+      spinner.hidden = !loading;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const v = validate();
+      if (!v.ok || !v.data) return;
+      setLoading(true);
+      try {
+        const res = await fetch(webhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(v.data),
+        });
+        let payload: { ok?: boolean; errors?: string[]; message?: string } = {};
+        try { payload = await res.json(); } catch {}
+        if (res.ok && payload.ok !== false) {
+          form!.querySelectorAll<HTMLElement>('.v3-field, .v3-field-row, .v3-form-submit').forEach((el) => {
+            el.style.display = 'none';
+          });
+          successEl.hidden = false;
+          form!.reset();
+        } else {
+          const errs = payload.errors?.length
+            ? payload.errors.join(' · ')
+            : "Impossible d'envoyer. Réessayez ou écrivez à contact.fenx.agency@gmail.com.";
+          formErrorEl.textContent = errs;
+          formErrorEl.hidden = false;
+        }
+      } catch {
+        formErrorEl.textContent = "Erreur réseau. Écrivez à contact.fenx.agency@gmail.com.";
+        formErrorEl.hidden = false;
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Format français téléphone : XX XX XX XX XX (live formatting léger)
+    const telField = form.querySelector<HTMLInputElement>('input[name="telephone"]');
+    if (telField) {
+      telField.addEventListener('input', () => {
+        const raw = telField.value.replace(/\D/g, '').slice(0, 10);
+        const parts = raw.match(/.{1,2}/g) || [];
+        telField.value = parts.join(' ');
+      });
+    }
+  }
+</script>
+
+<style>
+  .v3-contact {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 680px);
+    justify-content: center;
+    gap: 64px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .v3-contact-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  .v3-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .v3-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 540px) {
+    .v3-field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .v3-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .v3-field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.01em;
+  }
+
+  .v3-field label span[aria-hidden="true"] {
+    color: var(--violet-primary);
+  }
+
+  .v3-field-optional {
+    color: var(--text-dim);
+    font-weight: 400;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+
+  .v3-field input,
+  .v3-field textarea {
+    width: 100%;
+    background: oklch(0.16 0.03 280);
+    border: 1px solid oklch(0.3 0.05 280 / 0.55);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  }
+
+  .v3-field textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+
+  .v3-field input:focus,
+  .v3-field textarea:focus {
+    border-color: var(--violet-primary);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.18);
+    background: oklch(0.17 0.03 280);
+  }
+
+  .v3-field input::placeholder,
+  .v3-field textarea::placeholder {
+    color: var(--text-dim);
+  }
+
+  .v3-field.has-error input,
+  .v3-field.has-error textarea {
+    border-color: #f87171;
+    background: rgba(248, 113, 113, 0.05);
+  }
+
+  .v3-field-error {
+    font-size: 12px;
+    color: #f87171;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 180ms ease, max-height 180ms ease;
+  }
+
+  .v3-field-error.is-visible {
+    opacity: 1;
+    max-height: 40px;
+  }
+
+  .v3-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .v3-form-error {
+    margin: 0;
+    padding: 10px 14px;
+    background: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    border-radius: 10px;
+    color: #fca5a5;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .v3-form-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--violet-primary), var(--violet-dark));
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    box-shadow: 0 8px 22px -8px rgba(167, 139, 250, 0.6);
+    align-self: flex-start;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .v3-form-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px -8px rgba(167, 139, 250, 0.75);
+  }
+
+  .v3-form-submit:disabled {
+    cursor: wait;
+    opacity: 0.85;
+    transform: none;
+  }
+
+  .v3-form-submit .v3-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .v3-form-submit:hover .v3-arrow {
+    transform: translateX(4px);
+  }
+
+  .v3-form-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: v3-spin 700ms linear infinite;
+    margin-left: 4px;
+  }
+
+  @keyframes v3-spin { to { transform: rotate(360deg); } }
+
+  .v3-form-success {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid var(--violet-primary);
+    border-radius: 12px;
+    color: var(--lavender-bright);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .v3-form-success svg {
+    color: var(--violet-primary);
+    flex-shrink: 0;
+  }
+
+  /* Aside info */
+  .v3-contact-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 32px;
+    background: var(--cosmic-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+  }
+
+  .v3-contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .v3-aside-eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--violet-primary);
+  }
+
+  .v3-aside-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-hover);
+    text-decoration: none;
+    line-height: 1.3;
+    word-break: break-word;
+    transition: color 200ms ease;
+  }
+
+  /* Évite le débordement de l'email (long, insécable) sur très petits écrans */
+  @media (max-width: 400px) {
+    .v3-aside-link {
+      font-size: 15px;
+    }
+  }
+
+  .v3-aside-link:hover {
+    color: var(--violet-soft);
+  }
+
+  .v3-aside-link .v3-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .v3-aside-link:hover .v3-arrow {
+    transform: translateX(4px);
+  }
+
+  .v3-aside-text {
+    font-size: 15px;
+    color: var(--lavender-bright);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v3-form-spinner {
+      animation: none;
+    }
+  }
+</style>

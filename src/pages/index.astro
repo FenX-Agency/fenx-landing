@@ -2,20 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import Probleme from '../components/Probleme.astro';
-import Offre from '../components/Offre.astro';
-import Processus from '../components/Processus.astro';
+import SelectedWork from '../components/v3/SelectedWork.astro';
+import Services from '../components/v3/Services.astro';
+import Pricing from '../components/v3/Pricing.astro';
+import Process from '../components/v3/Process.astro';
+import Garantie from '../components/v3/Garantie.astro';
+import Contact from '../components/v3/Contact.astro';
+import FAQ from '../components/v3/FAQ.astro';
 import Footer from '../components/Footer.astro';
-import ContactModal from '../components/ContactModal.astro';
 ---
 <Layout>
   <Header />
   <main id="main">
-    <Hero />
-    <Probleme />
-    <Offre />
-    <Processus />
+    <Hero />              {/* [01] */}
+    <SelectedWork />      {/* [02] */}
+    <Services />          {/* [03] */}
+    <Pricing />           {/* [04] — Branding agent */}
+    <Process />           {/* [05] */}
+    <Garantie />          {/* [06] — NEW (UX-UI agent : risque zéro avant FAQ) */}
+    <FAQ />               {/* [07] — objections levées */}
+    <Contact />           {/* [08] */}
   </main>
   <Footer />
-  <ContactModal />
 </Layout>

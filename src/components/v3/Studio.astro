@@ -1,0 +1,237 @@
+---
+const stats = [
+  { value: '4', label: 'projets / trimestre max' },
+  { value: 'IDF', label: 'Île-de-France + remote' },
+  { value: '2026', label: 'Studio fondé' },
+];
+---
+<section id="studio" class="v3-section v3-studio">
+  <div class="container">
+    <div class="v3-studio-grid">
+      <div class="v3-studio-text">
+        <span class="v3-eyebrow" data-reveal>[05] Studio</span>
+        <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+          Studio <em>IA-native</em> — pas d'agence-usine
+        </h2>
+        <div class="v3-studio-body" data-reveal style="--reveal-delay: 160ms">
+          <p>
+            Anthony pilote tout, de bout en bout. <em>Pas de account manager</em>,
+            pas d'intermédiaire, pas d'agence sous-traitée.
+          </p>
+          <p>
+            Direct sur Telegram et email — réponse sous <em>24h max</em>.
+            Tu sais qui code, qui livre, qui répond.
+          </p>
+        </div>
+        <ul class="v3-studio-stats" data-reveal style="--reveal-delay: 240ms">
+          {stats.map((s) => (
+            <li>
+              <span class="v3-stat-value">{s.value}</span>
+              <span class="v3-stat-label">{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="v3-studio-visual" data-reveal style="--reveal-delay: 320ms" aria-hidden="true">
+        <div class="v3-studio-frame">
+          <div class="v3-studio-grid-bg"></div>
+          <div class="v3-studio-orb v3-studio-orb-1"></div>
+          <div class="v3-studio-orb v3-studio-orb-2"></div>
+          <div class="v3-studio-meta">
+            <span class="v3-studio-meta-eyebrow">STUDIO · 48.95°N · 2.27°E</span>
+            <span class="v3-studio-meta-title">Sannois · Île-de-France</span>
+            <span class="v3-studio-meta-line">Atelier solo · zéro open-space</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-studio {
+    background: var(--cosmic-bg);
+  }
+
+  .v3-studio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  @media (max-width: 1024px) {
+    .v3-studio-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+  }
+
+  .v3-studio-text {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .v3-studio-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .v3-studio-body p {
+    font-size: 17px;
+    color: var(--lavender-bright);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 520px;
+  }
+
+  .v3-studio-stats {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .v3-studio-stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .v3-stat-value {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--violet-primary);
+    line-height: 1;
+  }
+
+  .v3-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Visual frame — abstract violet sans photo nécessaire */
+  .v3-studio-visual {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    max-width: 460px;
+    justify-self: end;
+  }
+
+  @media (max-width: 1024px) {
+    .v3-studio-visual {
+      justify-self: center;
+      max-width: 380px;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  .v3-studio-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    background: linear-gradient(
+      135deg,
+      oklch(0.20 0.06 280) 0%,
+      oklch(0.14 0.04 280) 100%
+    );
+    border: 1px solid oklch(0.3 0.06 280 / 0.5);
+    box-shadow:
+      0 30px 80px -30px rgba(167, 139, 250, 0.35),
+      0 0 0 1px oklch(0.95 0.05 280 / 0.06);
+  }
+
+  .v3-studio-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(167, 139, 250, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(167, 139, 250, 0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  }
+
+  .v3-studio-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.45;
+    will-change: transform;
+  }
+
+  .v3-studio-orb-1 {
+    width: 220px;
+    height: 220px;
+    background: var(--violet-primary);
+    top: -40px;
+    right: -50px;
+    animation: studio-orb-float 12s ease-in-out infinite;
+  }
+
+  .v3-studio-orb-2 {
+    width: 280px;
+    height: 280px;
+    background: var(--violet-dark);
+    bottom: -60px;
+    left: -70px;
+    animation: studio-orb-float 16s ease-in-out infinite reverse;
+    animation-delay: -4s;
+  }
+
+  @keyframes studio-orb-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -20px) scale(1.1); }
+  }
+
+  .v3-studio-meta {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 2;
+  }
+
+  .v3-studio-meta-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--violet-primary);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .v3-studio-meta-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .v3-studio-meta-line {
+    font-size: 13px;
+    color: var(--lavender-bright);
+    margin-top: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v3-studio-orb {
+      animation: none;
+    }
+  }
+</style>

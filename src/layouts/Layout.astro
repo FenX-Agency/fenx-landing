@@ -1,12 +1,14 @@
 ---
+import NeuralBg from '../components/NeuralBg.astro';
+
 interface Props {
   title?: string;
   description?: string;
 }
 
 const {
-  title = 'FenX Agency — Sites premium pour commerces de proximité',
-  description = "Votre commerce mérite mieux. Sites sur-mesure pour TPE locales : design propre, référencement Google, tableau de bord autonome. À partir de 990€, livrés en 7 jours.",
+  title = 'Création de site internet pour commerces — dès 1990€',
+  description = "Site internet sur-mesure pour commerces et TPE en Île-de-France. Visible sur Google, livré en 7 à 14 jours, prix fixe dès 1990€.",
 } = Astro.props;
 
 const siteUrl = 'https://fenx-agency.com';
@@ -21,7 +23,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <meta name="color-scheme" content="dark">
   <title>{title}</title>
   <meta name="description" content={description}>
-  <meta name="keywords" content="site web TPE, agence web Sannois, site commerce proximité, site clé en main 990€, refonte site web, SEO local, agence web Île-de-France">
+  <meta name="keywords" content="création site internet, site internet restaurant, site internet pas cher, vidéo réseaux sociaux, agence web Île-de-France">
   <meta name="author" content="FenX Agency">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href={siteUrl}>
@@ -50,42 +52,214 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
-  <!-- Fonts -->
+  <!-- Fonts — V3.6 : Switzer (Fontshare distinctive) replaces Inter for body/H1/H2 (skill frontend-design : eviter Inter = AI slop) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <!-- Switzer (Fontshare distinctive font, replaces Inter) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,700,800,900&display=swap" rel="stylesheet">
+  <!-- Instrument Serif (italics emphasis) + JetBrains Mono (eyebrow/tags monospace) -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="preload" href="/styles.css" as="style">
-  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5n-wU.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
 
-  <!-- Structured data (JSON-LD) — local business -->
+  <!-- Structured data (JSON-LD) @graph — LocalBusiness + FAQPage + Services (SEO agent) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'FenX Agency',
-    url: siteUrl,
-    logo: `${siteUrl}/assets/favicon.svg`,
-    description: description,
-    sameAs: [],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'contact.fenx.agency@gmail.com',
-      contactType: 'Customer Service',
-      availableLanguage: ['fr', 'en'],
-    },
+    '@graph': [
+      {
+        '@type': 'LocalBusiness',
+        '@id': `${siteUrl}/#business`,
+        name: 'FenX Agency',
+        alternateName: 'Fen X Agency',
+        url: siteUrl,
+        logo: `${siteUrl}/assets/favicon.svg`,
+        image: `${siteUrl}/assets/og-image.jpg`,
+        description: description,
+        priceRange: '€€',
+        email: 'contact.fenx.agency@gmail.com',
+        address: {
+          '@type': 'PostalAddress',
+          addressRegion: 'Île-de-France',
+          addressCountry: 'FR',
+        },
+        areaServed: [
+          { '@type': 'AdministrativeArea', name: 'Île-de-France' },
+          { '@type': 'Country', name: 'France' },
+        ],
+        founder: { '@type': 'Person', name: 'Anthony Grupposo' },
+        knowsAbout: [
+          'Création de sites web',
+          'SEO local',
+          'Vidéos IA',
+          'Branding',
+          'Identité visuelle',
+        ],
+        sameAs: [],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'contact.fenx.agency@gmail.com',
+          contactType: 'Customer Service',
+          availableLanguage: ['fr', 'en'],
+        },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'FenX Agency',
+        description: description,
+        inLanguage: 'fr-FR',
+        publisher: { '@id': `${siteUrl}/#business` },
+      },
+      {
+        '@type': 'Service',
+        '@id': `${siteUrl}/#service-sites`,
+        serviceType: 'Création de site web',
+        provider: { '@id': `${siteUrl}/#business` },
+        name: 'Site web premium pour TPE',
+        description: "Site clé en main pour commerces : référencement Google, espace de gestion autonome, site ultra-rapide sur mobile.",
+        areaServed: 'Île-de-France',
+        offers: {
+          '@type': 'Offer',
+          price: '1990',
+          priceCurrency: 'EUR',
+          priceSpecification: {
+            '@type': 'PriceSpecification',
+            price: '1990',
+            priceCurrency: 'EUR',
+            valueAddedTaxIncluded: false,
+          },
+        },
+      },
+      {
+        '@type': 'Service',
+        '@id': `${siteUrl}/#service-videos`,
+        serviceType: 'Production vidéo IA',
+        provider: { '@id': `${siteUrl}/#business` },
+        name: 'Vidéos IA pour réseaux sociaux',
+        description: "Vidéos courtes pour TikTok, Reels et Shorts : à la pièce ou en lot. Voix sur-mesure, montage pro, prêtes à poster.",
+        areaServed: 'France',
+      },
+      {
+        '@type': 'Service',
+        '@id': `${siteUrl}/#service-branding`,
+        serviceType: 'Branding',
+        provider: { '@id': `${siteUrl}/#business` },
+        name: 'Identité visuelle complète',
+        description: "Logo, charte couleurs, kit de marque complet. Cohérence garantie sur tous les supports.",
+        areaServed: 'France',
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `${siteUrl}/#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Combien ça coûte vraiment ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Trois packs : Démarrage à partir de 1990€, Croissance 2990€, Signature sur-mesure (devis prix fixe sous 48h). Vidéo IA : 290€/pièce (pack 3 à 690€). Maintenance : 79€/mois. Jamais d'heures facturées." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Combien de temps pour livrer ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Site : 7-14 jours à compter de la réception de ton contenu (textes, photos). Vidéo IA : 5 jours. Identité de marque : 4-6 semaines. Pas de créneau immédiat ? On planifie ta date ensemble." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Qui maintient le site après ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Toi via l'espace de gestion inclus (formation 30 min en visio). Ou pack Maintenance 79€/mois : 2 modifs/mois, suivi Google trimestriel, support sous 48h." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Et si je veux modifier moi-même ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Espace de gestion sur-mesure inclus dans le 1990€. Tu modifies textes, photos, horaires, menus en 2 clics. Pas de logiciel compliqué, rien à mettre à jour vous-même." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Mon site sera-t-il rapide et bien fait ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Oui. On utilise les mêmes technologies que les grands sites pour un site ultra-rapide, sécurisé et bien référencé sur Google. Vous n'avez rien de technique à gérer." },
+          },
+          {
+            '@type': 'Question',
+            name: 'Comment se passe le paiement ?',
+            acceptedAnswer: { '@type': 'Answer', text: "50% au brief signé, 50% à la livraison. Devis prix fixe (pas d'heures facturées). Paiement par virement ou carte bancaire." },
+          },
+        ],
+      },
+    ],
   })} />
 </head>
 <body>
+  <NeuralBg />
   <a href="#main" class="skip-link">Aller au contenu</a>
 
+  {/* V4 Scroll progress bar top 2px (Web Designer agent reco) */}
+  <div class="v4-scroll-progress" aria-hidden="true"></div>
+
   <slot />
+
+  <script is:inline>
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const bar = document.querySelector('.v4-scroll-progress');
+      if (!bar) return;
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+        bar.style.setProperty('--scroll-progress', progress.toFixed(3));
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(update); ticking = true; }
+      }, { passive: true });
+      update();
+    })();
+  </script>
 
   <script is:inline>
     // Disable browser scroll restoration on reload — avoid the "jump to bottom" issue on Firefox hard refresh
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   </script>
-  <!-- Lenis + GSAP disabled (Firefox jitter). Replaced by vanilla IntersectionObserver reveals + subtle parallax. -->
-  <script src="/scripts/scroll-fx.js" defer is:inline></script>
+
+  {/* Lenis smooth scroll — V3.3 reactivated avec params Wibify-like (slow + smooth) */}
+  <script>
+    import Lenis from 'lenis';
+
+    function initLenis() {
+      // Respecte prefers-reduced-motion : pas de smooth scroll
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const lenis = new Lenis({
+        duration: 1.4,                          // slow + smooth (Wibify-like)
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ease out expo
+        smoothWheel: true,
+        wheelMultiplier: 0.85,                  // mollette légèrement ralentie
+        touchMultiplier: 2,                     // touchscreen reste réactif
+        infinite: false,
+      });
+
+      // RAF loop
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Expose pour debug / autres scripts
+      (window as any).__lenis = lenis;
+    }
+
+    initLenis();
+    document.addEventListener('astro:page-load', initLenis);
+  </script>
+
+  {/* V5 : scroll-fx migré vers GSAP + ScrollTrigger (TS module Astro-bundlé) */}
+  <script>
+    import '../scripts/scroll-fx.ts';
+  </script>
   <script src="/scripts/pixel-canvas.js" defer is:inline></script>
 </body>
 </html>

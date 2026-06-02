@@ -1,0 +1,226 @@
+---
+interface Question {
+  num: string;
+  q: string;
+  a: string;
+}
+
+const questions: Question[] = [
+  {
+    num: '01',
+    q: 'Combien ça coûte vraiment ?',
+    a: "Trois packs : Démarrage à partir de 1990€, Croissance 2990€, Signature sur-mesure (devis prix fixe sous 48h). Vidéo IA : 290€/pièce (pack 3 à 690€). Maintenance : 79€/mois. Jamais d'heures facturées.",
+  },
+  {
+    num: '02',
+    q: 'Combien de temps pour livrer ?',
+    a: "Site : 7-14 jours à compter de la réception de ton contenu (textes, photos). Vidéo IA : 5 jours. Identité de marque : 4-6 semaines. Pas de créneau immédiat ? On planifie ta date ensemble.",
+  },
+  {
+    num: '03',
+    q: 'Qui maintient le site après ?',
+    a: "Toi via l'espace de gestion inclus (formation 30 min en visio). Ou pack Maintenance 79€/mois : 2 modifs/mois, suivi Google trimestriel, support sous 48h.",
+  },
+  {
+    num: '04',
+    q: 'Et si je veux modifier moi-même ?',
+    a: "Espace de gestion sur-mesure inclus dans le 1990€. Tu modifies textes, photos, horaires, menus en 2 clics. Pas de logiciel compliqué, rien à mettre à jour vous-même.",
+  },
+  {
+    num: '05',
+    q: 'Mon site sera-t-il rapide et bien fait ?',
+    a: "Oui. On utilise les mêmes technologies que les grands sites pour un site ultra-rapide, sécurisé et bien référencé sur Google. Vous n'avez rien de technique à gérer.",
+  },
+  {
+    num: '06',
+    q: 'Comment se passe le paiement ?',
+    a: "50% au brief signé, 50% à la livraison. Devis prix fixe (pas d'heures facturées). Paiement par virement ou carte bancaire.",
+  },
+];
+---
+<section id="faq" class="v3-section v3-faq">
+  <div class="container">
+    <header class="v3-section-head">
+      <span class="v3-eyebrow" data-reveal>[07] FAQ / Vos objections, levées</span>
+      <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
+        Tout savoir <em>avant de signer</em>
+      </h2>
+      <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
+        Les 6 questions qu'on entend tout le temps. <em>Réponses directes.</em>
+      </p>
+    </header>
+
+    <div class="v3-faq-list">
+      {questions.map((item, idx) => (
+        <details
+          class="v3-faq-item"
+          data-reveal
+          style={`--reveal-delay: ${220 + idx * 80}ms`}
+          name="v3-faq"
+        >
+          <summary class="v3-faq-summary">
+            <span class="v3-faq-num">{item.num}</span>
+            <span class="v3-faq-q">{item.q}</span>
+            <span class="v3-faq-toggle" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path class="v3-faq-plus-h" d="M4 11h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <path class="v3-faq-plus-v" d="M11 4v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </summary>
+          <div class="v3-faq-answer">
+            <p>{item.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .v3-faq {
+    background: var(--cosmic-bg);
+  }
+
+  /* Titre sur 1 ligne (override scopé FAQ) */
+  .v3-faq .v3-section-head {
+    max-width: 1100px;
+  }
+  .v3-faq .v3-h2 {
+    font-size: clamp(2.2rem, 4.6vw, 4.6rem);
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) {
+    .v3-faq .v3-h2 {
+      font-size: clamp(1.9rem, 8vw, 3rem);
+      white-space: normal;
+    }
+  }
+
+  .v3-faq-list {
+    max-width: 1000px;
+    margin: 0; /* aligné à gauche comme le header (réf Wibify) */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .v3-faq-item {
+    border-top: 1px solid var(--border-subtle);
+    transition: background 200ms ease;
+  }
+
+  .v3-faq-item:last-of-type {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .v3-faq-item[open] {
+    background: rgba(167, 139, 250, 0.03);
+  }
+
+  .v3-faq-summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 44px; /* grand écart num → question (réf Wibify) */
+    padding: 26px 4px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .v3-faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .v3-faq-summary:focus-visible {
+    outline: 2px solid var(--violet-primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* Numéro : monospace, subtil, collé à gauche */
+  .v3-faq-num {
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(167, 139, 250, 0.55);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Question : poids normal (pas gras), plus grande */
+  .v3-faq-q {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-hover);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    transition: color 200ms ease;
+  }
+  .v3-faq-summary:hover .v3-faq-q {
+    color: #fff;
+  }
+
+  @media (max-width: 600px) {
+    .v3-faq-q {
+      font-size: 17px;
+    }
+    .v3-faq-summary {
+      padding: 22px 2px;
+      column-gap: 20px;
+    }
+  }
+
+  /* Toggle : "+" qui devient "−" à l'ouverture (la barre verticale se rétracte) */
+  .v3-faq-toggle {
+    color: var(--violet-soft);
+    display: inline-flex;
+    transition: color 200ms ease;
+  }
+  .v3-faq-plus-v {
+    transform-origin: 11px 11px;
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .v3-faq-item[open] .v3-faq-plus-v {
+    transform: scaleY(0);
+  }
+  .v3-faq-item[open] .v3-faq-toggle,
+  .v3-faq-summary:hover .v3-faq-toggle {
+    color: var(--violet-primary);
+  }
+
+  .v3-faq-answer {
+    padding: 0 8px 30px;
+    padding-left: 66px; /* aligné sous la question (num auto + column-gap) */
+    animation: v3-faq-slide 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (max-width: 600px) {
+    .v3-faq-answer {
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+  }
+
+  .v3-faq-answer p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--lavender-bright);
+    line-height: 1.6;
+    max-width: 660px;
+  }
+
+  @keyframes v3-faq-slide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v3-faq-toggle,
+    .v3-faq-plus-v,
+    .v3-faq-answer {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>
