@@ -5,6 +5,7 @@ interface Tier {
   num: string;
   name: string;
   price: string;
+  priceSuffix: string;
   priceUnit: string;
   pitch: string;
   features: string[];
@@ -18,7 +19,8 @@ const tiers: Tier[] = [
     num: '01',
     name: 'Pack Démarrage',
     price: '1 990',
-    priceUnit: '€ HT · paiement 50/50',
+    priceSuffix: '€ HT',
+    priceUnit: 'paiement 50/50',
     pitch: "Tu lances ton activité ou ton site est obsolète. On livre l'essentiel propre.",
     features: [
       'Site 5 pages sur-mesure',
@@ -35,7 +37,8 @@ const tiers: Tier[] = [
     num: '02',
     name: 'Pack Croissance',
     price: '2 990',
-    priceUnit: '€ HT · paiement 50/50',
+    priceSuffix: '€ HT',
+    priceUnit: 'paiement 50/50',
     pitch: "Tu veux booster ton acquisition. Site + branding + premières vidéos IA.",
     features: [
       'Tout le Pack Démarrage',
@@ -53,6 +56,7 @@ const tiers: Tier[] = [
     num: '03',
     name: 'Pack Signature',
     price: 'Sur mesure',
+    priceSuffix: '',
     priceUnit: 'devis prix fixe sous 48h',
     pitch: "Tu as un projet ambitieux. Réservé : restaurants premium, marques en ligne, cabinets et professions libérales.",
     features: [
@@ -98,7 +102,12 @@ const tiers: Tier[] = [
           </header>
 
           <div class="v3-pricing-price-row">
-            <span class="v3-pricing-price">{tier.price}</span>
+            <div class="v3-pricing-price-main">
+              <span class="v3-pricing-price">{tier.price}</span>
+              {tier.priceSuffix && (
+                <span class="v3-pricing-suffix">{tier.priceSuffix}</span>
+              )}
+            </div>
             <span class="v3-pricing-unit">{tier.priceUnit}</span>
           </div>
 
@@ -264,6 +273,14 @@ const tiers: Tier[] = [
     border-bottom: 1px solid var(--border-subtle);
   }
 
+  /* Prix + suffixe "€ HT" sur la même ligne (baseline alignée) */
+  .v3-pricing-price-main {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
   .v3-pricing-price {
     font-family: 'Switzer', 'Inter', sans-serif;
     font-size: 2.75rem;
@@ -273,6 +290,19 @@ const tiers: Tier[] = [
     color: var(--text-hover);
   }
   .v3-pricing-card.is-featured .v3-pricing-price {
+    color: var(--ember-400);
+  }
+
+  /* Suffixe "€ HT" : à côté du prix, MÊME couleur que le prix */
+  .v3-pricing-suffix {
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text-hover);
+  }
+  .v3-pricing-card.is-featured .v3-pricing-suffix {
     color: var(--ember-400);
   }
 
