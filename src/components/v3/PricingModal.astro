@@ -18,20 +18,20 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       <input type="hidden" name="pack" id="pm-pack" value="" />
       <div class="pm-grid">
         <label class="pm-field">Prénom
-          <input name="prenom" type="text" autocomplete="given-name" required />
+          <input name="prenom" type="text" autocomplete="given-name" placeholder="Marie" required />
         </label>
         <label class="pm-field">Nom
-          <input name="nom_famille" type="text" autocomplete="family-name" required />
+          <input name="nom_famille" type="text" autocomplete="family-name" placeholder="Durand" required />
         </label>
       </div>
       <label class="pm-field">Email
-        <input name="email" type="email" autocomplete="email" required />
+        <input name="email" type="email" autocomplete="email" placeholder="marie@exemple.fr" required />
       </label>
       <label class="pm-field">Téléphone
-        <input name="telephone" type="tel" autocomplete="tel" required />
+        <input name="telephone" type="tel" autocomplete="tel" placeholder="06 12 34 56 78" required />
       </label>
       <label class="pm-field">Ton projet en deux mots (optionnel)
-        <textarea name="message" rows="3"></textarea>
+        <textarea name="message" rows="3" placeholder="Ex. un site vitrine pour mon salon à Sannois"></textarea>
       </label>
       <button class="btn-pill pm-submit" type="submit">
         <span class="text">Envoyer ma demande</span>
