@@ -43,11 +43,38 @@ mm.add(
     }
 
     // ============ 2. Wibify reveals — batch + toggle in/out + back.out ============
-    // Initial state : tous les [data-reveal] partent invisibles + offset bas
-    const revealEls = gsap.utils.toArray<HTMLElement>('[data-reveal]');
-    gsap.set(revealEls, { autoAlpha: 0, y: 40 });
+    // Mobile : les éléments [data-reveal-mobile="scrub"] (Process rows) utilisent un
+    // reveal scroll-linked (scrub) par élément = fluide, au lieu du batch toggle qui
+    // les faisait apparaître "d'un coup". Desktop : tout passe par le batch.
+    const allReveal = gsap.utils.toArray<HTMLElement>('[data-reveal]');
+    const scrubReveal = isMobile
+      ? allReveal.filter((el) => el.dataset.revealMobile === 'scrub')
+      : [];
+    const batchReveal = allReveal.filter((el) => !scrubReveal.includes(el));
 
-    ScrollTrigger.batch('[data-reveal]', {
+    // Initial state : les [data-reveal] batch partent invisibles + offset bas
+    gsap.set(batchReveal, { autoAlpha: 0, y: 40 });
+
+    // Mobile : reveal scrub par card (opacité couplée au scroll = fluide, tous navigateurs)
+    scrubReveal.forEach((el) => {
+      gsap.fromTo(
+        el,
+        { autoAlpha: 0, y: 48 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 92%',
+            end: 'top 58%',
+            scrub: true,
+          },
+        }
+      );
+    });
+
+    ScrollTrigger.batch(batchReveal, {
       start: 'top 88%',
       end: 'bottom 12%',
       onEnter: (els) =>
