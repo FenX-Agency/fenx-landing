@@ -587,9 +587,8 @@ const tiers: Tier[] = [
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 28px;
+    column-count: 2;
+    column-gap: 28px;
   }
   .v3-sig-feature {
     display: flex;
@@ -598,7 +597,10 @@ const tiers: Tier[] = [
     font-size: 0.95rem;
     color: var(--lavender-bright, #c9c2e8);
     line-height: 1.4;
+    break-inside: avoid;
+    margin-bottom: 13px;
   }
+  .v3-sig-feature:last-child { margin-bottom: 0; }
   .v3-sig-feature svg {
     flex-shrink: 0;
     margin-top: 3px;
@@ -612,7 +614,6 @@ const tiers: Tier[] = [
       gap: 28px;
     }
     .v3-sig-left { flex-basis: auto; max-width: none; }
-    .v3-sig-features { grid-template-columns: 1fr; }
-    .v3-sig-cta { width: 100%; justify-content: space-between; }
+    .v3-sig-features { column-count: 1; }
   }
 </style>
