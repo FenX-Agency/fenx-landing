@@ -1,11 +1,196 @@
 ---
+// Header — nav desktop + drawer mobile premium (accessible).
+// Liens centralisés ici pour rester en sync desktop / drawer.
+const navLinks = [
+  { href: '#selected-work', label: 'Réalisations' },
+  { href: '#services', label: 'Services' },
+  { href: '#pricing', label: 'Offres' },
+  { href: '#process', label: 'Méthode' },
+  { href: '#faq', label: 'Questions' },
+];
 ---
-<header class="site-header container">
+<header class="site-header container" data-site-header>
   <a href="#hero" class="logo">Fen<span>X</span></a>
+
+  {/* Nav desktop */}
   <nav class="site-nav" aria-label="Navigation principale">
-    <a href="#pricing">Offres</a>
-    <a href="#process">Méthode</a>
+    {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
     <a href="https://demo-wok.fenx-agency.com" target="_blank" rel="noopener">Démo</a>
     <a href="#contact" class="nav-cta">Contact</a>
   </nav>
+
+  {/* Bouton hamburger — visible ≤768px uniquement */}
+  <button
+    type="button"
+    class="nav-toggle"
+    data-nav-toggle
+    aria-label="Ouvrir le menu"
+    aria-expanded="false"
+    aria-controls="mobile-drawer"
+  >
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+  </button>
 </header>
+
+{/* Drawer mobile + backdrop */}
+<div class="mobile-drawer" id="mobile-drawer" data-mobile-drawer aria-hidden="true">
+  <div class="mobile-drawer-backdrop" data-drawer-backdrop></div>
+  <nav class="mobile-drawer-panel" role="dialog" aria-modal="true" aria-label="Menu" data-drawer-panel>
+    <div class="mobile-drawer-head">
+      <a href="#hero" class="logo mobile-drawer-logo" data-drawer-link>Fen<span>X</span></a>
+      <button
+        type="button"
+        class="mobile-drawer-close"
+        data-drawer-close
+        aria-label="Fermer le menu"
+      >
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M5 5l12 12M17 5L5 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <ul class="mobile-drawer-list">
+      {navLinks.map((l, i) => (
+        <li style={`--drawer-i: ${i}`}>
+          <a href={l.href} class="mobile-drawer-link" data-drawer-link>
+            <span class="mobile-drawer-link-num">{String(i + 1).padStart(2, '0')}</span>
+            <span>{l.label}</span>
+            <span class="mobile-drawer-link-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+      <li style={`--drawer-i: ${navLinks.length}`}>
+        <a
+          href="https://demo-wok.fenx-agency.com"
+          target="_blank"
+          rel="noopener"
+          class="mobile-drawer-link"
+          data-drawer-link
+        >
+          <span class="mobile-drawer-link-num">{String(navLinks.length + 1).padStart(2, '0')}</span>
+          <span>Démo</span>
+          <span class="mobile-drawer-link-arrow" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    </ul>
+
+    <a href="#contact" class="mobile-drawer-cta" data-drawer-link>
+      Contact
+      <span aria-hidden="true">→</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+  function initMobileDrawer() {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+    const drawer = document.querySelector<HTMLElement>('[data-mobile-drawer]');
+    if (!toggle || !drawer) return;
+    if ((drawer as any).__drawerInit) return;
+    (drawer as any).__drawerInit = true;
+
+    const panel = drawer.querySelector<HTMLElement>('[data-drawer-panel]');
+    const backdrop = drawer.querySelector<HTMLElement>('[data-drawer-backdrop]');
+    const closeBtn = drawer.querySelector<HTMLButtonElement>('[data-drawer-close]');
+    const links = Array.from(drawer.querySelectorAll<HTMLElement>('[data-drawer-link]'));
+
+    let lastFocused: HTMLElement | null = null;
+
+    const getFocusable = (): HTMLElement[] =>
+      Array.from(
+        drawer.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled])'
+        )
+      ).filter((el) => el.offsetParent !== null || el === closeBtn);
+
+    function open() {
+      lastFocused = document.activeElement as HTMLElement;
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      toggle!.setAttribute('aria-expanded', 'true');
+      toggle!.setAttribute('aria-label', 'Fermer le menu');
+      document.body.classList.add('drawer-locked');
+      // focus le 1er élément focusable après transition
+      window.setTimeout(() => {
+        const f = getFocusable();
+        (f[0] || closeBtn)?.focus();
+      }, 60);
+    }
+
+    function close() {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      toggle!.setAttribute('aria-expanded', 'false');
+      toggle!.setAttribute('aria-label', 'Ouvrir le menu');
+      document.body.classList.remove('drawer-locked');
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+
+    function isOpen() {
+      return drawer.classList.contains('is-open');
+    }
+
+    toggle.addEventListener('click', () => (isOpen() ? close() : open()));
+    closeBtn?.addEventListener('click', close);
+    backdrop?.addEventListener('click', close);
+    links.forEach((l) => l.addEventListener('click', close));
+
+    // Escape + focus trap
+    drawer.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const f = getFocusable();
+        if (f.length === 0) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Si on repasse en desktop avec le drawer ouvert → on ferme proprement
+    const mq = window.matchMedia('(min-width: 769px)');
+    const onChange = () => { if (mq.matches && isOpen()) close(); };
+    if (typeof mq.addEventListener === 'function') mq.addEventListener('change', onChange);
+    else if (typeof mq.addListener === 'function') mq.addListener(onChange);
+
+    document.addEventListener('astro:before-swap', () => {
+      document.body.classList.remove('drawer-locked');
+      (drawer as any).__drawerInit = false;
+    });
+  }
+
+  initMobileDrawer();
+  document.addEventListener('astro:page-load', initMobileDrawer);
+
+  // Header condensé une fois scrollé (ombre + fond plus opaque). Subtil, premium.
+  function initHeaderScroll() {
+    const header = document.querySelector<HTMLElement>('[data-site-header]');
+    if (!header) return;
+    if ((header as any).__scrollInit) return;
+    (header as any).__scrollInit = true;
+    let ticking = false;
+    const update = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  }
+  initHeaderScroll();
+  document.addEventListener('astro:page-load', initHeaderScroll);
+</script>

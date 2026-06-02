@@ -583,7 +583,15 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     color: var(--text-hover);
     text-decoration: none;
     line-height: 1.3;
+    word-break: break-word;
     transition: color 200ms ease;
+  }
+
+  /* Évite le débordement de l'email (long, insécable) sur très petits écrans */
+  @media (max-width: 400px) {
+    .v3-aside-link {
+      font-size: 15px;
+    }
   }
 
   .v3-aside-link:hover {

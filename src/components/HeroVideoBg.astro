@@ -110,25 +110,35 @@ const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : un
     const lenis = (window as any).__lenis;
     if (lenis && typeof lenis.on === 'function') lenis.on('scroll', ScrollTrigger.update);
 
-    // ===== Hero pinné + ZOOM d'approche au scroll (GSAP, interpolé → aucun seek, fluide) =====
-    // Le bloc texte reste visible sur le hero, sans effet.
-    const tween = gsap.fromTo(
-      video,
-      { scale: 1.06 },
-      {
-        scale: 1.5,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: '+=110%',
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-        },
-      }
-    );
+    // ===== Hero pinné + ZOOM d'approche au scroll — DESKTOP ONLY =====
+    // matchMedia : sur mobile/tactile (≤768px) on NE pin PAS (sinon le 1er écran de
+    // scroll ne fait que zoomer → sensation "bloqué"). La vidéo reste un bg autoplay,
+    // la page scrolle normalement. Sur desktop : pin + zoom d'approche.
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 769px)', () => {
+      const tween = gsap.fromTo(
+        video,
+        { scale: 1.06 },
+        {
+          scale: 1.5,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: '+=110%',
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+      return () => { tween.kill(); };
+    });
+    // Sur mobile, la vidéo garde un léger zoom statique (pas de scale 1 brut).
+    mm.add('(max-width: 768px)', () => {
+      gsap.set(video, { scale: 1.06 });
+    });
 
     // ===== Boucle avec fondu noir propre (JS) =====
     const FADE = 0.6;
@@ -150,8 +160,7 @@ const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : un
 
     const cleanup = () => {
       cancelAnimationFrame(raf);
-      if (tween.scrollTrigger) tween.scrollTrigger.kill();
-      tween.kill();
+      mm.revert();
       (hero as any).__heroVidInit = false;
       document.removeEventListener('astro:before-swap', cleanup);
     };
