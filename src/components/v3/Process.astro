@@ -127,41 +127,8 @@ const phases: Phase[] = [
     transform-origin: center top;
   }
 
-  /* V3.8 Fade out COMPLET quand row recouverte (Anthony : "effet de disparition", pas d'ombre persistante) */
-  /* Scroll-driven : APPARITION en entrant + MAINTIEN + DISPARITION quand recouverte
-     (pur CSS via animation-timeline, pas de data-reveal qui "poppait" tout d'un coup) */
-  @supports (animation-timeline: view()) {
-    .v3-process-row {
-      animation: v3-process-row-life linear both;
-      animation-timeline: view();
-      animation-range: entry 12% exit 48%;
-    }
-  }
-  @keyframes v3-process-row-life {
-    0% { /* apparition (la card entre par le bas) */
-      opacity: 0;
-      transform: translateY(46px) scale(0.97);
-      filter: brightness(1) blur(0);
-    }
-    14% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-    72% { /* maintien net pendant qu'elle est "active" */
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: brightness(1) blur(0);
-      box-shadow:
-        0 -1px 0 rgba(167, 139, 250, 0.06),
-        0 24px 60px -16px rgba(0, 0, 0, 0.85);
-    }
-    100% { /* disparition quand recouverte par la suivante */
-      opacity: 0;
-      transform: scale(0.96) translateY(-12px);
-      filter: brightness(0.4) blur(2px);
-      box-shadow: none;
-    }
-  }
+  /* Apparition en entrant + disparition quand recouverte : gérées en JS (GSAP ScrollTrigger),
+     fiable tous navigateurs (l'ancien animation-timeline n'était pas supporté partout). */
 
   /* ::before garantit 100% opacite (couche cosmic-card en arriere-plan) */
   .v3-process-row::before {
@@ -314,3 +281,75 @@ const phases: Phase[] = [
     }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initProcessStack() {
+    const section = document.getElementById('process');
+    if (!section) return;
+    if ((section as any).__procInit) return;
+    (section as any).__procInit = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const lenis = (window as any).__lenis;
+    if (lenis && typeof lenis.on === 'function') lenis.on('scroll', ScrollTrigger.update);
+
+    const mm = gsap.matchMedia();
+    // Effet d'empilement (apparition + disparition) — desktop uniquement
+    // (sur mobile le sticky est désactivé, les cards se suivent normalement).
+    mm.add('(min-width: 901px)', () => {
+      const rows = gsap.utils.toArray<HTMLElement>('.v3-process-row');
+      rows.forEach((row, i) => {
+        // APPARITION : la card monte + fade in en entrant
+        gsap.from(row, {
+          opacity: 0,
+          y: 56,
+          scale: 0.97,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 90%',
+            end: 'top 58%',
+            scrub: true,
+          },
+        });
+        // DISPARITION : quand la card SUIVANTE monte la recouvrir, celle-ci s'estompe
+        const next = rows[i + 1];
+        if (next) {
+          gsap.to(row, {
+            opacity: 0,
+            scale: 0.95,
+            y: -16,
+            filter: 'blur(3px) brightness(0.45)',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: next,
+              start: 'top 32%',
+              end: 'top 4%',
+              scrub: true,
+            },
+          });
+        }
+      });
+      // recalcule après pin du hero / chargements
+      ScrollTrigger.refresh();
+      return () => {
+        ScrollTrigger.getAll().forEach((t) => {
+          if (t.trigger && (t.trigger as HTMLElement).classList?.contains('v3-process-row')) t.kill();
+        });
+        gsap.set(rows, { clearProps: 'opacity,transform,filter' });
+      };
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+      mm.revert();
+      (section as any).__procInit = false;
+    }, { once: true });
+  }
+
+  initProcessStack();
+  document.addEventListener('astro:page-load', initProcessStack);
+</script>
