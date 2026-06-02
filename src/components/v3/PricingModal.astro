@@ -36,7 +36,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       <button class="btn-pill pm-submit" type="submit">
         <span class="text">Envoyer ma demande</span>
       </button>
-      <p class="pm-foot">Réponse sous 24h. Zéro spam, zéro engagement.</p>
+      <p class="pm-foot" id="pm-foot">Réponse sous 24h. Zéro spam, zéro engagement.</p>
       <p class="pm-status" id="pm-status" role="status" aria-live="polite"></p>
     </form>
   </div>
@@ -186,29 +186,33 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
 </style>
 
 <script>
-  const PACKS: Record<string, { eyebrow: string; title: string; sub: string }> = {
+  const PACKS: Record<string, { eyebrow: string; title: string; sub: string; delay: string }> = {
     'Vitrine': {
       eyebrow: 'Formule Vitrine · 990€',
       title: 'Parlons de ta Vitrine',
       sub: 'Ton site vitrine + référencement local, livré vite. On cadre tout en 15 minutes, sans engagement.',
+      delay: '24h',
     },
     'Pack Démarrage': {
       eyebrow: 'Pack Démarrage · 1990€',
       title: 'Parlons de ton Pack Démarrage',
       sub: 'Site 5 pages sur-mesure + espace de gestion autonome. Dis-nous où tu en es.',
+      delay: '24h',
     },
     'Pack Croissance': {
       eyebrow: 'Pack Croissance · 2990€',
       title: 'Parlons de ton Pack Croissance',
       sub: 'Site + branding + vidéos IA. Voyons ensemble ton plan d’acquisition.',
+      delay: '48h',
     },
     'Pack Signature': {
       eyebrow: 'Pack Signature · sur-mesure',
       title: 'Parlons de ton projet Signature',
-      sub: 'Sur-mesure, sans limite. Décris-nous ton ambition, on te répond sous 24h.',
+      sub: 'Sur-mesure, sans limite. Décris-nous ton ambition, on te répond avec un devis sous 48h.',
+      delay: '48h',
     },
   };
-  const DEFAULT = { eyebrow: 'Ton projet', title: 'Parlons de ton projet', sub: 'Réponse sous 24h, sans engagement.' };
+  const DEFAULT = { eyebrow: 'Ton projet', title: 'Parlons de ton projet', sub: 'Sans engagement.', delay: '24h' };
 
   const overlay = document.getElementById('pricing-modal');
   if (overlay) {
@@ -218,6 +222,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     const elTitle = document.getElementById('pm-title')!;
     const elSub = document.getElementById('pm-sub')!;
     const elPack = document.getElementById('pm-pack') as HTMLInputElement;
+    const elFoot = document.getElementById('pm-foot')!;
     const elStatus = document.getElementById('pm-status')!;
     let lastFocused: HTMLElement | null = null;
 
@@ -226,6 +231,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       elEyebrow.textContent = cfg.eyebrow;
       elTitle.textContent = cfg.title;
       elSub.textContent = cfg.sub;
+      elFoot.textContent = 'Réponse sous ' + cfg.delay + '. Zéro spam, zéro engagement.';
       elPack.value = pack || '';
       elStatus.textContent = '';
       elStatus.className = 'pm-status';
