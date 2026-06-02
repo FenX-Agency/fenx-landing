@@ -1,6 +1,5 @@
 ---
-// Pricing V4 — 3 tiers (Branding + Strategy agents)
-// Pack Démarrage 1990€ / Pack Croissance 2990€ / Pack Signature sur-mesure
+// Pricing V4 : 4 tiers (Vitrine 990 · Démarrage 1990 · Croissance 2990 · Signature)
 interface Tier {
   num: string;
   name: string;
@@ -11,12 +10,32 @@ interface Tier {
   features: string[];
   cta: string;
   featured: boolean;
+  variant?: 'blue';
   badge?: string;
 }
 
 const tiers: Tier[] = [
   {
     num: '01',
+    name: 'Vitrine',
+    price: '990',
+    priceSuffix: '€ HT',
+    priceUnit: 'paiement 50/50',
+    pitch: "Tu démarres et tu veux exister sur Google sans te ruiner. L'essentiel, propre et rapide.",
+    features: [
+      'Site vitrine 1 page',
+      'SEO local Google Business',
+      'Optimisé mobile, ultra-rapide',
+      'Mise en ligne et hébergement 12 mois inclus',
+      'Modifications gérées par FenX',
+    ],
+    cta: 'Commencer petit',
+    featured: false,
+    variant: 'blue',
+    badge: 'Le plus accessible',
+  },
+  {
+    num: '02',
     name: 'Pack Démarrage',
     price: '1 990',
     priceSuffix: '€ HT',
@@ -34,7 +53,7 @@ const tiers: Tier[] = [
     featured: false,
   },
   {
-    num: '02',
+    num: '03',
     name: 'Pack Croissance',
     price: '2 990',
     priceSuffix: '€ HT',
@@ -53,7 +72,7 @@ const tiers: Tier[] = [
     badge: 'Le plus choisi',
   },
   {
-    num: '03',
+    num: '04',
     name: 'Pack Signature',
     price: 'Sur mesure',
     priceSuffix: '',
@@ -87,16 +106,16 @@ const tiers: Tier[] = [
     <div class="v3-pricing-grid">
       {tiers.map((tier, idx) => (
         <article
-          class:list={['v3-pricing-card', tier.featured && 'is-featured']}
+          class:list={['v3-pricing-card', tier.featured && 'is-featured', tier.variant === 'blue' && 'is-blue']}
           data-reveal
-          style={`--reveal-delay: ${220 + idx * 120}ms`}
+          style={`--reveal-delay: ${220 + idx * 110}ms`}
         >
           {tier.badge && (
             <span class="v3-pricing-badge" aria-hidden="true">{tier.badge}</span>
           )}
 
           <header class="v3-pricing-card-head">
-            <span class="v3-pricing-num">{tier.num} / 03</span>
+            <span class="v3-pricing-num">{tier.num} / 04</span>
             <h3 class="v3-pricing-name">{tier.name}</h3>
             <p class="v3-pricing-pitch">{tier.pitch}</p>
           </header>
@@ -124,7 +143,7 @@ const tiers: Tier[] = [
 
           <a
             href="#contact"
-            class:list={['v3-pricing-cta', tier.featured && 'is-featured']}
+            class:list={['v3-pricing-cta', tier.featured && 'is-featured', tier.variant === 'blue' && 'is-blue']}
           >
             {tier.cta}
             <span class="v3-arrow" aria-hidden="true">→</span>
@@ -165,17 +184,23 @@ const tiers: Tier[] = [
 
   .v3-pricing-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
     align-items: stretch;
   }
 
-  @media (max-width: 1100px) {
+  /* 4 cards sur une ligne en desktop ; 2x2 en tablette ; 1 col en mobile */
+  @media (max-width: 1200px) {
+    .v3-pricing-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 760px;
+      margin: 0 auto;
+    }
+  }
+  @media (max-width: 640px) {
     .v3-pricing-grid {
       grid-template-columns: 1fr;
-      gap: 14px;
-      max-width: 560px;
-      margin: 0 auto;
+      max-width: 420px;
     }
   }
 
@@ -184,11 +209,11 @@ const tiers: Tier[] = [
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 22px;
     background: var(--cosmic-card);
     border: 1px solid var(--border-subtle);
     border-radius: 16px;
-    padding: 48px 36px 36px;
+    padding: 40px 24px 28px;
     transition: border-color 400ms ease, box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -199,7 +224,7 @@ const tiers: Tier[] = [
     transform: translateY(-4px);
   }
 
-  /* Featured tier (Croissance) — ember accent (Branding agent dual palette) */
+  /* Featured tier (Croissance) : ember accent (Branding agent dual palette) */
   .v3-pricing-card.is-featured {
     background: linear-gradient(180deg, rgba(255, 107, 53, 0.04) 0%, var(--cosmic-card) 60%);
     border-color: rgba(255, 107, 53, 0.32);
@@ -212,7 +237,38 @@ const tiers: Tier[] = [
                 0 0 0 1px rgba(255, 107, 53, 0.40) inset;
   }
 
-  /* Badge "Le plus choisi" — ember pill */
+  /* Tier Vitrine : accent bleu FenX (#3B82F6) */
+  .v3-pricing-card.is-blue {
+    background: linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, var(--cosmic-card) 60%);
+    border-color: rgba(59, 130, 246, 0.35);
+    box-shadow: 0 0 32px rgba(59, 130, 246, 0.10),
+                0 0 0 1px rgba(59, 130, 246, 0.18) inset;
+  }
+  .v3-pricing-card.is-blue:hover {
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 24px 64px -12px rgba(59, 130, 246, 0.30),
+                0 0 0 1px rgba(59, 130, 246, 0.40) inset;
+  }
+  .v3-pricing-card.is-blue .v3-pricing-price,
+  .v3-pricing-card.is-blue .v3-pricing-suffix { color: #60A5FA; }
+  .v3-pricing-card.is-blue .v3-pricing-check { color: #60A5FA; }
+  .v3-pricing-card.is-blue .v3-pricing-badge {
+    background: linear-gradient(135deg, #2563EB, #3B82F6);
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.36);
+  }
+  .v3-pricing-cta.is-blue {
+    background: linear-gradient(135deg, #2563EB, #3B82F6);
+    border-color: #2563EB;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.32);
+  }
+  .v3-pricing-cta.is-blue:hover {
+    background: linear-gradient(135deg, #3B82F6, #60A5FA);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.46);
+    transform: translateY(-2px);
+  }
+
+  /* Badge pill (ember pour Croissance, bleu pour Vitrine) */
   .v3-pricing-badge {
     position: absolute;
     top: -10px;
@@ -248,7 +304,7 @@ const tiers: Tier[] = [
 
   .v3-pricing-name {
     font-family: 'Switzer', 'Inter', sans-serif;
-    font-size: 1.625rem;
+    font-size: 1.4rem;
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.05;
@@ -283,7 +339,7 @@ const tiers: Tier[] = [
 
   .v3-pricing-price {
     font-family: 'Switzer', 'Inter', sans-serif;
-    font-size: 2.75rem;
+    font-size: 2.3rem;
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1;
