@@ -73,7 +73,7 @@ const tiers: Tier[] = [
     <header class="v3-section-head">
       <span class="v3-eyebrow" data-reveal>[04] Pricing / Trois packs, prix fixes</span>
       <h2 class="v3-h2" data-reveal style="--reveal-delay: 80ms">
-        Tu sais ce que tu paies. <em>Avant</em> de signer.
+        Tu sais ce que tu paies.<br /><em>Avant</em> de signer.
       </h2>
       <p class="v3-section-sub" data-reveal style="--reveal-delay: 160ms">
         Pas d'heures facturées. Pas de surprise. <em>Devis prix fixe</em>, paiement 50% au brief, 50% à la livraison.
@@ -131,6 +131,28 @@ const tiers: Tier[] = [
   .v3-pricing {
     background: var(--cosmic-bg);
     position: relative;
+  }
+
+  /* Titre forcé sur 2 lignes (br) + sous-titre sur 1 ligne (override scopé Pricing) */
+  .v3-pricing .v3-section-head {
+    max-width: 1200px;
+  }
+  .v3-pricing .v3-h2 {
+    font-size: clamp(2.4rem, 5vw, 5rem);
+    white-space: nowrap;
+  }
+  .v3-pricing .v3-section-sub {
+    max-width: none;
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) {
+    .v3-pricing .v3-h2 {
+      font-size: clamp(1.9rem, 8vw, 3rem);
+      white-space: normal;
+    }
+    .v3-pricing .v3-section-sub {
+      white-space: normal;
+    }
   }
 
   .v3-pricing-grid {

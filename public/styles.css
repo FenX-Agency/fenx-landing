@@ -35,7 +35,8 @@
   --border-subtle: rgba(244, 241, 255, 0.10);
 
   /* === Aliases backwards compat (NE PAS retirer — refs partout dans le code) === */
-  --cosmic-bg: var(--ink-800);
+  /* translucide : laisse voir le NeuralBg (canvas fixe) derrière les sections */
+  --cosmic-bg: rgba(12, 12, 18, 0.52);
   --cosmic-surface: var(--ink-600);
   --cosmic-card: var(--ink-700);
   --charcoal-bg: var(--ink-800);
@@ -102,10 +103,10 @@
 /* Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 /* Native smooth scroll — kept simple, Lenis disabled (was jittery on Firefox) */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; background: #07070d; }
 body {
   font-family: 'Switzer', 'Inter', system-ui, sans-serif;
-  background: var(--ink-800);
+  background: transparent; /* laisse voir le NeuralBg (canvas fixe z-index:-1) */
   color: var(--text-primary);
   line-height: 1.5;
   overflow-x: hidden;

@@ -1,4 +1,6 @@
 ---
+import NeuralBg from '../components/NeuralBg.astro';
+
 interface Props {
   title?: string;
   description?: string;
@@ -194,6 +196,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   })} />
 </head>
 <body>
+  <NeuralBg />
   <a href="#main" class="skip-link">Aller au contenu</a>
 
   {/* V4 Scroll progress bar top 2px (Web Designer agent reco) */}
