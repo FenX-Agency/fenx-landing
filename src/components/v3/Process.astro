@@ -130,11 +130,15 @@ const phases: Phase[] = [
 
   /* Fade out COMPLET quand row recouverte (Anthony : "effet de disparition") — scroll-driven CSS
      (animation-timeline suit correctement la position d'une row STICKY, contrairement à GSAP). */
-  @supports (animation-timeline: view()) {
-    .v3-process-row {
-      animation: v3-process-row-fade linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 45%;
+  /* DESKTOP UNIQUEMENT : l'effet d'empilement/disparition (les rows sont sticky en desktop).
+     Sur mobile les rows sont en flux normal → pas de fade-out scroll (apparition propre via data-reveal). */
+  @media (min-width: 901px) {
+    @supports (animation-timeline: view()) {
+      .v3-process-row {
+        animation: v3-process-row-fade linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 45%;
+      }
     }
   }
   @keyframes v3-process-row-fade {

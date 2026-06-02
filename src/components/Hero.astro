@@ -397,10 +397,13 @@ import HeroVideoBg from './HeroVideoBg.astro';
       padding: 110px 24px 80px;
     }
     .hero-v3__gradient {
+      /* mobile : assombri au centre (lisibilité texte) mais BAS transparent
+         → laisse le masque du hero révéler le NeuralBg = fusion avec la section 2 */
       background: linear-gradient(180deg,
         rgba(22, 22, 28, 0.0) 0%,
-        rgba(22, 22, 28, 0.4) 60%,
-        rgba(22, 22, 28, 0.85) 100%
+        rgba(22, 22, 28, 0.45) 52%,
+        rgba(22, 22, 28, 0.5) 74%,
+        rgba(22, 22, 28, 0.0) 100%
       );
     }
     .hero-v3__h1 {
