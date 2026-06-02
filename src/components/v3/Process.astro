@@ -226,6 +226,11 @@ const phases: Phase[] = [
     filter: brightness(0.95);
   }
 
+  /* Première card (Méthode) : l'image remplit tout le cadre, pas de bande en bas */
+  .v3-process-row:first-of-type .v3-process-row-img {
+    object-fit: cover;
+  }
+
   /* V3.7 : retire hover image scale (Anthony : pas de hover Process) */
 
   @media (max-width: 900px) {
