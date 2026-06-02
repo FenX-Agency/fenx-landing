@@ -52,16 +52,15 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
-  <!-- Fonts · V3.6 : Switzer (Fontshare distinctive) replaces Inter for body/H1/H2 (skill frontend-design : eviter Inter = AI slop) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- Fonts : chargement ASYNCHRONE (non bloquant) + font-display swap. Preconnect limite aux origines des fichiers de police. -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-  <!-- Switzer (Fontshare distinctive font, replaces Inter) -->
-  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,700,800,900&display=swap" rel="stylesheet">
-  <!-- Instrument Serif (italics emphasis) + JetBrains Mono (eyebrow/tags monospace) -->
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="preload" href="/styles.css" as="style">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,700,800,900&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,700,800,900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap">
+  </noscript>
   <link rel="stylesheet" href="/styles.css">
 
   <!-- Structured data (JSON-LD) @graph : LocalBusiness + FAQPage + Services (SEO agent) -->
