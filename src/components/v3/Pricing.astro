@@ -1,4 +1,5 @@
 ---
+import Button from '../Button.astro';
 // Pricing V4 : 4 tiers (Vitrine 990 · Démarrage 1990 · Croissance 2990 · Signature)
 interface Tier {
   num: string;
@@ -162,10 +163,9 @@ const tiers: Tier[] = [
           <span class="v3-sig-price-val">{tiers[3].price}</span>
           <span class="v3-sig-price-unit">{tiers[3].priceUnit}</span>
         </div>
-        <a href="#contact" class="v3-pricing-cta v3-sig-cta">
-          {tiers[3].cta}
-          <span class="v3-arrow" aria-hidden="true">→</span>
-        </a>
+        <div class="v3-sig-cta-wrap">
+          <Button href="#contact" text={tiers[3].cta} />
+        </div>
       </div>
       <div class="v3-sig-right">
         <ul class="v3-sig-features">
@@ -481,6 +481,11 @@ const tiers: Tier[] = [
       radial-gradient(120% 160% at 100% 100%, rgba(255, 107, 53, 0.10), transparent 55%),
       linear-gradient(180deg, #15151d 0%, #0e0e14 100%);
     overflow: hidden;
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease;
+  }
+  .v3-pricing-signature:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 72px -22px rgba(0, 0, 0, 0.65);
   }
   .v3-pricing-signature::before {
     content: '';
@@ -502,6 +507,13 @@ const tiers: Tier[] = [
   .v3-sig-left {
     flex: 0 0 38%;
     max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .v3-sig-cta-wrap {
+    margin-top: 6px;
   }
   .v3-sig-eyebrow {
     font-family: 'JetBrains Mono', 'Geist Mono', monospace;
@@ -518,19 +530,19 @@ const tiers: Tier[] = [
     line-height: 1.05;
     letter-spacing: -0.01em;
     color: var(--text-hover, #ffffff);
-    margin: 10px 0 0;
+    margin: 0;
   }
   .v3-sig-pitch {
     font-size: 0.95rem;
     color: var(--lavender-bright, #c9c2e8);
     line-height: 1.55;
-    margin: 12px 0 0;
+    margin: 0;
   }
   .v3-sig-price {
     display: flex;
     align-items: baseline;
     gap: 10px;
-    margin: 22px 0 0;
+    margin: 4px 0 0;
     flex-wrap: wrap;
   }
   .v3-sig-price-val {
