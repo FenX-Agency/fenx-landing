@@ -5,9 +5,10 @@ interface Props {
   small?: boolean;
   target?: string;
   rel?: string;
+  [key: string]: any;
 }
 
-const { href, text, small = false, target, rel } = Astro.props;
+const { href, text, small = false, target, rel, ...rest } = Astro.props;
 const classes = small ? 'btn-pill btn-pill-small' : 'btn-pill';
 ---
 <a
@@ -15,6 +16,7 @@ const classes = small ? 'btn-pill btn-pill-small' : 'btn-pill';
   class={classes}
   {...(target && { target })}
   {...(rel && { rel })}
+  {...rest}
 >
   <span class="pixel-canvas-wrapper"><canvas></canvas></span>
   <span class="text">{text}</span>

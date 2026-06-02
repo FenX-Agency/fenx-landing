@@ -1,5 +1,6 @@
 ---
 import Button from '../Button.astro';
+import PricingModal from './PricingModal.astro';
 // Pricing V4 : 4 tiers (Vitrine 990 · Démarrage 1990 · Croissance 2990 · Signature)
 interface Tier {
   num: string;
@@ -145,6 +146,8 @@ const tiers: Tier[] = [
           <a
             href="#contact"
             class:list={['v3-pricing-cta', tier.featured && 'is-featured', tier.variant === 'blue' && 'is-blue']}
+            data-pricing-cta
+            data-pack={tier.name}
           >
             {tier.cta}
             <span class="v3-arrow" aria-hidden="true">→</span>
@@ -164,7 +167,7 @@ const tiers: Tier[] = [
           <span class="v3-sig-price-unit">{tiers[3].priceUnit}</span>
         </div>
         <div class="v3-sig-cta-wrap">
-          <Button href="#contact" text={tiers[3].cta} />
+          <Button href="#contact" text={tiers[3].cta} data-pricing-cta data-pack={tiers[3].name} />
         </div>
       </div>
       <div class="v3-sig-right">
@@ -181,6 +184,8 @@ const tiers: Tier[] = [
       </div>
     </article>
   </div>
+
+  <PricingModal />
 </section>
 
 <style>
