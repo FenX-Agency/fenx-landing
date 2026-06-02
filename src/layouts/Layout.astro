@@ -7,8 +7,8 @@ interface Props {
 }
 
 const {
-  title = 'FenX Agency — Sites premium pour commerces de proximité',
-  description = "Votre commerce mérite mieux. Sites sur-mesure pour TPE locales : design propre, référencement Google, tableau de bord autonome. À partir de 990€, livrés en 7 jours.",
+  title = 'Création de site internet pour commerces — dès 1990€',
+  description = "Site internet sur-mesure pour commerces et TPE en Île-de-France. Visible sur Google, livré en 7 jours, prix fixe dès 1990€.",
 } = Astro.props;
 
 const siteUrl = 'https://fenx-agency.com';
@@ -23,7 +23,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <meta name="color-scheme" content="dark">
   <title>{title}</title>
   <meta name="description" content={description}>
-  <meta name="keywords" content="site web TPE, agence web Sannois, site commerce proximité, site clé en main 990€, refonte site web, SEO local, agence web Île-de-France">
+  <meta name="keywords" content="création site internet, agence web Sannois, site internet restaurant, site internet pas cher, vidéo réseaux sociaux, agence web Île-de-France">
   <meta name="author" content="FenX Agency">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href={siteUrl}>
@@ -78,7 +78,6 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
         image: `${siteUrl}/assets/og-image.jpg`,
         description: description,
         priceRange: '€€',
-        telephone: '+33-1-00-00-00-00',
         email: 'contact.fenx.agency@gmail.com',
         address: {
           '@type': 'PostalAddress',
@@ -98,8 +97,6 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
           'Vidéos IA',
           'Branding',
           'Identité visuelle',
-          'Astro',
-          'Cloudflare',
         ],
         sameAs: [],
         contactPoint: {
@@ -124,7 +121,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
         serviceType: 'Création de site web',
         provider: { '@id': `${siteUrl}/#business` },
         name: 'Site web premium pour TPE',
-        description: "Site clé en main pour commerces de proximité. SEO local Google Business, back-office autonome, Lighthouse 95+.",
+        description: "Site clé en main pour commerces : référencement Google, espace de gestion autonome, site ultra-rapide sur mobile.",
         areaServed: 'Île-de-France',
         offers: {
           '@type': 'Offer',
@@ -144,7 +141,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
         serviceType: 'Production vidéo IA',
         provider: { '@id': `${siteUrl}/#business` },
         name: 'Vidéos IA pour réseaux sociaux',
-        description: "Vingt vidéos par mois pour TikTok, Reels et Shorts. Voix clonée, montage pro, prêtes à poster.",
+        description: "Vingt vidéos par mois pour TikTok, Reels et Shorts. Voix sur-mesure, montage pro, prêtes à poster.",
         areaServed: 'France',
       },
       {
@@ -153,7 +150,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
         serviceType: 'Branding',
         provider: { '@id': `${siteUrl}/#business` },
         name: 'Identité visuelle complète',
-        description: "Logo, charte couleurs, design system éditable. Cohérence garantie sur tous les supports.",
+        description: "Logo, charte couleurs, kit de marque complet. Cohérence garantie sur tous les supports.",
         areaServed: 'France',
       },
       {
@@ -163,7 +160,7 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
           {
             '@type': 'Question',
             name: 'Combien ça coûte vraiment ?',
-            acceptedAnswer: { '@type': 'Answer', text: "Site clé en main : à partir de 1990€. Vidéo IA : 290€/pièce (pack 3 à 690€). Maintenance : 79€/mois. Pack Premium tout-inclus : 2790€. Devis prix fixe, jamais d'heures facturées." },
+            acceptedAnswer: { '@type': 'Answer', text: "Trois packs : Démarrage à partir de 1990€, Croissance 2990€, Signature sur-mesure (devis prix fixe sous 48h). Vidéo IA : 290€/pièce (pack 3 à 690€). Maintenance : 79€/mois. Jamais d'heures facturées." },
           },
           {
             '@type': 'Question',
@@ -173,22 +170,22 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
           {
             '@type': 'Question',
             name: 'Qui maintient le site après ?',
-            acceptedAnswer: { '@type': 'Answer', text: "Toi via le back-office inclus (formation 30 min en visio). Ou pack Maintenance 79€/mois : 2 modifs/mois, audit SEO trimestriel, support sous 48h." },
+            acceptedAnswer: { '@type': 'Answer', text: "Toi via l'espace de gestion inclus (formation 30 min en visio). Ou pack Maintenance 79€/mois : 2 modifs/mois, suivi Google trimestriel, support sous 48h." },
           },
           {
             '@type': 'Question',
             name: 'Et si je veux modifier moi-même ?',
-            acceptedAnswer: { '@type': 'Answer', text: "Back-office sur-mesure inclus dans le 1990€. Tu modifies textes, photos, horaires, menus en 2 clics. Pas de WordPress, pas de plugins à mettre à jour." },
+            acceptedAnswer: { '@type': 'Answer', text: "Espace de gestion sur-mesure inclus dans le 1990€. Tu modifies textes, photos, horaires, menus en 2 clics. Pas de logiciel compliqué, rien à mettre à jour vous-même." },
           },
           {
             '@type': 'Question',
-            name: 'Vous utilisez quoi techniquement ?',
-            acceptedAnswer: { '@type': 'Answer', text: "Astro 5 + React 19 + TypeScript + Tailwind 4 + Cloudflare Pages + R2. Stack moderne, ultra-performante, sécurisée. Lighthouse 95+ garanti." },
+            name: 'Mon site sera-t-il rapide et bien fait ?',
+            acceptedAnswer: { '@type': 'Answer', text: "Oui. On utilise les mêmes technologies que les grands sites pour un site ultra-rapide, sécurisé et bien référencé sur Google. Vous n'avez rien de technique à gérer." },
           },
           {
             '@type': 'Question',
             name: 'Comment se passe le paiement ?',
-            acceptedAnswer: { '@type': 'Answer', text: "50% au brief signé, 50% à la livraison. Devis prix fixe (pas d'heures facturées). Paiement par virement ou Stripe." },
+            acceptedAnswer: { '@type': 'Answer', text: "50% au brief signé, 50% à la livraison. Devis prix fixe (pas d'heures facturées). Paiement par virement ou carte bancaire." },
           },
         ],
       },

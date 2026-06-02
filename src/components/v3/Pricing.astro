@@ -23,9 +23,9 @@ const tiers: Tier[] = [
     features: [
       'Site 5 pages sur-mesure',
       'SEO local Google Business',
-      'Back-office édition autonome',
+      'Espace de gestion autonome',
       'Formation visio 30 min',
-      'Hébergement Cloudflare 12 mois',
+      'Mise en ligne et hébergement 12 mois inclus',
       'Support 14 jours après livraison',
     ],
     cta: 'Démarrer le brief',
@@ -42,8 +42,8 @@ const tiers: Tier[] = [
       'Identité visuelle complète',
       'Charte couleurs + design system',
       '5 vidéos IA réseaux sociaux',
-      'Voix clonée (ElevenLabs)',
-      'Audit SEO + Google Ads setup',
+      'Voix sur-mesure pour vos vidéos',
+      'Référencement Google + campagne pub Google prête',
     ],
     cta: 'Choisir Croissance',
     featured: true,
@@ -54,14 +54,14 @@ const tiers: Tier[] = [
     name: 'Pack Signature',
     price: 'Sur mesure',
     priceUnit: 'devis prix fixe sous 48h',
-    pitch: "Tu as un projet ambitieux. Réservé : restaurants premium, marques DNVB, cabinets pro.",
+    pitch: "Tu as un projet ambitieux. Réservé : restaurants premium, marques en ligne, cabinets et professions libérales.",
     features: [
       'Tout le Pack Croissance',
       'Site sans limite de pages',
-      'Animations sur-mesure (WebGL)',
+      'Animations sur-mesure haut de gamme',
       '20 vidéos IA / mois pendant 3 mois',
       'Maintenance offerte 6 mois',
-      'Slack privé Anthony · réponse 4h',
+      'Ligne directe avec Anthony · réponse en 4h',
     ],
     cta: 'Discuter sur-mesure',
     featured: false,
@@ -116,7 +116,6 @@ const tiers: Tier[] = [
           <a
             href="#contact"
             class:list={['v3-pricing-cta', tier.featured && 'is-featured']}
-            data-open-contact
           >
             {tier.cta}
             <span class="v3-arrow" aria-hidden="true">→</span>

@@ -1488,7 +1488,24 @@ h1.hero .hero-h1-accent-2 {
 }
 
 /* ============================================
-   Contact Modal (Discuter projet)
+   Anchor scroll offset (fixed header overlap fix)
+   ============================================ */
+
+.v3-section,
+#contact,
+#services,
+#pricing,
+#process,
+#selected-work,
+#faq {
+  scroll-margin-top: 96px;
+}
+
+/* ============================================
+   Contact Modal (Discuter projet) — DEPRECATED
+   Modal removed; inline #contact form is the single
+   contact entry point. Styles kept inert (no markup
+   references these selectors anymore).
    ============================================ */
 
 .contact-modal {
