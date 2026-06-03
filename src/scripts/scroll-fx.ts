@@ -113,6 +113,36 @@ mm.add(
         }),
     });
 
+    // ============ 2b. Process (Méthode) : fade-out des cards recouvertes ============
+    // STRICTEMENT limité aux .v3-process-row, desktop only (sticky actif a partir de 901px).
+    // Chaque card se fond (opacity + scale + blur) quand la card SUIVANTE vient la recouvrir.
+    // Remplace l'ancien CSS animation-timeline:view() (cassé sur sticky dans Chrome).
+    // immediateRender:false pour ne pas perturber le reveal d'entree (batch ci-dessus).
+    if (window.matchMedia('(min-width: 901px)').matches) {
+      const processRows = gsap.utils.toArray<HTMLElement>('.v3-process-row');
+      processRows.forEach((row, i) => {
+        const next = processRows[i + 1];
+        if (!next) return; // la derniere card n'est jamais recouverte
+        gsap.fromTo(
+          row,
+          { opacity: 1, scale: 1, filter: 'blur(0px) brightness(1)' },
+          {
+            opacity: 0,
+            scale: 0.96,
+            filter: 'blur(3px) brightness(0.45)',
+            ease: 'none',
+            immediateRender: false,
+            scrollTrigger: {
+              trigger: next,
+              start: 'top 40%',
+              end: 'top 12%',
+              scrub: true,
+            },
+          }
+        );
+      });
+    }
+
     // ============ 3. Parallax scrub — éléments décoratifs ============
     gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((el) => {
       const speed = parseFloat(el.getAttribute('data-parallax') || '0.3');
