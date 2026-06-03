@@ -1,6 +1,7 @@
 ---
 // Modal unique, consciente du pack cliqué. Ouverte par les CTA [data-pricing-cta].
 // Envoie au meme webhook n8n que le formulaire Contact + un champ `pack`.
+// Feedback d'envoi premium : loader neuronal (signal qui circule) + check animé + textes animés.
 const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
 ---
 <div class="pm-overlay" id="pricing-modal" hidden>
@@ -33,11 +34,43 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       <label class="pm-field">Ton projet en deux mots (optionnel)
         <textarea name="message" rows="3" placeholder="Ex. un site vitrine pour mon salon à Sannois"></textarea>
       </label>
-      <button class="btn-pill pm-submit" type="submit">
+
+      <button class="btn-pill pm-submit" type="submit" id="pm-submit">
         <span class="text">Envoyer ma demande</span>
       </button>
+
       <p class="pm-foot" id="pm-foot">Réponse sous 24h. Zéro spam, zéro engagement.</p>
-      <p class="pm-status" id="pm-status" role="status" aria-live="polite"></p>
+
+      <!-- Feedback premium : neural loader (envoi) / check (succès) / texte animé -->
+      <div class="pm-feedback" id="pm-feedback" data-state="idle" role="status" aria-live="polite">
+        <span class="pm-neural" aria-hidden="true">
+          <svg viewBox="0 0 96 30" fill="none">
+            <defs>
+              <linearGradient id="pm-grad" x1="0" y1="0" x2="96" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#8b6bff"/>
+                <stop offset="1" stop-color="#ff6b35"/>
+              </linearGradient>
+            </defs>
+            <path class="pm-link" style="animation-delay:0s"   d="M10 15 L34 6"/>
+            <path class="pm-link" style="animation-delay:.08s" d="M10 15 L34 24"/>
+            <path class="pm-link" style="animation-delay:.24s" d="M34 6 L62 15"/>
+            <path class="pm-link" style="animation-delay:.24s" d="M34 24 L62 15"/>
+            <path class="pm-link" style="animation-delay:.42s" d="M62 15 L86 15"/>
+            <circle class="pm-node" style="animation-delay:0s"   cx="10" cy="15" r="3"/>
+            <circle class="pm-node" style="animation-delay:.16s" cx="34" cy="6"  r="3"/>
+            <circle class="pm-node" style="animation-delay:.16s" cx="34" cy="24" r="3"/>
+            <circle class="pm-node" style="animation-delay:.32s" cx="62" cy="15" r="3"/>
+            <circle class="pm-node pm-node--out" style="animation-delay:.48s" cx="86" cy="15" r="3.6"/>
+          </svg>
+        </span>
+        <span class="pm-check" aria-hidden="true">
+          <svg viewBox="0 0 26 26" fill="none">
+            <circle class="pm-check-ring" cx="13" cy="13" r="11"/>
+            <path class="pm-check-tick" d="M8 13.5l3.4 3.4L18 9"/>
+          </svg>
+        </span>
+        <span class="pm-feedback-text" id="pm-feedback-text"></span>
+      </div>
     </form>
   </div>
 </div>
@@ -165,23 +198,115 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     box-shadow: 0 0 0 3px rgba(139, 107, 255, 0.18);
   }
   .pm-field input.is-invalid,
-  .pm-field textarea.is-invalid { border-color: #f87171; }
+  .pm-field textarea.is-invalid {
+    border-color: #f87171;
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+  }
 
   .pm-submit {
     margin-top: 6px;
     width: 100%;
     justify-content: center;
+    transition: opacity 300ms ease;
   }
   .pm-foot { font-size: 12px; color: #8b8ba0; text-align: center; margin: 2px 0 0; }
-  .pm-status { font-size: 13px; margin: 2px 0 0; min-height: 16px; text-align: center; }
-  .pm-status.is-error { color: #f87171; }
-  .pm-status.is-ok { color: #4ade80; }
+
+  /* Quand le form est occupé (envoi/succès) : bouton + foot s'effacent, le feedback prend le relais */
+  .pm-form[data-busy] .pm-submit { opacity: 0.4; pointer-events: none; }
+  .pm-form[data-busy] .pm-foot { display: none; }
+
+  /* ===== Feedback premium ===== */
+  .pm-feedback {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    min-height: 30px;
+    margin-top: 2px;
+    text-align: center;
+  }
+  .pm-feedback[data-state="sending"],
+  .pm-feedback[data-state="success"],
+  .pm-feedback[data-state="error"] { display: flex; }
+
+  .pm-feedback-text { font-size: 14px; font-weight: 500; color: #c9c2e8; }
+
+  /* --- Loader neuronal (envoi) --- */
+  .pm-neural { display: none; }
+  .pm-feedback[data-state="sending"] .pm-neural { display: inline-flex; }
+  .pm-neural svg { width: 86px; height: 28px; overflow: visible; }
+  .pm-node {
+    fill: #8b6bff;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pm-node 1.4s ease-in-out infinite;
+  }
+  .pm-node--out { fill: #ff6b35; }
+  .pm-link {
+    stroke: url(#pm-grad);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 5 34;
+    stroke-dashoffset: 39;
+    opacity: 0.85;
+    animation: pm-flow 1.4s linear infinite;
+  }
+  @keyframes pm-node {
+    0%, 100% { opacity: 0.22; transform: scale(0.7); }
+    50% { opacity: 1; transform: scale(1.25); }
+  }
+  @keyframes pm-flow { to { stroke-dashoffset: 0; } }
+
+  .pm-feedback[data-state="sending"] .pm-feedback-text {
+    background: linear-gradient(90deg, rgba(201,194,232,0.45) 25%, #ffffff 50%, rgba(201,194,232,0.45) 75%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: pm-shimmer 1.6s linear infinite;
+  }
+  @keyframes pm-shimmer { to { background-position: -220% 0; } }
+
+  /* --- Check (succès) --- */
+  .pm-check { display: none; }
+  .pm-feedback[data-state="success"] .pm-check { display: inline-flex; }
+  .pm-check svg { width: 26px; height: 26px; }
+  .pm-check-ring {
+    stroke: #4ade80; stroke-width: 2; fill: none;
+    stroke-dasharray: 70; stroke-dashoffset: 70;
+    animation: pm-draw 0.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  .pm-check-tick {
+    stroke: #4ade80; stroke-width: 2.4; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 24; stroke-dashoffset: 24;
+    animation: pm-draw 0.35s cubic-bezier(0.65, 0, 0.35, 1) 0.32s forwards;
+  }
+  @keyframes pm-draw { to { stroke-dashoffset: 0; } }
+  .pm-feedback[data-state="success"] .pm-feedback-text {
+    color: #4ade80;
+    animation: pm-rise 0.4s ease 0.2s both;
+  }
+  @keyframes pm-rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+  /* --- Erreur --- */
+  .pm-feedback[data-state="error"] .pm-feedback-text { color: #f87171; }
+  .pm-feedback[data-state="error"] { animation: pm-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+  @keyframes pm-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+  }
 
   @media (max-width: 460px) {
     .pm-grid { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .pm-backdrop, .pm-dialog { transition: none; }
+    .pm-backdrop, .pm-dialog, .pm-node, .pm-link,
+    .pm-check-ring, .pm-check-tick, .pm-feedback, .pm-feedback-text { animation: none !important; transition: none !important; }
+    .pm-feedback[data-state="sending"] .pm-feedback-text { color: #c9c2e8; -webkit-text-fill-color: currentColor; }
+    .pm-check-ring, .pm-check-tick { stroke-dashoffset: 0 !important; }
   }
 </style>
 
@@ -202,7 +327,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     'Pack Croissance': {
       eyebrow: 'Pack Croissance · 2990€',
       title: 'Parlons de ton Pack Croissance',
-      sub: 'Site + branding + vidéos IA. Voyons ensemble ton plan d’acquisition.',
+      sub: 'Site + branding + vidéos pour tes réseaux. Voyons ensemble ton plan d’acquisition.',
       delay: '48h',
     },
     'Pack Signature': {
@@ -223,21 +348,42 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     const elSub = document.getElementById('pm-sub')!;
     const elPack = document.getElementById('pm-pack') as HTMLInputElement;
     const elFoot = document.getElementById('pm-foot')!;
-    const elStatus = document.getElementById('pm-status')!;
+    const fb = document.getElementById('pm-feedback')!;
+    const fbText = document.getElementById('pm-feedback-text')!;
+    const submitBtn = document.getElementById('pm-submit') as HTMLButtonElement;
     let lastFocused: HTMLElement | null = null;
+    let currentDelay = '24h';
+
+    function setState(state: 'idle' | 'sending' | 'success' | 'error', text: string) {
+      // re-trigger l'anim si on repasse en error consécutivement
+      if (state === 'error' && fb.getAttribute('data-state') === 'error') {
+        fb.setAttribute('data-state', 'idle');
+        void (fb as HTMLElement).offsetWidth;
+      }
+      fb.setAttribute('data-state', state);
+      fbText.textContent = text || '';
+      const busy = state === 'sending' || state === 'success';
+      if (busy) form.setAttribute('data-busy', '');
+      else form.removeAttribute('data-busy');
+      submitBtn.disabled = busy;
+    }
+
+    function clearErrors() {
+      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+    }
 
     function openModal(pack: string) {
       const cfg = PACKS[pack] || DEFAULT;
+      currentDelay = cfg.delay;
       elEyebrow.textContent = cfg.eyebrow;
       elTitle.textContent = cfg.title;
       elSub.textContent = cfg.sub;
       elFoot.textContent = 'Réponse sous ' + cfg.delay + '. Zéro spam, zéro engagement.';
       elPack.value = pack || '';
-      elStatus.textContent = '';
-      elStatus.className = 'pm-status';
+      clearErrors();
+      setState('idle', '');
       lastFocused = document.activeElement as HTMLElement;
       overlay.hidden = false;
-      // force reflow then animate
       void overlay.offsetWidth;
       overlay.classList.add('is-open');
       document.body.style.overflow = 'hidden';
@@ -257,7 +403,7 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') closeModal();
       if (e.key === 'Tab') {
-        const f = dialog.querySelectorAll<HTMLElement>('a[href],button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+        const f = dialog.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),input,textarea,select,[tabindex]:not([tabindex="-1"])');
         if (!f.length) return;
         const first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -273,29 +419,40 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     });
     overlay.querySelectorAll('[data-pm-close]').forEach((b) => b.addEventListener('click', closeModal));
 
+    // Efface l'erreur dès que l'utilisateur corrige
+    form.addEventListener('input', () => {
+      if (fb.getAttribute('data-state') === 'error') setState('idle', '');
+      clearErrors();
+    });
+
     const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (submitBtn.disabled) return;
       const fd = new FormData(form);
       const prenom = (fd.get('prenom') as string || '').trim();
       const nom_famille = (fd.get('nom_famille') as string || '').trim();
       const email = (fd.get('email') as string || '').trim();
       const telephone = (fd.get('telephone') as string || '').trim();
-      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
-      let bad = '';
-      if (!prenom) bad = 'prenom';
-      else if (!nom_famille) bad = 'nom_famille';
-      else if (!EMAIL.test(email)) bad = 'email';
-      else if (telephone.replace(/\D/g, '').length < 9) bad = 'telephone';
-      if (bad) {
-        const f = form.querySelector(`[name="${bad}"]`) as HTMLElement;
-        f?.classList.add('is-invalid'); f?.focus();
-        elStatus.textContent = 'Vérifie ce champ.'; elStatus.className = 'pm-status is-error';
-        return;
+      clearErrors();
+
+      const checks: [boolean, string, string][] = [
+        [!prenom, 'prenom', 'Indique ton prénom.'],
+        [!nom_famille, 'nom_famille', 'Indique ton nom.'],
+        [!EMAIL.test(email), 'email', 'Cet email ne semble pas valide.'],
+        [telephone.replace(/\D/g, '').length < 9, 'telephone', 'Ce numéro ne semble pas valide.'],
+      ];
+      for (const [bad, name, msg] of checks) {
+        if (bad) {
+          const fEl = form.querySelector('[name="' + name + '"]') as HTMLElement;
+          fEl?.classList.add('is-invalid');
+          fEl?.focus();
+          setState('error', msg);
+          return;
+        }
       }
-      const btn = form.querySelector('.pm-submit') as HTMLButtonElement;
-      btn.disabled = true;
-      elStatus.textContent = 'Envoi…'; elStatus.className = 'pm-status';
+
+      setState('sending', 'Transmission en cours');
       try {
         const res = await fetch(form.dataset.webhook || '', {
           method: 'POST',
@@ -309,14 +466,11 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
           }),
         });
         if (!res.ok) throw new Error('http');
-        elStatus.textContent = 'Reçu ! On te répond sous 24h.'; elStatus.className = 'pm-status is-ok';
+        setState('success', 'Reçu. On te répond sous ' + currentDelay + '.');
         form.reset();
-        setTimeout(closeModal, 1600);
+        setTimeout(closeModal, 2400);
       } catch {
-        elStatus.textContent = 'Oups, réessaie ou écris à contact.fenx.agency@gmail.com';
-        elStatus.className = 'pm-status is-error';
-      } finally {
-        btn.disabled = false;
+        setState('error', 'Oups, réessaie ou écris à contact.fenx.agency@gmail.com');
       }
     });
   }
