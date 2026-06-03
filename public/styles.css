@@ -388,7 +388,7 @@ h2.section {
    ============================================ */
 .site-header {
   position: fixed;
-  top: 18px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
   width: auto;
@@ -396,34 +396,30 @@ h2.section {
   display: flex;
   align-items: center;
   gap: 22px;
-  padding: 11px 16px 11px 22px;
+  padding: 12px 18px 12px 24px;
   z-index: 100;
-  border-radius: 15px;
-  background: rgba(17, 17, 24, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 12px 34px -22px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition:
-    gap 480ms cubic-bezier(0.22, 1, 0.36, 1),
-    top 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    padding 480ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 480ms cubic-bezier(0.22, 1, 0.36, 1),
-    background 380ms ease,
-    border-color 380ms ease,
-    box-shadow 460ms ease;
+  border-radius: 16px;
+  /* Initial 21st-style : aérien, quasi-transparent, flush en haut (le verre est minimal) */
+  background: rgba(17, 17, 24, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8px 22px -20px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(7px) saturate(120%);
+  -webkit-backdrop-filter: blur(7px) saturate(120%);
+  transition: all 600ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-/* Rétraction au scroll : la barre se condense + bordure violette + glow (desktop) */
+/* Rétraction au scroll : le verre se matérialise + la barre monte/flotte + bordure violette + glow */
 .site-header.is-scrolled {
-  top: 12px;
+  top: 14px;
   gap: 18px;
-  padding: 8px 14px 8px 20px;
-  border-radius: 13px;
+  padding: 9px 16px 9px 22px;
+  border-radius: 14px;
   background: rgba(14, 14, 21, 0.82);
-  border-color: rgba(139, 107, 255, 0.32);
+  border-color: rgba(139, 107, 255, 0.34);
   box-shadow:
     0 18px 50px -22px rgba(0, 0, 0, 0.78),
     0 0 44px -26px rgba(139, 107, 255, 0.45);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 @media (prefers-reduced-motion: reduce) {
   .site-header {
@@ -436,7 +432,7 @@ h2.section {
   letter-spacing: -0.02em;
   color: var(--text-primary);
   text-decoration: none;
-  margin-right: 34px;
+  margin-right: 170px;
 }
 .logo span { color: var(--violet-primary, #8b6bff); }
 .site-nav {
