@@ -439,7 +439,7 @@ h2.section {
 .site-header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 22px;
 }
 .logo {
   font-size: 22px;
@@ -478,18 +478,21 @@ h2.section {
 .site-nav a:not(.nav-cta):hover { color: var(--text-primary); }
 .site-nav a:not(.nav-cta):hover::after { transform: scaleX(1); }
 .nav-cta {
-  color: #fff;
+  color: #ece9fb;
   font-weight: 600;
-  padding: 8px 18px;
-  border-radius: 100px;
-  background: var(--violet-primary, #8b6bff);
-  transition: background 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+  padding: 9px 17px;
+  border-radius: 10px;
+  background: rgba(139, 107, 255, 0.13);
+  border: 1px solid rgba(139, 107, 255, 0.42);
+  transition: background 240ms ease, border-color 240ms ease, color 240ms ease,
+    transform 240ms ease, box-shadow 240ms ease;
 }
 .nav-cta:hover {
   color: #fff;
-  background: var(--violet-soft, #a78bfa);
+  background: rgba(139, 107, 255, 0.3);
+  border-color: rgba(139, 107, 255, 0.75);
   transform: translateY(-1px);
-  box-shadow: 0 8px 22px -8px rgba(139, 107, 255, 0.55);
+  box-shadow: 0 8px 20px -8px rgba(139, 107, 255, 0.5);
 }
 
 /* ============================================

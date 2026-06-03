@@ -10,16 +10,14 @@ const navLinks = [
 ];
 ---
 <header class="site-header" data-site-header>
-  <div class="site-header-left">
-    <a href="#hero" class="logo">Fen<span>X</span></a>
+  <a href="#hero" class="logo">Fen<span>X</span></a>
 
+  <div class="site-header-right">
     {/* Nav desktop */}
     <nav class="site-nav" aria-label="Navigation principale">
       {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
-  </div>
 
-  <div class="site-header-right">
     <a href="#contact" class="nav-cta">Contact</a>
 
     {/* Bouton hamburger — visible ≤768px uniquement */}
@@ -172,12 +170,10 @@ const navLinks = [
     if (!header) return;
     if ((header as any).__scrollInit) return;
     (header as any).__scrollInit = true;
-    const hero = document.getElementById('hero');
     let ticking = false;
     const update = () => {
-      // Rétraction quand le hero est quasiment passé (pas dès les 1ers px)
-      const retract = hero ? hero.getBoundingClientRect().bottom < 120 : window.scrollY > 600;
-      header.classList.toggle('is-scrolled', retract);
+      // Rétraction dès qu'on commence à scroller
+      header.classList.toggle('is-scrolled', window.scrollY > 80);
       ticking = false;
     };
     window.addEventListener('scroll', () => {
