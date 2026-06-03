@@ -110,35 +110,71 @@ const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : un
     const lenis = (window as any).__lenis;
     if (lenis && typeof lenis.on === 'function') lenis.on('scroll', ScrollTrigger.update);
 
-    // ===== Hero pinné + ZOOM d'approche au scroll — DESKTOP ONLY =====
-    // matchMedia : sur mobile/tactile (≤768px) on NE pin PAS (sinon le 1er écran de
-    // scroll ne fait que zoomer → sensation "bloqué"). La vidéo reste un bg autoplay,
-    // la page scrolle normalement. Sur desktop : pin + zoom d'approche.
+    // ===== Anti-jump au refresh =====
+    // Au reload, le navigateur peut restaurer une position de scroll (et Lenis peut
+    // démarrer ailleurs qu'en haut). On crée le pin AVANT que la vidéo soit prête
+    // → ses dimensions changent au chargement → le pin-spacer se recalcule → SAUT.
+    // Fix : on force le scroll en haut, PUIS on crée le pin une fois la vidéo prête
+    // (loadeddata/canplay) ou après un court fallback, puis ScrollTrigger.refresh().
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      lenis.scrollTo(0, { immediate: true });
+    }
+    window.scrollTo(0, 0);
+
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 769px)', () => {
-      const tween = gsap.fromTo(
-        video,
-        { scale: 1.06 },
-        {
-          scale: 1.5,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: hero,
-            start: 'top top',
-            end: '+=110%',
-            pin: true,
-            pinSpacing: true,
-            scrub: 0.6,
-            invalidateOnRefresh: true,
-          },
-        }
-      );
-      return () => { tween.kill(); };
-    });
-    // Sur mobile, la vidéo garde un léger zoom statique (pas de scale 1 brut).
-    mm.add('(max-width: 768px)', () => {
-      gsap.set(video, { scale: 1.06 });
-    });
+    let setupDone = false;
+
+    const setupPin = () => {
+      if (setupDone) return;
+      setupDone = true;
+
+      // Re-force le haut juste avant de mesurer/pinner (évite tout offset résiduel).
+      if (lenis && typeof lenis.scrollTo === 'function') lenis.scrollTo(0, { immediate: true });
+      window.scrollTo(0, 0);
+
+      // ===== Hero pinné + ZOOM d'approche au scroll — DESKTOP ONLY =====
+      // matchMedia : sur mobile/tactile (≤768px) on NE pin PAS (sinon le 1er écran de
+      // scroll ne fait que zoomer → sensation "bloqué"). La vidéo reste un bg autoplay,
+      // la page scrolle normalement. Sur desktop : pin + zoom d'approche.
+      mm.add('(min-width: 769px)', () => {
+        const tween = gsap.fromTo(
+          video,
+          { scale: 1.06 },
+          {
+            scale: 1.5,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: hero,
+              start: 'top top',
+              end: '+=110%',
+              pin: true,
+              pinSpacing: true,
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+        return () => { tween.kill(); };
+      });
+      // Sur mobile, la vidéo garde un léger zoom statique (pas de scale 1 brut).
+      mm.add('(max-width: 768px)', () => {
+        gsap.set(video, { scale: 1.06 });
+      });
+
+      // Mesure une fois la vidéo prête → pas de recalcul tardif du pin-spacer.
+      ScrollTrigger.refresh();
+    };
+
+    // La vidéo a-t-elle déjà assez de données (cache) ? readyState >= 2 = HAVE_CURRENT_DATA.
+    if (video.readyState >= 2) {
+      setupPin();
+    } else {
+      video.addEventListener('loadeddata', setupPin, { once: true });
+      video.addEventListener('canplay', setupPin, { once: true });
+      // Fallback : si la vidéo tarde (réseau lent, erreur), on pin quand même après 1.2s
+      // pour ne pas bloquer le scroll. Le poster reste affiché en attendant.
+      window.setTimeout(setupPin, 1200);
+    }
 
     // ===== Boucle avec fondu noir propre (JS) =====
     const FADE = 0.6;
@@ -155,8 +191,6 @@ const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : un
       raf = requestAnimationFrame(tick);
     };
     tick();
-
-    ScrollTrigger.refresh();
 
     const cleanup = () => {
       cancelAnimationFrame(raf);

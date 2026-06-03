@@ -22,12 +22,12 @@ mm.add(
     reduceMotion: '(prefers-reduced-motion: reduce)',
   },
   (context) => {
-    const conditions = context.conditions as {
+    const conditions = (context.conditions ?? {}) as {
       isDesktop: boolean;
       isMobile: boolean;
       reduceMotion: boolean;
     };
-    const { reduceMotion, isMobile } = conditions;
+    const { reduceMotion, isDesktop, isMobile } = conditions;
 
     // ============ 1. Reduced motion : reveal immédiat, pas de parallax ============
     if (reduceMotion) {
@@ -132,6 +132,41 @@ mm.add(
         }
       );
     });
+
+    // ============ 3.5 Process sticky-stacking fade (desktop only) ============
+    // Les rows .v3-process-row sont en position:sticky et s'empilent. Chaque row
+    // doit se fondre (opacity + scale + blur) quand la row SUIVANTE la recouvre.
+    // CSS scroll-driven `animation-timeline: view()` + `animation-range: exit` ne
+    // se déclenche PAS de façon fiable sur un élément sticky (il ne "sort" jamais
+    // vraiment du viewport tant qu'il est collé en haut). On pilote donc le fade
+    // en GSAP, basé sur le recouvrement réel par la row suivante.
+    // Mobile : pas de sticky (rows en flux) → on ne touche pas (reveal scrub géré plus haut).
+    if (isDesktop) {
+      const processRows = gsap.utils.toArray<HTMLElement>('.v3-process-row');
+      processRows.forEach((row, i) => {
+        const next = processRows[i + 1];
+        if (!next) return; // la dernière row ne se fait jamais recouvrir
+        gsap.fromTo(
+          row,
+          { autoAlpha: 1, scale: 1, filter: 'brightness(1) blur(0px)' },
+          {
+            autoAlpha: 0,
+            scale: 0.96,
+            filter: 'brightness(0.4) blur(2px)',
+            ease: 'none',
+            scrollTrigger: {
+              // Le fade démarre quand le haut de la row suivante atteint le haut
+              // de la row courante (collée), et se termine peu après recouvrement.
+              trigger: next,
+              start: 'top 32%',
+              end: 'top 8%',
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      });
+    }
 
     // ============ 4. Counter animation ============
     gsap.utils.toArray<HTMLElement>('[data-counter]').forEach((el) => {
