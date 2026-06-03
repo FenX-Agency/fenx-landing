@@ -495,10 +495,19 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
             source: 'pricing-modal',
           }),
         });
-        if (!res.ok) throw new Error('http');
-        setState('success', 'Reçu. On te répond sous ' + currentDelay + '.');
-        form.reset();
-        setTimeout(closeModal, 2400);
+        let data: any = null;
+        try { data = await res.json(); } catch {}
+        if (res.ok && (!data || data.ok !== false)) {
+          setState('success', 'Reçu. On te répond sous ' + currentDelay + '.');
+          form.reset();
+          setTimeout(closeModal, 2400);
+        } else if (data && Array.isArray(data.errors) && data.errors.includes('EMAIL_EXISTS')) {
+          setFieldError('email', 'Tu nous as déjà contactés avec cet email.');
+          (form.querySelector('[name="email"]') as HTMLElement)?.focus();
+          setState('idle', '');
+        } else {
+          setState('error', 'Oups, réessaie ou écris à contact.fenx.agency@gmail.com');
+        }
       } catch {
         setState('error', 'Oups, réessaie ou écris à contact.fenx.agency@gmail.com');
       }
