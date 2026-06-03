@@ -204,10 +204,11 @@ const phases: Phase[] = [
   /* ============ Visuel illustration 3D blueprint ============ */
   .v3-process-row-visual {
     position: relative;
-    /* Toutes les cards remplissent la hauteur de la row (pas de bandes, image cadrée).
-       Mobile repasse en 16/10 plus bas. */
-    aspect-ratio: auto;
-    align-self: stretch;
+    /* Cadre 16/10 fixe (ratio natif des photos), NON étiré sur la hauteur du texte :
+       l'image se remplit et se centre sur son sujet sans sur-rogner les côtés.
+       Identique sur les 4 cards. Mobile garde 16/10 plus bas. */
+    aspect-ratio: 16 / 10;
+    align-self: center;
     min-height: 380px;
     background: radial-gradient(
       ellipse at center,
