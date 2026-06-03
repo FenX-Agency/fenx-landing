@@ -20,23 +20,34 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       <div class="pm-grid">
         <label class="pm-field">Prénom
           <input name="prenom" type="text" autocomplete="given-name" placeholder="Marie" required />
+          <span class="pm-field-err"></span>
         </label>
         <label class="pm-field">Nom
           <input name="nom_famille" type="text" autocomplete="family-name" placeholder="Durand" required />
+          <span class="pm-field-err"></span>
         </label>
       </div>
       <label class="pm-field">Email
         <input name="email" type="email" autocomplete="email" placeholder="marie@exemple.fr" required />
+        <span class="pm-field-err"></span>
       </label>
       <label class="pm-field">Téléphone
         <input name="telephone" type="tel" autocomplete="tel" placeholder="06 12 34 56 78" required />
+        <span class="pm-field-err"></span>
       </label>
       <label class="pm-field">Ton projet en deux mots (optionnel)
         <textarea name="message" rows="3" placeholder="Ex. un site vitrine pour mon salon à Sannois"></textarea>
       </label>
 
       <button class="btn-pill pm-submit" type="submit" id="pm-submit">
+        <span class="pixel-canvas-wrapper"><canvas></canvas></span>
         <span class="text">Envoyer ma demande</span>
+        <span class="arrow">
+          <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+            <path class="arrow-base" d="M0 6 L16 6 M12 1 L16 6 L12 11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path class="arrow-shimmer" d="M0 6 L16 6 M12 1 L16 6 L12 11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </span>
       </button>
 
       <p class="pm-foot" id="pm-foot">Réponse sous 24h. Zéro spam, zéro engagement.</p>
@@ -202,6 +213,16 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
     border-color: #f87171;
     box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
   }
+  .pm-field-err {
+    font-family: 'Switzer', 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #f87171;
+    display: none;
+  }
+  .pm-field-err:not(:empty) { display: block; }
 
   .pm-submit {
     margin-top: 6px;
@@ -368,8 +389,15 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       submitBtn.disabled = busy;
     }
 
+    function setFieldError(name: string, msg: string) {
+      const input = form.querySelector('[name="' + name + '"]') as HTMLElement;
+      input?.classList.add('is-invalid');
+      const err = input?.parentElement?.querySelector('.pm-field-err');
+      if (err) err.textContent = msg;
+    }
     function clearErrors() {
       form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+      form.querySelectorAll('.pm-field-err').forEach((el) => { (el as HTMLElement).textContent = ''; });
     }
 
     function openModal(pack: string) {
@@ -386,6 +414,8 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       overlay.hidden = false;
       void overlay.offsetWidth;
       overlay.classList.add('is-open');
+      // ré-init de l'effet pixel du bouton (btn-pill visible maintenant)
+      setTimeout(() => { try { window.dispatchEvent(new Event('resize')); } catch {} }, 60);
       document.body.style.overflow = 'hidden';
       try { (window as any).__lenis?.stop(); } catch {}
       const first = form.querySelector('input') as HTMLInputElement;
@@ -435,21 +465,21 @@ const WEBHOOK_URL = 'https://n8n.fenx-agency.com/webhook/landing-contact';
       const email = (fd.get('email') as string || '').trim();
       const telephone = (fd.get('telephone') as string || '').trim();
       clearErrors();
-
+      const dgts = telephone.replace(/\D/g, '').length;
       const checks: [boolean, string, string][] = [
-        [!prenom, 'prenom', 'Indique ton prénom.'],
-        [!nom_famille, 'nom_famille', 'Indique ton nom.'],
-        [!EMAIL.test(email), 'email', 'Cet email ne semble pas valide.'],
-        [telephone.replace(/\D/g, '').length < 9, 'telephone', 'Ce numéro ne semble pas valide.'],
+        [!prenom, 'prenom', 'Ton prénom ?'],
+        [!nom_famille, 'nom_famille', 'Ton nom ?'],
+        [!EMAIL.test(email), 'email', 'Email invalide'],
+        [dgts < 9 || dgts > 15, 'telephone', 'Numéro invalide'],
       ];
+      let firstBad = '';
       for (const [bad, name, msg] of checks) {
-        if (bad) {
-          const fEl = form.querySelector('[name="' + name + '"]') as HTMLElement;
-          fEl?.classList.add('is-invalid');
-          fEl?.focus();
-          setState('error', msg);
-          return;
-        }
+        if (bad) { setFieldError(name, msg); if (!firstBad) firstBad = name; }
+      }
+      if (firstBad) {
+        (form.querySelector('[name="' + firstBad + '"]') as HTMLElement)?.focus();
+        setState('idle', '');
+        return;
       }
 
       setState('sending', 'Transmission en cours');
