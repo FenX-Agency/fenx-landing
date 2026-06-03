@@ -49,6 +49,7 @@ const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : un
     object-fit: cover;
     display: block;
     transform-origin: 50% 46%; /* zoom vers le phoenix */
+    transform: scale(1.06); /* etat de repos = depart du zoom GSAP, evite le pop de zoom au load */
     will-change: transform;
   }
   .hero-video-bg__black {
@@ -156,7 +157,7 @@ const videoSrcMobile = videoSrc ? videoSrc.replace(/\.mp4$/, '-mobile.mp4') : un
     };
     tick();
 
-    ScrollTrigger.refresh();
+    requestAnimationFrame(() => ScrollTrigger.refresh());
 
     const cleanup = () => {
       cancelAnimationFrame(raf);

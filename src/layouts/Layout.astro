@@ -28,8 +28,9 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href={siteUrl}>
 
-  <!-- Critical inline anti-FOUC : etat neutre avant chargement du CSS (surtout en hard refresh / cache vide) -->
-  <style>
+  <!-- Critical anti-FOUC : page masquee jusqu'au chargement du CSS (is:inline = reellement dans le head). -->
+  <style is:inline>
+    html { visibility: hidden; }
     html, body { background: #07070d; margin: 0; }
     .skip-link { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
     .mobile-drawer { visibility: hidden; }
@@ -198,6 +199,8 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
 </head>
 <body>
   <NeuralBg />
+  {/* Reveal anti-FOUC : html redevient visible une fois le bundle CSS charge (derniere feuille). */}
+  <style is:global>html { visibility: visible; }</style>
   <a href="#main" class="skip-link">Aller au contenu</a>
 
   {/* V4 Scroll progress bar top 2px (Web Designer agent reco) */}
