@@ -125,11 +125,38 @@ const phases: Phase[] = [
     overflow: hidden;
     box-shadow: 0 -1px 0 rgba(167, 139, 250, 0.06),
                 0 24px 60px -16px rgba(0, 0, 0, 0.85);
-    /* Le fade out (opacity + scale + blur) quand la row est recouverte par la
-       suivante est piloté en GSAP ScrollTrigger (desktop only) dans scroll-fx.ts.
-       Raison : animation-timeline:view() + animation-range:exit ne se déclenche
-       PAS de façon fiable sur un élément sticky collé en haut (Chrome). */
-    transform-origin: center center;
+    /* V3.7 : scroll-driven fade quand la row sort du viewport (recouverte par suivante) */
+    transform-origin: center top;
+  }
+
+  /* Fade out COMPLET quand row recouverte (Anthony : "effet de disparition") — scroll-driven CSS
+     (animation-timeline suit correctement la position d'une row STICKY, contrairement à GSAP). */
+  /* DESKTOP UNIQUEMENT : l'effet d'empilement/disparition (les rows sont sticky en desktop).
+     Sur mobile les rows sont en flux normal → pas de fade-out scroll (apparition propre via data-reveal). */
+  @media (min-width: 901px) {
+    @supports (animation-timeline: view()) {
+      .v3-process-row {
+        animation: v3-process-row-fade linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 45%;
+      }
+    }
+  }
+  @keyframes v3-process-row-fade {
+    0% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: brightness(1) blur(0);
+      box-shadow:
+        0 -1px 0 rgba(167, 139, 250, 0.06),
+        0 24px 60px -16px rgba(0, 0, 0, 0.85);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.96) translateY(-12px);
+      filter: brightness(0.4) blur(2px);
+      box-shadow: none;
+    }
   }
 
   /* ::before garantit 100% opacite (couche cosmic-card en arriere-plan) */
