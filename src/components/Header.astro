@@ -173,8 +173,8 @@ const navLinks = [
     const update = () => {
       // Rétraction quand on atteint les badges (bas du hero), pile au bon moment
       const retract = badges
-        ? badges.getBoundingClientRect().top < 80
-        : window.scrollY > 400;
+        ? badges.getBoundingClientRect().top < 180
+        : window.scrollY > 320;
       header.classList.toggle('is-scrolled', retract);
       ticking = false;
     };
