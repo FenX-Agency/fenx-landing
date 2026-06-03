@@ -392,26 +392,49 @@ h2.section {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 32px;
+  padding: 22px 32px;
   z-index: 100;
-  background: rgba(20, 22, 26, 0.6);
-  backdrop-filter: blur(20px);
-  transition: padding 280ms ease, background 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
-  border-bottom: 1px solid transparent;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  will-change: width, padding, border-radius, top;
+  transition:
+    width 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    max-width 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    top 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    padding 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 380ms ease,
+    border-color 380ms ease,
+    box-shadow 460ms ease,
+    backdrop-filter 380ms ease;
 }
-/* Condensé au scroll : fond plus dense + hairline + padding réduit */
+/* Scroll : la navbar se détache et devient une pilule flottante (verre + bordure violette) */
 .site-header.is-scrolled {
-  padding-top: 16px;
-  padding-bottom: 16px;
-  background: rgba(14, 14, 20, 0.82);
-  border-bottom-color: var(--border-subtle);
-  box-shadow: 0 8px 30px -16px rgba(0, 0, 0, 0.7);
+  top: 14px;
+  width: 94%;
+  max-width: 1060px;
+  padding: 10px 16px 10px 24px;
+  border-radius: 999px;
+  background: rgba(17, 17, 24, 0.72);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-color: rgba(139, 107, 255, 0.28);
+  box-shadow:
+    0 18px 50px -22px rgba(0, 0, 0, 0.75),
+    0 0 44px -24px rgba(139, 107, 255, 0.45);
 }
 @media (prefers-reduced-motion: reduce) {
-  .site-header { transition: none; }
+  .site-header {
+    transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+  }
 }
 .logo {
   font-size: 22px;
@@ -420,23 +443,48 @@ h2.section {
   color: var(--text-primary);
   text-decoration: none;
 }
-.logo span { color: var(--lime-primary); }
+.logo span { color: var(--violet-primary, #8b6bff); }
 .site-nav {
   display: flex;
-  gap: 24px;
+  gap: 26px;
   align-items: center;
 }
 .site-nav a {
+  position: relative;
   font-size: 14px;
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s ease;
+  transition: color 220ms ease;
 }
-.site-nav a:hover { color: var(--text-primary); }
+.site-nav a:not(.nav-cta)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--violet-primary, #8b6bff), var(--ember-500, #ff6b35));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.site-nav a:not(.nav-cta):hover { color: var(--text-primary); }
+.site-nav a:not(.nav-cta):hover::after { transform: scaleX(1); }
 .site-nav .nav-cta {
-  color: var(--lime-primary);
-  font-weight: 700;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: var(--violet-primary, #8b6bff);
+  transition: background 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+}
+.site-nav .nav-cta:hover {
+  color: #fff;
+  background: var(--violet-soft, #a78bfa);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px -8px rgba(139, 107, 255, 0.55);
 }
 
 /* ============================================
