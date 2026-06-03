@@ -204,7 +204,10 @@ const phases: Phase[] = [
   /* ============ Visuel illustration 3D blueprint ============ */
   .v3-process-row-visual {
     position: relative;
-    aspect-ratio: 16 / 10; /* V3.5 : 1:1 -> 16:10 (allonge horizontal Wibify-like) */
+    /* Toutes les cards remplissent la hauteur de la row (pas de bandes, image cadrée).
+       Mobile repasse en 16/10 plus bas. */
+    aspect-ratio: auto;
+    align-self: stretch;
     min-height: 380px;
     background: radial-gradient(
       ellipse at center,
@@ -220,36 +223,14 @@ const phases: Phase[] = [
   .v3-process-row-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
     filter: brightness(0.95);
   }
 
-  /* Première card (Méthode) : l'image remplit TOUT le cadre (largeur + hauteur),
-     pas de bande ni d'espace. On retire l'aspect-ratio figé pour qu'elle s'étire
-     sur toute la hauteur de la card, et cover pour combler sans déformer. */
-  .v3-process-row:first-of-type .v3-process-row-visual {
-    aspect-ratio: auto;
-    min-height: 100%;
-    align-self: stretch;
-  }
-  .v3-process-row:first-of-type .v3-process-row-img {
-    object-fit: cover;
-  }
-
-  /* 4e card (Mise en ligne) : le téléphone est le sujet → on remplit le cadre
-     et on centre sur le téléphone (au lieu du contain qui le laisse flotter
-     avec des bandes et décentré dans une row haute). */
-  .v3-process-row:last-of-type .v3-process-row-visual {
-    aspect-ratio: auto;
-    min-height: 100%;
-    align-self: stretch;
-  }
-  .v3-process-row:last-of-type .v3-process-row-img {
-    object-fit: cover;
-    object-position: center;
-  }
+  /* (Fill + cover + centré s'applique désormais à TOUTES les cards via les règles
+     de base ci-dessus · plus de cas particulier 1re/4e.) */
 
   /* V3.7 : retire hover image scale (Anthony : pas de hover Process) */
 
