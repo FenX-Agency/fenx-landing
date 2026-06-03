@@ -28,6 +28,13 @@ const ogImage = `${siteUrl}/assets/og-image.jpg`;
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href={siteUrl}>
 
+  <!-- Critical inline anti-FOUC : etat neutre avant chargement du CSS (surtout en hard refresh / cache vide) -->
+  <style>
+    html, body { background: #07070d; margin: 0; }
+    .skip-link { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .mobile-drawer { visibility: hidden; }
+  </style>
+
   <!-- Open Graph (Facebook, LinkedIn, WhatsApp, Slack…) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="FenX Agency">
