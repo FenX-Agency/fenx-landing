@@ -238,6 +238,19 @@ const phases: Phase[] = [
     object-fit: cover;
   }
 
+  /* 4e card (Mise en ligne) : le téléphone est le sujet → on remplit le cadre
+     et on centre sur le téléphone (au lieu du contain qui le laisse flotter
+     avec des bandes et décentré dans une row haute). */
+  .v3-process-row:last-of-type .v3-process-row-visual {
+    aspect-ratio: auto;
+    min-height: 100%;
+    align-self: stretch;
+  }
+  .v3-process-row:last-of-type .v3-process-row-img {
+    object-fit: cover;
+    object-position: center;
+  }
+
   /* V3.7 : retire hover image scale (Anthony : pas de hover Process) */
 
   @media (max-width: 900px) {
