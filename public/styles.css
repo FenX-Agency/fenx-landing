@@ -388,53 +388,58 @@ h2.section {
    ============================================ */
 .site-header {
   position: fixed;
-  top: 0;
+  top: 18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
-  max-width: 100%;
+  width: 94%;
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 32px;
+  padding: 13px 16px 13px 24px;
   z-index: 100;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 0;
-  box-shadow: none;
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  will-change: width, padding, border-radius, top;
+  border-radius: 18px;
+  background: rgba(17, 17, 24, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 12px 34px -22px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  will-change: max-width, padding, top;
   transition:
-    width 560ms cubic-bezier(0.22, 1, 0.36, 1),
     max-width 560ms cubic-bezier(0.22, 1, 0.36, 1),
     top 560ms cubic-bezier(0.22, 1, 0.36, 1),
     padding 480ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 520ms cubic-bezier(0.22, 1, 0.36, 1),
     background 380ms ease,
     border-color 380ms ease,
-    box-shadow 460ms ease,
-    backdrop-filter 380ms ease;
+    box-shadow 460ms ease;
 }
-/* Scroll : la navbar se détache et devient une pilule flottante (verre + bordure violette) */
+/* Rétraction après le hero : plus étroite, plus dense, bordure violette */
 .site-header.is-scrolled {
-  top: 14px;
-  width: 94%;
-  max-width: 1060px;
-  padding: 10px 16px 10px 24px;
-  border-radius: 999px;
-  background: rgba(17, 17, 24, 0.72);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border-color: rgba(139, 107, 255, 0.28);
+  top: 12px;
+  max-width: 960px;
+  padding: 9px 14px 9px 22px;
+  border-radius: 15px;
+  background: rgba(14, 14, 21, 0.8);
+  border-color: rgba(139, 107, 255, 0.30);
   box-shadow:
-    0 18px 50px -22px rgba(0, 0, 0, 0.75),
-    0 0 44px -24px rgba(139, 107, 255, 0.45);
+    0 18px 50px -22px rgba(0, 0, 0, 0.78),
+    0 0 44px -26px rgba(139, 107, 255, 0.45);
 }
 @media (prefers-reduced-motion: reduce) {
   .site-header {
     transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
   }
+}
+.site-header-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.site-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 .logo {
   font-size: 22px;
@@ -472,7 +477,7 @@ h2.section {
 }
 .site-nav a:not(.nav-cta):hover { color: var(--text-primary); }
 .site-nav a:not(.nav-cta):hover::after { transform: scaleX(1); }
-.site-nav .nav-cta {
+.nav-cta {
   color: #fff;
   font-weight: 600;
   padding: 8px 18px;
@@ -480,7 +485,7 @@ h2.section {
   background: var(--violet-primary, #8b6bff);
   transition: background 240ms ease, transform 240ms ease, box-shadow 240ms ease;
 }
-.site-nav .nav-cta:hover {
+.nav-cta:hover {
   color: #fff;
   background: var(--violet-soft, #a78bfa);
   transform: translateY(-1px);
@@ -683,8 +688,9 @@ body.drawer-locked {
 
 /* ≤768px : on masque la nav desktop, on montre le hamburger */
 @media (max-width: 768px) {
-  .site-header { padding: 16px 20px; }
+  .site-header { padding: 11px 14px 11px 18px; }
   .site-nav { display: none; }
+  .nav-cta { display: none; }
   .nav-toggle { display: flex; }
 }
 

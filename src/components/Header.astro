@@ -9,29 +9,33 @@ const navLinks = [
   { href: '#faq', label: 'Questions' },
 ];
 ---
-<header class="site-header container" data-site-header>
-  <a href="#hero" class="logo">Fen<span>X</span></a>
+<header class="site-header" data-site-header>
+  <div class="site-header-left">
+    <a href="#hero" class="logo">Fen<span>X</span></a>
 
-  {/* Nav desktop */}
-  <nav class="site-nav" aria-label="Navigation principale">
-    {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
-    <a href="https://demo-wok.fenx-agency.com" target="_blank" rel="noopener">Démo</a>
+    {/* Nav desktop */}
+    <nav class="site-nav" aria-label="Navigation principale">
+      {navLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
+
+  <div class="site-header-right">
     <a href="#contact" class="nav-cta">Contact</a>
-  </nav>
 
-  {/* Bouton hamburger — visible ≤768px uniquement */}
-  <button
-    type="button"
-    class="nav-toggle"
-    data-nav-toggle
-    aria-label="Ouvrir le menu"
-    aria-expanded="false"
-    aria-controls="mobile-drawer"
-  >
-    <span class="nav-toggle-bar"></span>
-    <span class="nav-toggle-bar"></span>
-    <span class="nav-toggle-bar"></span>
-  </button>
+    {/* Bouton hamburger — visible ≤768px uniquement */}
+    <button
+      type="button"
+      class="nav-toggle"
+      data-nav-toggle
+      aria-label="Ouvrir le menu"
+      aria-expanded="false"
+      aria-controls="mobile-drawer"
+    >
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+  </div>
 </header>
 
 {/* Drawer mobile + backdrop */}
@@ -62,19 +66,6 @@ const navLinks = [
           </a>
         </li>
       ))}
-      <li style={`--drawer-i: ${navLinks.length}`}>
-        <a
-          href="https://demo-wok.fenx-agency.com"
-          target="_blank"
-          rel="noopener"
-          class="mobile-drawer-link"
-          data-drawer-link
-        >
-          <span class="mobile-drawer-link-num">{String(navLinks.length + 1).padStart(2, '0')}</span>
-          <span>Démo</span>
-          <span class="mobile-drawer-link-arrow" aria-hidden="true">↗</span>
-        </a>
-      </li>
     </ul>
 
     <a href="#contact" class="mobile-drawer-cta" data-drawer-link>
@@ -181,9 +172,12 @@ const navLinks = [
     if (!header) return;
     if ((header as any).__scrollInit) return;
     (header as any).__scrollInit = true;
+    const hero = document.getElementById('hero');
     let ticking = false;
     const update = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 24);
+      // Rétraction quand le hero est quasiment passé (pas dès les 1ers px)
+      const retract = hero ? hero.getBoundingClientRect().bottom < 120 : window.scrollY > 600;
+      header.classList.toggle('is-scrolled', retract);
       ticking = false;
     };
     window.addEventListener('scroll', () => {
