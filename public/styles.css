@@ -425,7 +425,6 @@ h2.section {
     0 18px 50px -22px rgba(0, 0, 0, 0.78),
     0 0 44px -26px rgba(139, 107, 255, 0.45);
 }
-.site-header.is-scrolled .logo { margin-right: 16px; }
 @media (prefers-reduced-motion: reduce) {
   .site-header {
     transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
@@ -437,7 +436,7 @@ h2.section {
   letter-spacing: -0.02em;
   color: var(--text-primary);
   text-decoration: none;
-  margin-right: 42px;
+  margin-right: 34px;
 }
 .logo span { color: var(--violet-primary, #8b6bff); }
 .site-nav {
